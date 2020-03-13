@@ -1,6 +1,6 @@
-# PROJECT NAME HERE
+# DATAVICE DEMO PLUGIN FOR WORDPRESS
 
-This is where the description of this current project development. This should be a short description of the project so that other team member can immedietely know what the project is all about.
+The DataVice server for WordPress is a user management for your application or game users. This is an alternative to firebase which you can host your own.
 
 ## Getting Started
 
