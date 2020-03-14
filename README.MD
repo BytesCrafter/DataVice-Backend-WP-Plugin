@@ -6,6 +6,53 @@ The DataVice server for WordPress is a user management for your application or g
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
+### REST API Implementation
+
+#### AUTHENTICATION
+
+REQUEST:
+- Method: POST
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=UN (value=Username), key=PW (value=Password)
+
+RESPONSE:
+- code: 'unknown_request' message: 'Please contact your administrator.' data: null
+- code: 'invalid_username' message: 'Unknown username. Check again or try your email address.' data: null
+- code: 'incorrect_password' message: '<strong>ERROR</strong>: The password you entered for the username <strong>USERNAME HERE</strong> is incorrect. <a href=\"http://localhost/wp-login.php?action=lostpassword\">Lost your password?</a>' data: null
+
+IF SUCCESS:
+```
+    {
+        "data": {
+            "ID": "4",
+            "user_login": "Demoguy",
+            "user_pass": "$P$BF6bLMMQC.lm5wRxTZqeDv/Q6vWGgO/",
+            "user_nicename": "demoguy",
+            "user_email": "demoguy@bytescrafter.net",
+            "user_url": "",
+            "user_registered": "2020-03-14 05:39:09",
+            "user_activation_key": "1584164356:$P$BGXi.agvSOc.KVBKdih.w/BGZtRQb00",
+            "user_status": "0",
+            "display_name": "Demo Guy"
+        },
+        "ID": 4,
+        "caps": {
+            "subscriber": true
+        },
+        "cap_key": "wp_capabilities",
+        "roles": [
+            "subscriber"
+        ],
+        "allcaps": {
+            "read": true,
+            "level_0": true,
+            "subscriber": true
+        },
+        "filter": null
+    }
+```
+
+
 ### Prerequisites
 
 EXAMPLE START

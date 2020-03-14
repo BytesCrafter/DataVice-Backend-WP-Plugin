@@ -31,4 +31,6 @@
 
     include_once ( plugin_dir_path( __FILE__ ) . '/config.php' );
 
+    include_once ( plugin_dir_path( __FILE__ ) . '/includes/api/index.php' );
+
 ?>
