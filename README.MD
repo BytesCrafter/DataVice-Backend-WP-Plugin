@@ -1,14 +1,10 @@
-# DATAVICE DEMO PLUGIN FOR WORDPRESS
+# DataVice - WordPress Plugin
 
-The DataVice server for WordPress is a user management for your application or game users. This is an alternative to firebase which you can host your own.
-
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+The DataVice for WordPress is a user management for your application or game users. This is an alternative to firebase which you can host your own.
 
 ### REST API Implementation
 
-#### AUTHENTICATION
+#### CREDENTIAL AUTHENTICATE
 
 REQUEST:
 - Method: POST
@@ -52,92 +48,63 @@ IF SUCCESS:
     }
 ```
 
+#### USER DATA REQUEST
 
-### Prerequisites
+REQUEST:
+- Method: POST
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=UN (value=Username), key=PW (value=Password)
 
-EXAMPLE START
-What things you need to install the software and how to install them
+RESPONSE:
+- code: 'unknown_request' message: 'Please contact your administrator.' data: null
+- code: 'invalid_username' message: 'Unknown username. Check again or try your email address.' data: null
+- code: 'incorrect_password' message: '<strong>ERROR</strong>: The password you entered for the username <strong>USERNAME HERE</strong> is incorrect. <a href=\"http://localhost/wp-login.php?action=lostpassword\">Lost your password?</a>' data: null
 
+IF SUCCESS:
 ```
-Give examples
+    {
+        "data": {
+            "ID": "4",
+            "user_login": "Demoguy",
+            "user_pass": "$P$BF6bLMMQC.lm5wRxTZqeDv/Q6vWGgO/",
+            "user_nicename": "demoguy",
+            "user_email": "demoguy@bytescrafter.net",
+            "user_url": "",
+            "user_registered": "2020-03-14 05:39:09",
+            "user_activation_key": "1584164356:$P$BGXi.agvSOc.KVBKdih.w/BGZtRQb00",
+            "user_status": "0",
+            "display_name": "Demo Guy"
+        },
+        "ID": 4,
+        "caps": {
+            "subscriber": true
+        },
+        "cap_key": "wp_capabilities",
+        "roles": [
+            "subscriber"
+        ],
+        "allcaps": {
+            "read": true,
+            "level_0": true,
+            "subscriber": true
+        },
+        "filter": null
+    }
 ```
-EXAMPLE END
-
-### Installing
-
-EXAMPLE START
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-EXAMPLE END
-
-## Running the tests
-
-EXAMPLE START
-Explain how to run the automated tests for this system
-EXAMPLE END
-
-### Break down into end to end tests
-
-EXAMPLE START
-Explain what these tests test and why
-
-```
-Give an example
-```
-EXAMPLE END
-
-### And coding style tests
-
-EXAMPLE START
-Explain what these tests test and why
-
-```
-Give an example
-```
-EXAMPLE END
-
-## Deployment
-
-EXAMPLE START
-Add additional notes about how to deploy this on a live system
-EXAMPLE END
-
-## Built With
-
-EXAMPLE START
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-EXAMPLE END
 
 ## Contributing
 
-EXAMPLE START
-Please read [CONTRIBUTING.md](CONTRIBUTING) for details on our code of conduct, and the process for submitting pull requests to us.
-EXAMPLE END
+Please read [CONTRIBUTING](CONTRIBUTING) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/BytesCrafter). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/BytesCrafter/DataVice-WP-Plugin/tags). 
 
 ## Authors
 
-* **Caezar V. De Castro II** - *Initial work* - [GitLab](https://gitlab.com/BytesCrafter)
+* **Bytes Crafter** - *Initial work* - [Github](https://github.com/BytesCrafter/DataVice-WP-Plugin.git)
 
-See also the list of [contributors](https://github.com/BytesCrafter) who participated in this project.
+See also the list of [contributors](https://github.com/BytesCrafter/DataVice-WP-Plugin/graphs/contributors) who participated in this project.
 
 ## License
 
@@ -145,6 +112,5 @@ This project is licensed under the GNU GPL License - see the [LICENSE](LICENSE) 
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+* WordPress.Org
+* MariaDB Developer
