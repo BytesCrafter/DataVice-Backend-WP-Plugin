@@ -18,7 +18,7 @@
             global $wpdb;
 
             // Step1 : check of fields are past
-            if( !isset($_POST['UN']) && !isset($_POST['email']) && !isset($_POST['FN']) && !isset($_POST['LN']) && !isset($_POST['gender']) && !isset($_POST['province']) && !isset($_POST['city']) ){
+            if( !isset($_POST['un']) && !isset($_POST['em']) && !isset($_POST['fn']) && !isset($_POST['ln']) && !isset($_POST['gd']) && !isset($_POST['pr']) && !isset($_POST['ct']) ){
                 return rest_ensure_response( 
                     array(
                             "status" => "unknown",
@@ -29,14 +29,16 @@
             }
 
             // Sanitaion
-            $username = sanitize_user($_POST['UN']);
+            $username = sanitize_user($_POST['un']);
 
-            $user_email = sanitize_email($_POST['email']);
+            $user_email = sanitize_email($_POST['em']);
 
             $user_meta = array(
-                'first_name' => $_POST['FN'],
-                'last_name' => $_POST['LN'],
+                'first_name' => $_POST['fn'],
+                'last_name' => $_POST['ln'],
             );
+
+            $gender = $_POST['gd'];
 
             // step1 : check if user exist
             if ( username_exists( $username ) ) {
@@ -80,6 +82,9 @@
                         $update_meta = update_user_meta($result->id, $key, $value  );
                        
                     }
+                    
+                    $add_key_meta_gender = add_user_meta( $result->id, 'gender', $gender );
+
 
                     // step7 : Create password rest key for User Account Activation   
                     $adt_rp_key = get_password_reset_key( $user );

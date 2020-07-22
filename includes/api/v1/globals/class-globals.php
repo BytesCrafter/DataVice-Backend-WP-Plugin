@@ -90,16 +90,11 @@
             return wp_insert_user( $userdata );
             
         }
-     
-
-
 
         public static function signup($user_table_name, $data){
             global $wpdb;
             return $wpdb->insert($user_table_name, $data);
         }
-
-      
         
     }
 ?>
