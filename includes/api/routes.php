@@ -21,7 +21,7 @@
 	require plugin_dir_path(__FILE__) . '/v1/users/class-data.php';
 	require plugin_dir_path(__FILE__) . '/v1/users/class-signup.php';
 	require plugin_dir_path(__FILE__) . '/v1/globals/class-globals.php';
-    
+    require plugin_dir_path(__FILE__) . '/v1/feeds/class-feeds.php';
 	
 	// Init check if USocketNet successfully request from wapi.
     function datavice_route()
@@ -54,6 +54,16 @@
         register_rest_route( 'datavice/v1/user', 'signup', array(
             'methods' => 'POST',
             'callback' => array('DVC_Signup', 'initialize'),
+        ));
+
+        register_rest_route( 'datavice/v1/feeds', 'get_feeds', array(
+            'methods' => 'GET',
+            'callback' => array('DVC_Newsfeed', 'get_feeds'),
+        ));
+
+        register_rest_route( 'datavice/v1/feeds', 'get_additional_feeds', array(
+            'methods' => 'GET',
+            'callback' => array('DVC_Newsfeed', 'get_additional_feeds'),
         ));
                 
     }
