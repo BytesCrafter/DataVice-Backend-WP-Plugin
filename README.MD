@@ -117,6 +117,30 @@ IF SUCCESS:
     }
 ```
 
+#### SIGN UP
+REQUEST:
+- Method: POST
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=UN (value=username), key=email (value=email), key=FN (value=first_name), key=LN (value=last_name), key=gender (value=gender), key=province (value=province), key=city (value=city) 
+
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. Verification Unknown!' data: null
+- code: 'failed' message: 'Username Already Exists' data: null
+- code: 'unknown' message: 'Please contact your administrator. User Creation Unknown!' data: null
+- code: 'unknown' message: 'Please contact your administrator. User Authentication key Creation Unknown!' data: null
+- code: 'unknown' message: 'Please contact your administrator. User Creation Unknown!' data: null
+- code: 'Success' message: 'Please check your email account for activation.' data: null
+
+IF SUCCESS:
+```
+    {
+       "status" => "Success",
+       "message" => "Please check your email account for activation.",
+    }
+```
+
+
+
 ## Contributing
 
 Please read [CONTRIBUTING](CONTRIBUTING) for details on our code of conduct, and the process for submitting pull requests to us.
