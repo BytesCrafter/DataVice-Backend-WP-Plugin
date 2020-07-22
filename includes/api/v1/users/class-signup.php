@@ -18,7 +18,7 @@
             global $wpdb;
 
             // Step1 : check of fields are past
-            if( !isset($_POST['UN']) && !isset($_POST['email']) && !isset($_POST['FN']) && !isset($_POST['LN']) && !isset($_POST['gender']) && !isset($_POST['province']) && !isset($_POST['city']) ){
+            if( !isset($_POST['un']) && !isset($_POST['em']) && !isset($_POST['fn']) && !isset($_POST['ln']) && !isset($_POST['gd']) && !isset($_POST['pr']) && !isset($_POST['ct']) ){
                 return rest_ensure_response( 
                     array(
                             "status" => "unknown",
@@ -29,16 +29,18 @@
             }
 
             // Sanitaion
-            $username = sanitize_user($_POST['UN']);
+            $username = sanitize_user($_POST['un']);
 
-            $user_email = sanitize_email($_POST['email']);
+            $user_email = sanitize_email($_POST['em']);
 
             $user_meta = array(
-                'first_name' => $_POST['FN'],
-                'last_name' => $_POST['LN'],
+                'first_name' => $_POST['fn'],
+                'last_name' => $_POST['ln'],
             );
 
+            $gender = $_POST['gd'];
 
+            // step1 : check if user exist
             if ( username_exists( $username ) ) {
                 return rest_ensure_response( 
                     array(
@@ -48,8 +50,10 @@
                 );
 
             } else {
+                // step2 : check call user create function from global
                 $user_result =  DVC_Globals::user_create($username,  $user_email);
 
+                // step3 : check if user creation false
                 if ($user_result == false) {
     
                     return rest_ensure_response( 
@@ -58,30 +62,37 @@
                                 "message" => "Please contact your administrator. User Creation Unknown!",
                         )
                     );
-    
+                    
                 }else{
-    
+
+		        	// Initialize WP global variable
                     global $wpdb;
-    
+                    
+                   // step4 : Fetch id from wp_users table
                     $result = $wpdb->get_row("SELECT id
                         FROM {$wpdb->prefix}users 
                         WHERE user_login = '$username' AND user_email = '$user_email' ", OBJECT );
+                    
+                   // step5 : Create WP User data 
+                    $user = new WP_User( (int) $result->id );
 
-                    $user = new WP_User( (int) $result );
-                
+                    // step6 : Update user_meta table  
                     foreach ($user_meta as $key => $value) {
 
                         $update_meta = update_user_meta($result->id, $key, $value  );
                        
                     }
+                    
+                    $add_key_meta_gender = add_user_meta( $result->id, 'gender', $gender );
 
-                    return $update_meta;
 
+                    // step7 : Create password rest key for User Account Activation   
                     $adt_rp_key = get_password_reset_key( $user );
 
                     // important to sending mail activation
                     $user_login = $user->user_login;
-    
+                    
+                    // step8 : Check if Account Activation key is False   
                     if ( is_wp_error( $adt_rp_key ) ) {
                         return rest_ensure_response( 
                             array(
@@ -91,8 +102,11 @@
                         );
 
                     }else{
+                    
+                         // step9 : Activate send mail function   
                         $send_email = DVC_Signup::send_mail_activation($result, $adt_rp_key, $user_login);
                         
+                         // step9 : Fetch if send mail function come true   
                         if ($send_email == false) {
                             return rest_ensure_response( 
                                 array(

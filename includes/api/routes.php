@@ -66,6 +66,16 @@
             'methods' => 'GET',
             'callback' => array('DVC_Newsfeed', 'get_additional_feeds'),
         ));
+
+        register_rest_route( 'datavice/v1/feeds', 'home', array(
+            'methods' => 'GET',
+            'callback' => array('DVC_Newsfeed', 'home_feeds'),
+        ));
+
+        register_rest_route( 'datavice/v1/feeds', 'home_add_feeds', array(
+            'methods' => 'GET',
+            'callback' => array('DVC_Newsfeed', 'home_additional_feeds'),
+        ));
                 
     }
     add_action( 'rest_api_init', 'datavice_route' );
