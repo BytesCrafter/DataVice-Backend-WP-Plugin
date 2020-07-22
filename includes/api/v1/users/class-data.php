@@ -20,7 +20,7 @@
 
 
                  //User verification
-                 $verified = DVC_Verification::initialize();
+                 $verified = DVC_Verification::initialize('GET');
 
                 //Check if ID is passed
                  if (!isset($_GET['ID']) ) {

@@ -15,10 +15,10 @@
 <?php
 	class DVC_Verification {
 
-		public static function initialize() {
 
-			// STEP 1: Check if WPID and SNID is passed as this is REQUIRED!
-			if (!isset($_POST["wpid"]) || !isset($_POST["snid"]) ) {
+		public static function through_post(){
+
+			if (!isset($_POST["wpid"]) || !isset($_POST["snky"]) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -26,12 +26,49 @@
 					)
 				);
 			}
-			$user_id = $_POST["wpid"];
-			$session_token = $_POST["snid"];
+
+			return array(
+				'wpid' => $_POST["wpid"],
+				'snky' => $_POST["snky"],
+			);
+			
+		}
+
+		public static function through_get(){
+			
+			if (!isset($_GET["wpid"]) || !isset($_GET["snky"]) ) {
+				return rest_ensure_response( 
+					array(
+						"status" => "unknown",
+						"message" => "Please contact your administrator. Verification Unknown!",
+					)
+				);
+			}
+
+			return array(
+				'wpid' => $_GET["wpid"],
+				'snky' => $_GET["snky"],
+			);
+
+		}
+
+		public static function initialize($request = null) {
+
+			// STEP 1: Check if WPID and SNID is passed as this is REQUIRED!
+
+			if ($request == 'POST') {
+
+				$request = DVC_Verification:: through_post();
+				
+			} else {
+			
+				$request = DVC_Verification:: through_get();
+			
+			}
 
 			// STEP 2: Verify the Token if Valid and not expired.
-			$wp_session_tokens = WP_Session_Tokens::get_instance($user_id);
-			if( is_null($wp_session_tokens->get( $session_token )) ) {
+			$wp_session_tokens = WP_Session_Tokens::get_instance($request['wpid']);
+			if( is_null($wp_session_tokens->get( $request['snky'] )) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
@@ -39,7 +76,7 @@
 					)
 				);
 			} else {
-				if( time() >= $wp_session_tokens->get( $session_token )['expiration'] )   {
+				if( time() >= $wp_session_tokens->get( $request['snky'] )['expiration'] )   {
 					return rest_ensure_response( 
 						array(
 							"status" => "failed",
@@ -49,7 +86,7 @@
 				}
 			}
 
-			$wp_user = get_user_by("ID", $user_id);
+			$wp_user = get_user_by("ID", $request['wpid']);
 
 			if( $wp_user != false ) {
 				// STEP 3 - Return a success and complete object. //$wp_user->data->user_activation_key

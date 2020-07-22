@@ -139,6 +139,111 @@ IF SUCCESS:
     }
 ```
 
+#### NEWS FEED
+REQUEST:
+- Method: GET
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=ID (value=User ID)
+
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. Request unknown!' data: null
+- code: 'failed' message: 'Please contact your administrator. ID not in valid format!' data: null
+- code: 'failed' message: 'User not found!' data: null
+
+IF SUCCESS:
+```
+    {
+       {
+        "status": "success",
+        "data": {
+                "list": [
+                    {
+                        "id": "15"
+                    },
+                    {
+                        "id": "14"
+                    },
+                    {
+                        "id": "13"
+                    },
+                    {
+                        "id": "12"
+                    },
+                    {
+                        "id": "11"
+                    },
+                    {
+                        "id": "10"
+                    },
+                    {
+                        "id": "9"
+                    },
+                    {
+                        "id": "8"
+                    },
+                    {
+                        "id": "7"
+                    },
+                    {
+                        "id": "6"
+                    },
+                    {
+                        "id": "5"
+                    },
+                    {
+                        "id": "4"
+                    }
+                ],
+                "last_id": {
+                    "id": "4"
+                }
+            }
+        }
+    }
+```
+
+#### ADDITIONAL NEWS FEED
+REQUEST:
+- Method: GET
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=ID (value=User ID) key=LID (value=Last ID of post)
+
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. Request unknown!' data: null
+- code: 'failed' message: 'Parameters not in valid format!' data: null
+- code: 'failed' message: 'User not found!' data: null
+- code: 'failed' message: 'No more posts to see!' data: null
+
+
+IF SUCCESS:
+```
+    {
+        "status": "success",
+        "data": {
+            "list": [
+                {
+                    "id": "5"
+                },
+                {
+                    "id": "4"
+                },
+                {
+                    "id": "3"
+                },
+                {
+                    "id": "2"
+                },
+                {
+                    "id": "1"
+                }
+            ],
+            "last_id": {
+                "id": "1"
+            }
+        }
+    }
+```
+
 
 
 ## Contributing

@@ -61,7 +61,7 @@
 				array(
 					"status" => "success",
 					"data" => array(
-						"snid" => DVC_Authenticate::dvc_get_session($user->ID), 
+						"snky" => DVC_Authenticate::dvc_get_session($user->ID), 
 						"wpid" => $user->ID
 						)
 					)  
