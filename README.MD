@@ -145,7 +145,7 @@ IF SUCCESS:
 REQUEST:
 - Method: GET
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=ID (value=User ID)
+- Params: key=wpid (value=User ID), key=snky (value=Session Key)
 
 RESPONSE:
 - code: 'unknown' message: 'Please contact your administrator. Request unknown!' data: null
@@ -208,7 +208,7 @@ IF SUCCESS:
 REQUEST:
 - Method: GET
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=ID (value=User ID) key=LID (value=Last ID of post)
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=LID (value=Last ID of feed list)
 
 RESPONSE:
 - code: 'unknown' message: 'Please contact your administrator. Request unknown!' data: null
@@ -250,7 +250,7 @@ IF SUCCESS:
 REQUEST:
 - Method: GET
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: None
+- Params: key=wpid (value=User ID), key=snky (value=Session Key)
 
 RESPONSE:
 - code: 'unknown' message: 'Please contact your administrator. Request unknown!' data: null
@@ -309,6 +309,45 @@ IF SUCCESS:
     }
 ```
 
+#### ADDITIONAL HOME FEED LIST => /datavice/api/v1/feeds/home_add_feeds
+REQUEST:
+- Method: GET
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=LID (value=Last ID of feed list)
+
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. Request unknown!' data: null
+- code: 'failed' message: 'Please contact your administrator. ID not in valid format!' data: null
+- code: 'failed' message: 'User not found!' data: null
+
+IF SUCCESS:
+```
+    {
+        "status": "success",
+        "data": {
+            "list": [
+                {
+                    "id": "5"
+                },
+                {
+                    "id": "4"
+                },
+                {
+                    "id": "3"
+                },
+                {
+                    "id": "2"
+                },
+                {
+                    "id": "1"
+                }
+            ],
+            "last_id": {
+                "id": "1"
+            }
+        }
+    }
+```
 
 
 ## Contributing

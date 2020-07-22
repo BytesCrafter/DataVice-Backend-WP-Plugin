@@ -40,7 +40,7 @@
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
-						"message" => "Please contact your administrator. Verification Unknown!!",
+						"message" => "Please contact your administrator. Verification Unknown!",
 					)
 				);
 			}
@@ -67,47 +67,45 @@
 			
 			}
 
-			return $request;
-
 			// STEP 2: Verify the Token if Valid and not expired.
-			// $wp_session_tokens = WP_Session_Tokens::get_instance($request['wpid']);
-			// if( is_null($wp_session_tokens->get( $request['snky'] )) ) {
-			// 	return rest_ensure_response( 
-			// 		array(
-			// 			"status" => "failed",
-			// 			"message" => "Please contact your administrator. Token Not Found!"
-			// 		)
-			// 	);
-			// } else {
-			// 	if( time() >= $wp_session_tokens->get( $request['snky'] )['expiration'] )   {
-			// 		return rest_ensure_response( 
-			// 			array(
-			// 				"status" => "failed",
-			// 				"message" => "Please contact your administrator. Token Expired!"
-			// 			)
-			// 		);
-			// 	}
-			// }
+			$wp_session_tokens = WP_Session_Tokens::get_instance($request['wpid']);
+			if( is_null($wp_session_tokens->get( $request['snky'] )) ) {
+				return rest_ensure_response( 
+					array(
+						"status" => "failed",
+						"message" => "Please contact your administrator. Token Not Found!"
+					)
+				);
+			} else {
+				if( time() >= $wp_session_tokens->get( $request['snky'] )['expiration'] )   {
+					return rest_ensure_response( 
+						array(
+							"status" => "failed",
+							"message" => "Please contact your administrator. Token Expired!"
+						)
+					);
+				}
+			}
 
-			// $wp_user = get_user_by("ID", $request['wpid']);
+			$wp_user = get_user_by("ID", $request['wpid']);
 
-			// if( $wp_user != false ) {
-			// 	// STEP 3 - Return a success and complete object. //$wp_user->data->user_activation_key
-			// 	return rest_ensure_response( 
-			// 		array(
-			// 			"status" => "success",
-			// 			"email" => $wp_user->data->user_email,
-			// 			"uname" => $wp_user->data->user_login
-			// 		)
-			// 	);
-			// } else {
-			// 	return rest_ensure_response( 
-			// 		array(
-			// 			"status" => "failed",
-			// 			"message" => "Please contact your administrator. User Not Found!"
-			// 		)
-			// 	);
-			// }
+			if( $wp_user != false ) {
+				// STEP 3 - Return a success and complete object. //$wp_user->data->user_activation_key
+				return rest_ensure_response( 
+					array(
+						"status" => "success",
+						"email" => $wp_user->data->user_email,
+						"uname" => $wp_user->data->user_login
+					)
+				);
+			} else {
+				return rest_ensure_response( 
+					array(
+						"status" => "failed",
+						"message" => "Please contact your administrator. User Not Found!"
+					)
+				);
+			}
 
 		}
 	}

@@ -22,8 +22,6 @@
                 //User verification
                 $verified = DVC_Verification::initialize();
 
-                 $verified['wpid'];
-                
                 // Pass the ID in a variable
                  $user_id = $verified['wpid'];
 

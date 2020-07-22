@@ -19,7 +19,7 @@
 			global $wpdb;
 
 			// Step 1: Check if ID is passed
-			if (!isset($_GET["ID"])) {
+			if (!isset($_GET["wpid"]) || !isset($_GET["snky"])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -29,7 +29,7 @@
 			}
 
 			// Step 2: Check if ID is in valid format (integer)
-			if (!is_numeric($_GET["ID"])) {
+			if (!is_numeric($_GET["wpid"])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
@@ -39,7 +39,7 @@
 			}
 
 			// Step 3: Check if ID exists
-			if (!get_user_by("ID", $_GET['ID'])) {
+			if (!get_user_by("ID", $_GET['wpid'])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
@@ -49,7 +49,7 @@
 			}
 
 			//Step 4: Pass the processed id in a variable
-			$id = $_GET['ID'];
+			$id = $_GET['wpid'];
 			
 			//Step 5: Create table name for posts (bc_posts)
 			$table_post = BC_PREFIX.'posts';
@@ -83,7 +83,7 @@
 			global $wpdb;
 
 			// Step 1: Check if ID is passed
-			if (!isset($_GET["ID"]) || !isset($_GET["LID"])) {
+			if (!isset($_GET["wpid"]) || !isset($_GET["snky"]) || !isset($_GET["LID"])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -103,7 +103,7 @@
 			}
 
 			// Step 3: Check if ID exists
-			if (!get_user_by("ID", $_GET['ID'])) {
+			if (!get_user_by("ID", $_GET['wpid'])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
@@ -113,7 +113,7 @@
             }
             
             // Step 4: Pass the processed ids in a variable
-            $id = $_GET['ID'];
+            $id = $_GET['wpid'];
             $get_last_id = $_GET['LID'];
 
             //Get 5 new posts
@@ -152,15 +152,22 @@
 					)
 				)
             );
-            
-            
-
 			
         }
         
         public static function home_feeds(){
 			// Initialize WP global variable
 			global $wpdb;
+
+			if (!isset($_GET["wpid"]) || !isset($_GET["snky"])) {
+				return rest_ensure_response( 
+					array(
+						"status" => "unknown",
+						"message" => "Please contact your administrator. Request unknown!",
+					)
+				);
+			}
+
 
 			//Step 1: Create table name for posts (bc_posts)
 			$table_post = BC_PREFIX.'posts';
@@ -191,6 +198,15 @@
 						
 			// Initialize WP global variable
 			global $wpdb;
+
+			if (!isset($_GET["wpid"]) || !isset($_GET["snky"]) ||!isset($_GET['LID']) ) {
+				return rest_ensure_response( 
+					array(
+						"status" => "unknown",
+						"message" => "Please contact your administrator. Request unknown!",
+					)
+				);
+			}
 
 			// Step 1: Pass the processed ids in a variable
 			
