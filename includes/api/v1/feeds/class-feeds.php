@@ -158,8 +158,85 @@
 			
         }
         
-        
-        
+        public static function home_feeds(){
+			// Initialize WP global variable
+			global $wpdb;
+
+			//Step 1: Create table name for posts (bc_posts)
+			$table_post = BC_PREFIX.'posts';
+			
+			//Step 2: Get results from database 
+			$result= $wpdb->get_results("SELECT id
+                    FROM $table_post 
+					ORDER BY id DESC
+					LIMIT 12", OBJECT);
+			
+			//Step 3: Pass the last id or the minimum id
+			$last_id = min($result);
+			
+			//Step 4: Return a success message and a complete object
+			return rest_ensure_response( 
+				array(
+					"status" => "success",
+					"data" => array(
+						'list' => $result, 
+						'last_id' => $last_id
+					)
+				)
+			);
+
+		}
+
+        public static function home_additional_feeds(){
+						
+			// Initialize WP global variable
+			global $wpdb;
+
+			// Step 1: Pass the processed ids in a variable
+			
+			// $id = $_GET['ID'];
+            $get_last_id = $_GET['LID'];
+
+			//Get 5 new posts
+			$add_feeds = $get_last_id - 5;
+
+			//Step 2: Create table name for posts (bc_posts)
+			$table_post = BC_PREFIX.'posts';
+
+			//Step 3: Get results from database 
+			$result= $wpdb->get_results("SELECT id
+                FROM $table_post 
+                WHERE id BETWEEN $add_feeds AND ($get_last_id - 1)
+                ORDER BY id DESC", OBJECT);
+
+            //Step 4: Check if array count is 0 , return error message if true
+			if (count($result) < 1) {
+				return rest_ensure_response( 
+					array(
+						"status" => "failed",
+						"message" => "No more posts to see",
+					)
+				);
+			} else {
+				//Pass the last id
+				$last_id = min($result);
+			}
+
+			//Step 5: Return a success message and a complete object
+			return rest_ensure_response( 
+				array(
+					"status" => "success",
+					"data" => array(
+						'list' => $result, 
+						'last_id' => $last_id
+					)
+				)
+			);
+
+
+
+		}
+		
     }
 
 

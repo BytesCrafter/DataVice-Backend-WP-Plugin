@@ -67,15 +67,14 @@
                         FROM {$wpdb->prefix}users 
                         WHERE user_login = '$username' AND user_email = '$user_email' ", OBJECT );
 
-                    $user = new WP_User( (int) $result );
-                
+                    $user = new WP_User( (int) $result->id );
+
                     foreach ($user_meta as $key => $value) {
 
                         $update_meta = update_user_meta($result->id, $key, $value  );
                        
                     }
 
-                    return $update_meta;
 
                     $adt_rp_key = get_password_reset_key( $user );
 
