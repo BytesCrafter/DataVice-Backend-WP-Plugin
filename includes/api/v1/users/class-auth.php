@@ -11,7 +11,6 @@
         * @version 0.1.0
 	*/
 ?>
-
 <?php
 	class DVC_Authenticate {
 

@@ -25,7 +25,7 @@
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
-						"message" => "Please contact your administrator. Authentication Unknown!",
+						"message" => "Please contact your administrator. Request Unknown!",
 					)
 				);
             }

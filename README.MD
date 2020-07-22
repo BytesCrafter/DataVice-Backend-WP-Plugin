@@ -4,7 +4,7 @@ The DataVice for WordPress is a user management for your application or game use
 
 ### REST API Implementation
 
-#### CREDENTIAL AUTHENTICATE
+#### CREDENTIAL AUTHENTICATE => /datavice/api/v1/user/auth
 
 REQUEST:
 - Method: POST
@@ -12,43 +12,45 @@ REQUEST:
 - Params: key=UN (value=Username), key=PW (value=Password)
 
 RESPONSE:
-- code: 'unknown_request' message: 'Please contact your administrator.' data: null
-- code: 'invalid_username' message: 'Unknown username. Check again or try your email address.' data: null
-- code: 'incorrect_password' message: '<strong>ERROR</strong>: The password you entered for the username <strong>USERNAME HERE</strong> is incorrect. <a href=\"http://localhost/wp-login.php?action=lostpassword\">Lost your password?</a>' data: null
+- code: 'unknown' message: 'Please contact your administrator. Authentication Unknown!' data: null
+- code: 'failed' message: 'Unknown username. Check again or try your email address.' data: null
+- code: 'failed' message: '<strong>ERROR</strong>: The password you entered for the username <strong>USERNAME HERE</strong> is incorrect. <a href=\"http://localhost/wp-login.php?action=lostpassword\">Lost your password?</a>' data: null
 
 IF SUCCESS:
 ```
     {
+        "status": "success",
         "data": {
-            "ID": "4",
-            "user_login": "Demoguy",
-            "user_pass": "$P$BF6bLMMQC.lm5wRxTZqeDv/Q6vWGgO/",
-            "user_nicename": "demoguy",
-            "user_email": "demoguy@bytescrafter.net",
-            "user_url": "",
-            "user_registered": "2020-03-14 05:39:09",
-            "user_activation_key": "1584164356:$P$BGXi.agvSOc.KVBKdih.w/BGZtRQb00",
-            "user_status": "0",
-            "display_name": "Demo Guy"
-        },
-        "ID": 4,
-        "caps": {
-            "subscriber": true
-        },
-        "cap_key": "wp_capabilities",
-        "roles": [
-            "subscriber"
-        ],
-        "allcaps": {
-            "read": true,
-            "level_0": true,
-            "subscriber": true
-        },
-        "filter": null
+            "snky": "daMjLapFixr6olYJbyYcWPYssHcV7oNdHkM6HfDdHaI",
+            "wpid": 1
+        }
     }
 ```
 
-#### USER DATA REQUEST
+#### Verification => /datavice/api/v1/user/verify
+
+REQUEST:
+- Method: POST
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=wpid (value=User ID), key=snky (value=Session Key)
+
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. Authentication Unknown!' data: null
+- code: 'failed' message: 'Please contact your administrator. Token Not Found!' data: null
+- code: 'failed' message: 'Please contact your administrator. Token Expired!' data: null
+- code: 'failed' message: 'Please contact your administrator. User Not Found!' data: null
+
+
+IF SUCCESS:
+```
+    {
+        "status": "success",
+        "email": "lorenzbecislao@gmail.com",
+        "uname": "admin"
+    }
+```
+
+#### USERDATA REQUEST => /datavice/api/v1/user/data
 
 REQUEST:
 - Method: GET
@@ -56,28 +58,30 @@ REQUEST:
 - Params: key=ID (value=User ID)
 
 RESPONSE:
-- code: 'unknown' message: 'Please contact your administrator. Verification Unknown!' data: null
-- code: 'failed' message: 'Please contact your administrator. Invalid ID' data: null
+- code: 'unknown' message: 'Please contact your administrator. Authentication Unknown!' data: null
+- code: 'failed' message: 'Please contact your administrator. Token Not Found!' data: null
+- code: 'failed' message: 'Please contact your administrator. Token Expired!' data: null
 - code: 'failed' message: 'Please contact your administrator. User Not Found!' data: null
 
 IF SUCCESS:
 ```
-    {
-        "status": "success",
-        "data": {
-            "uname": "Demoguy",
-            "dname": "demoguy",
-            "email": "demoguy@bytescrafter.net",
-            "roles": [
-                "administrator"
-            ],
-            "fname": "Demo",
-            "lname": "Guy"
+{
+    "status": "success",
+    "data": {
+        "uname": "admin",
+        "dname": "admin",
+        "email": "admin@bytescrafter.net",
+        "ro": [
+            "administrator"
+        ],
+        "fn": "",
+        "ln": "",
+        "av": "bytescrafter.net/assets/imagees/admin-avatar"
     }
 }
 ```
 
-#### FORGOTTEN OR LOST PASSWORD
+#### FORGOTTEN OR LOST PASSWORD => /datavice/api/v1/user/forgot
 
 REQUEST:
 - Method: POST
@@ -85,7 +89,7 @@ REQUEST:
 - Params: key=UN (value=Username or value=Email)
 
 RESPONSE:
-- code: 'unknown' message: 'Please contact your administrator. Authentication Unknown!' data: null
+- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
 - code: 'failed' message: 'Email or username doesn't exists!' data: null
 - code: 'failed' message: 'Failed to send an email!' data: null
 
@@ -97,7 +101,7 @@ IF SUCCESS:
     }
 ```
 
-#### CREATING NEW PASSWORD
+#### CHANGE PASSWORD => /datavice/api/v1/user/reset
 
 REQUEST:
 - Method: POST
@@ -105,9 +109,8 @@ REQUEST:
 - Params: key=key (value=Key), key=PW (value=New Password)
 
 RESPONSE:
-- code: 'unknown' message: 'Please contact your administrator. Authentication Unknown!' data: null
+- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
 - code: 'failed' message: 'Invalid key' data: null
-- code: 'failed' message: 'Failed to send an email!' data: null
 
 IF SUCCESS:
 ```
@@ -117,11 +120,11 @@ IF SUCCESS:
     }
 ```
 
-#### SIGN UP
+#### SIGN UP => /datavice/api/v1/user/signup
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=UN (value=username), key=email (value=email), key=FN (value=first_name), key=LN (value=last_name), key=gender (value=gender), key=province (value=province), key=city (value=city) 
+- Params: key=un (value=username), key=em (value=email), key=fn (value=first_name), key=ln (value=last_name), key=gd (value=gender), key=pr (value=province id), key=ct (value=city id) 
 
 RESPONSE:
 - code: 'unknown' message: 'Please contact your administrator. Verification Unknown!' data: null
@@ -129,7 +132,6 @@ RESPONSE:
 - code: 'unknown' message: 'Please contact your administrator. User Creation Unknown!' data: null
 - code: 'unknown' message: 'Please contact your administrator. User Authentication key Creation Unknown!' data: null
 - code: 'unknown' message: 'Please contact your administrator. User Creation Unknown!' data: null
-- code: 'Success' message: 'Please check your email account for activation.' data: null
 
 IF SUCCESS:
 ```
@@ -139,7 +141,7 @@ IF SUCCESS:
     }
 ```
 
-#### NEWS FEED
+#### PROFILE FEED LIST => /datavice/api/v1/feeds/profile
 REQUEST:
 - Method: GET
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
@@ -202,7 +204,7 @@ IF SUCCESS:
     }
 ```
 
-#### ADDITIONAL NEWS FEED
+#### ADDITIONAL NEWS FEED => /datavice/api/v1/feeds/p_feeds
 REQUEST:
 - Method: GET
 - Header: key=Content-Type, value=application/x-www-form-urlencoded

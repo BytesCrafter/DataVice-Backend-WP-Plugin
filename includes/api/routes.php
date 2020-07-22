@@ -34,20 +34,21 @@
         register_rest_route( 'datavice/v1/user', 'verify', array(
             'methods' => 'POST',
             'callback' => array('DVC_Verification','initialize'),
+            
         ));
 
-        register_rest_route( 'datavice/v1/user', 'forgot_pass', array(
+        register_rest_route( 'datavice/v1/user', 'forgot', array(
             'methods' => 'POST',
             'callback' => array('DVC_Forgotpassword','initialize'),
         ));
 
-        register_rest_route( 'datavice/v1/user', 'create_newpass', array(
+        register_rest_route( 'datavice/v1/user', 'reset', array(
             'methods' => 'POST',
             'callback' => array('DVC_Changepassword','initialize'),
         ));
 
-        register_rest_route( 'datavice/v1/user', 'get_userdata', array(
-            'methods' => 'GET',
+        register_rest_route( 'datavice/v1/user', 'data', array(
+            'methods' => 'POST',
             'callback' => array('DVC_Userdata', 'initialize'),
         ));
 
@@ -56,12 +57,12 @@
             'callback' => array('DVC_Signup', 'initialize'),
         ));
 
-        register_rest_route( 'datavice/v1/feeds', 'get_feeds', array(
+        register_rest_route( 'datavice/v1/feeds', 'profile', array(
             'methods' => 'GET',
             'callback' => array('DVC_Newsfeed', 'get_feeds'),
         ));
 
-        register_rest_route( 'datavice/v1/feeds', 'get_additional_feeds', array(
+        register_rest_route( 'datavice/v1/feeds', 'p_feeds', array(
             'methods' => 'GET',
             'callback' => array('DVC_Newsfeed', 'get_additional_feeds'),
         ));
