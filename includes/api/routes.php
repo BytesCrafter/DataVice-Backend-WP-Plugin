@@ -19,6 +19,8 @@
     require plugin_dir_path(__FILE__) . '/v1/users/class-forgotpass.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-changepass.php';
 	require plugin_dir_path(__FILE__) . '/v1/users/class-data.php';
+	require plugin_dir_path(__FILE__) . '/v1/users/class-signup.php';
+	require plugin_dir_path(__FILE__) . '/v1/globals/class-globals.php';
     
 	
 	// Init check if USocketNet successfully request from wapi.
@@ -49,6 +51,11 @@
             'callback' => array('DVC_Userdata', 'initialize'),
         ));
 
+        register_rest_route( 'datavice/v1/user', 'signup', array(
+            'methods' => 'POST',
+            'callback' => array('DVC_Signup', 'initialize'),
+        ));
+                
     }
     add_action( 'rest_api_init', 'datavice_route' );
 

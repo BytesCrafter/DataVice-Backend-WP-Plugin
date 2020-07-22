@@ -71,6 +71,37 @@
                 WHERE $key LIKE '%$value%'");
 
         }
+        // NEW
+        public static function insert_usermeta($user_id,  $firstName, $lastName){
+            global $wpdb;
+            //  return $wpdb->get_row("INSERT 
+            //      INTO wp_usermeta
+            //      (user_id, meta_key, meta_value  ) VALUES ($user_id, '$c', '$value' ) ");
+
+            return wp_update_user([
+                'ID' => $userId, // this is the ID of the user you want to update.
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+            ]);
+           
+        }
+        // user create
+        public static function user_create($username,  $email){
+            $user_login = wp_slash( $username );
+            $user_email = wp_slash( $email );
+            $userdata = compact( 'user_login', 'user_email' );
+            return wp_insert_user( $userdata );
+        }
+     
+
+
+
+        public static function signup($user_table_name, $data){
+            global $wpdb;
+            return $wpdb->insert($user_table_name, $data);
+        }
+
+      
         
     }
 ?>
