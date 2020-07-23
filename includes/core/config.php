@@ -10,3 +10,9 @@
      * This is where you provide all the constant config.
 	*/
 ?>
+<?php
+
+	//Defining Global Variables
+	define('BC_PREFIX', 'bc_');
+
+?>

@@ -11,9 +11,7 @@
         * @version 0.1.0
 	*/
 ?>
-
 <?php
-
 	class DVC_Authenticate {
 
 		//Get the user session token string and if nothing, create and return one.
@@ -42,7 +40,7 @@
 			}
 
 			//Listens for POST values.
-			$username = $_POST["UN"];
+			$username = sanitize_user($_POST["UN"]);
 			$password = $_POST["PW"];
 
 			//Initialize wp authentication process.
@@ -62,13 +60,8 @@
 				array(
 					"status" => "success",
 					"data" => array(
-						"snid" => DVC_Authenticate::dvc_get_session($user->ID), 
-						"wpid" => $user->ID,
-						"uname" => $user->data->user_login,
-						"dname" => $user->data->display_name,
-						"email" => $user->data->user_email,
-						"avatar" => get_avatar_url($user->ID, array('size' => 150)),
-						"roles" => $user->roles,
+						"snky" => DVC_Authenticate::dvc_get_session($user->ID), 
+						"wpid" => $user->ID
 						)
 					)  
 				);
