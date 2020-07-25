@@ -83,6 +83,7 @@
         }
 
         // user create
+        //Global class for global functions only. Please put this function on specific class
         public static function user_create($username,  $email){
             $user_login = wp_slash( $username );
             $user_email = wp_slash( $email );
@@ -91,10 +92,14 @@
             
         }
 
+        //Global class for global functions only. Please put this function on specific class
         public static function signup($user_table_name, $data){
             global $wpdb;
             return $wpdb->insert($user_table_name, $data);
         }
+
+       
+
         
     }
 ?>

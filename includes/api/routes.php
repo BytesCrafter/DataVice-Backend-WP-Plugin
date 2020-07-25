@@ -76,6 +76,31 @@
             'methods' => 'GET',
             'callback' => array('DVC_Newsfeed', 'home_additional_feeds'),
         ));
+
+        register_rest_route( 'datavice/v1/user', 'add_address', array(
+            'methods' => 'POST',
+            'callback' => array('DVC_Userdata', 'add_address'),
+        ));
+
+        register_rest_route( 'datavice/v1/user', 'ctry', array(
+            'methods' => 'POST',
+            'callback' => array('DVC_Userdata', 'get_countries'),
+        ));
+
+        register_rest_route( 'datavice/v1/user', 'prv', array(
+            'methods' => 'POST',
+            'callback' => array('DVC_Userdata', 'get_provinces'),
+        ));
+
+        register_rest_route( 'datavice/v1/user', 'city', array(
+            'methods' => 'POST',
+            'callback' => array('DVC_Userdata', 'get_cities'),
+        ));
+
+        register_rest_route( 'datavice/v1/user', 'brgy', array(
+            'methods' => 'POST',
+            'callback' => array('DVC_Userdata', 'get_brgy'),
+        ));
                 
     }
     add_action( 'rest_api_init', 'datavice_route' );

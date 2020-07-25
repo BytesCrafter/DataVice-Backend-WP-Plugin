@@ -14,5 +14,6 @@
 
 	//Defining Global Variables
 	define('BC_PREFIX', 'bc_');
+	define('GP_PREFIX', 'gp_');
 
 ?>
