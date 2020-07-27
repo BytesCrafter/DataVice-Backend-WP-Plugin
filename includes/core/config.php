@@ -13,7 +13,14 @@
 <?php
 
 	//Defining Global Variables
-	define('BC_PREFIX', 'bc_');
-	define('GP_PREFIX', 'gp_');
+	define('DV_PREFIX', 'dv_');
+	define('DV_SERVER', 'localhost');
+	define('DV_USER', 'root');
+	define('DV_PASS', '');
+	define('DV_NAME', 'wordpress');
+
+
+
+	
 
 ?>

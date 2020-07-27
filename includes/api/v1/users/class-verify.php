@@ -13,7 +13,7 @@
 ?>
 
 <?php
-	class DVC_Verification {
+	class DV_Verification {
 
 		public static function initialize() {
 			

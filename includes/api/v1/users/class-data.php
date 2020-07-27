@@ -112,7 +112,7 @@
                         global $wpdb;
 
                         //Table name creation
-                        $ctry_table = GP_PREFIX.'countries'; 
+                        $ctry_table = DV_PREFIX.'countries'; 
 
                         $countries =  $wpdb->get_results("SELECT * 
                                 FROM $ctry_table
@@ -156,7 +156,7 @@
                         global $wpdb;
 
                         //Table name creation
-                        $prv_table = GP_PREFIX.'provinces';
+                        $prv_table = DV_PREFIX.'provinces';
                         
                         $provinces =  $wpdb->get_results("SELECT id, prov_name as prov
                                 FROM $prv_table
@@ -223,12 +223,12 @@
                         $province_code = $_POST["PC"];
 
                         //Table name creation
-                        $cty_table = GP_PREFIX.'cities'; 
+                        $cty_table = DV_PREFIX.'cities'; 
 
                         $cities =  $wpdb->get_results("SELECT *
                                 FROM $cty_table
-                                WHERE provCode = $province_code
-                                ORDER BY citymun_name ASC
+                                WHERE prov_code = $province_code
+                                ORDER BY city_name ASC
                         ");
 
                         if (!$cities) {
@@ -292,12 +292,12 @@
                         $city_code = $_POST["CC"];
 
                         //Table name creation
-                        $brgy_table = GP_PREFIX.'brgys'; 
+                        $brgy_table = DV_PREFIX.'brgys'; 
 
                         $brgys =  $wpdb->get_results("SELECT *
                                 FROM $brgy_table
-                                WHERE citymunCode = $city_code
-                                ORDER BY brgyDesc ASC
+                                WHERE city_code = $city_code
+                                ORDER BY brgy_name ASC
                         ");
 
                         if (!$brgys) {

@@ -45,8 +45,8 @@ IF SUCCESS:
 ```
     {
         "status": "success",
-        "email": "lorenzbecislao@gmail.com",
-        "uname": "admin"
+        "email": "demoguy@bytescrafter.net",
+        "uname": "demoguy"
     }
 ```
 
@@ -68,9 +68,9 @@ IF SUCCESS:
 {
     "status": "success",
     "data": {
-        "uname": "admin",
-        "dname": "admin",
-        "email": "admin@bytescrafter.net",
+        "uname": "demoguy",
+        "dname": "demoguy",
+        "email": "demoguy@bytescrafter.net",
         "ro": [
             "administrator"
         ],
@@ -425,7 +425,7 @@ IF SUCCESS:
             },
             {
                 "id": "85",
-             "prov": "Agusan Del Sur"
+                "prov": "Agusan Del Sur"
             },
             {
                 "id": "33",
@@ -462,32 +462,32 @@ IF SUCCESS:
             {
                 "id": "1380",
                 "citymun_name": "Bangued (Capital)",
-                "provCode": "1401",
-                "citymunCode": "140101"
+                "prov_code": "1401",
+                "city_code": "140101"
             },
             {
                 "id": "1381",
                 "citymun_name": "Boliney",
-                "provCode": "1401",
-                "citymunCode": "140102"
+                "prov_code": "1401",
+                "city_code": "140102"
             },
             {
                 "id": "1382",
                 "citymun_name": "Bucay",
-                "provCode": "1401",
-                "citymunCode": "140103"
+                "prov_code": "1401",
+                "city_code": "140103"
             },
             {
                 "id": "1383",
                 "citymun_name": "Bucloc",
-                "provCode": "1401",
-                "citymunCode": "140104"
+                "prov_code": "1401",
+                "city_code": "140104"
             },
             {
                 "id": "1384",
                 "citymun_name": "Daguioman",
-                "provCode": "1401",
-                "citymunCode": "140105"
+                "prov_code": "1401",
+                "city_code": "140105"
             }
         ]
     }
@@ -515,35 +515,27 @@ IF SUCCESS:
         "data": [
            {
                 "id": "36789",
-                "brgyCode": "137603001",
-                "brgyDesc": "Alabang",
-                "regCode": "13",
-                "provCode": "1376",
-                "citymunCode": "137603"
+                "brgy_name": "Alabang",
+                "prov_code": "1376",
+                "city_code": "137603"
             },
             {
                 "id": "36790",
-                "brgyCode": "137603002",
-                "brgyDesc": "Bayanan",
-                "regCode": "13",
-                "provCode": "1376",
-                "citymunCode": "137603"
+                "brgy_name": "Bayanan",
+                "prov_code": "1376",
+                "city_code": "137603"
             },
             {
                 "id": "36791",
-                "brgyCode": "137603003",
-                "brgyDesc": "Buli",
-                "regCode": "13",
-                "provCode": "1376",
-                "citymunCode": "137603"
+                "brgy_name": "Buli",
+                "prov_code": "1376",
+                "city_code": "137603"
             },
             {
                 "id": "36792",
-                "brgyCode": "137603004",
-                "brgyDesc": "Cupang",
-                "regCode": "13",
-                "provCode": "1376",
-                "citymunCode": "137603"
+                "brgy_name": "Cupang",
+                "prov_code": "1376",
+                "city_code": "137603"
             },
         ]
     }

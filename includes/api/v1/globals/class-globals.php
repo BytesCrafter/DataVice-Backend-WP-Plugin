@@ -11,7 +11,7 @@
 	*/
 ?>
 <?php
-  	class DVC_Globals {
+  	class DV_Globals {
          
         public static function create($table_name, $data){
             global $wpdb;

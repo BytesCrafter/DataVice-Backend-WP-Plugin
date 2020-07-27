@@ -11,7 +11,7 @@
 	*/
 ?>
 <?php
-  	class DVC_Newsfeed {
+  	class DV_Newsfeed {
          
         public static function get_feeds(){
 			

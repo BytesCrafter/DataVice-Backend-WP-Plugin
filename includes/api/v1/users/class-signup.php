@@ -11,7 +11,7 @@
 	*/
 ?>
 <?php
-    class DVC_Signup{
+    class DV_Signup{
         public static function initialize(){
 
             // Initialize WP global variable
@@ -51,7 +51,7 @@
 
             } else {
                 // step2 : check call user create function from global
-                $user_result =  DVC_Globals::user_create($username,  $user_email);
+                $user_result =  DV_Globals::user_create($username,  $user_email);
 
                 // step3 : check if user creation false
                 if ($user_result == false) {
@@ -104,7 +104,7 @@
                     }else{
                     
                          // step9 : Activate send mail function   
-                        $send_email = DVC_Signup::send_mail_activation($result, $adt_rp_key, $user_login);
+                        $send_email = DV_Signup::send_mail_activation($result, $adt_rp_key, $user_login);
                         
                          // step9 : Fetch if send mail function come true   
                         if ($send_email == false) {

@@ -12,7 +12,7 @@
 ?>
 
 <?php
-	class DVC_Forgotpassword {
+	class DV_Forgotpassword {
 
         // REST API for Forgotten Passwords
 		public static function initialize() {
@@ -63,7 +63,7 @@
 				);
             } 
 
-            if (DVC_Forgotpassword::send_mail_success() == false) {
+            if (DV_Forgotpassword::send_mail_success() == false) {
                 return rest_ensure_response( 
 					array(
 						"status" => "failed",
