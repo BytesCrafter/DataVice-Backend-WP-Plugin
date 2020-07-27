@@ -20,4 +20,15 @@
 	define('DV_NAME', 'wordpress');
 	define('PLUGIN_PATH', plugin_dir_path( __FILE__ ));
 
+	//Initializing table names
+	define('ADDRESS_TABLE', DV_PREFIX.'address');
+	define('ROLES_TABLE', DV_PREFIX.'roles');
+	define('ROLES_META_TABLE', DV_PREFIX.'roles_meta');
+	define('ROLES_ACCESS_TABLE', DV_PREFIX.'roles_access');
+
+
+
+
+
+
 ?>

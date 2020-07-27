@@ -22,6 +22,76 @@
 		for ($i=0; $i < count($sql_files); $i++) { 
 			file_importing($sql_files[$i]);
 		}
+
+		global $wpdb;
+
+		//Passing from global defined variable to local variable
+		$tbl_address = ADDRESS_TABLE;
+		$tbl_roles = ROLES_TABLE;
+		$tbl_roles_meta = ROLES_META_TABLE;
+		$tbl_roles_access = ROLES_ACCESS_TABLE;
+
+
+		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_address'" ) != $tbl_address) {
+			$sql = "CREATE TABLE `".$tbl_address."` (";
+				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`user_id` int(11) NOT NULL, ";
+				$sql .= "`store_id` int(11) NOT NULL DEFAULT 0, ";
+				$sql .= "`supplier_id` int(11) NOT NULL DEFAULT 0, ";
+				$sql .= "`a_street` varchar(120) NULL, ";
+				$sql .= "`a_brgy_id` int(11) NOT NULL, ";
+				$sql .= "`a_city_id` int(11) NOT NULL, ";
+				$sql .= "`a_province_id` int(11) NOT NULL, ";
+				$sql .= "`a_country_id` int(11) NOT NULL, ";
+				$sql .= "`a_timestamp` datetime NOT NULL, ";
+				$sql .= "`a_last_update` datetime NULL, ";
+				$sql .= "PRIMARY KEY (`ID`) ";
+				$sql .= ") ENGINE = InnoDB; ";
+			$result = $wpdb->get_results($sql);
+		}
+
+		//Database table creation for roles
+		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_roles'" ) != $tbl_roles) {
+			$sql = "CREATE TABLE `".$tbl_roles."` (";
+				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`store_id` int(11) NOT NULL, ";
+				$sql .= "`r_name` VARCHAR(40) NOT NULL, ";
+				$sql .= "`r_info` VARCHAR(255)  NULL, ";
+				$sql .= "`r_icon` VARCHAR(140)  NULL, ";
+				$sql .= "`r_timestamp` datetime NOT NULL, ";
+				$sql .= "`r_created_by` int(11) NOT NULL, ";
+				$sql .= "PRIMARY KEY (`ID`) ";
+				$sql .= ") ENGINE = InnoDB; ";
+			$result = $wpdb->get_results($sql);
+		}
+
+		//Database table creation for roles_meta
+		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_roles_meta'" ) != $tbl_roles_meta) {
+			$sql = "CREATE TABLE `".$tbl_roles_meta."` (";
+				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`r_group` int(11) NOT NULL, ";
+				$sql .= "`r_per_id` int(11) NOT NULL, ";
+				$sql .= "`rm_status` tinyint(4)  NULL, ";
+				$sql .= "`rm_timestamp` datetime NOT NULL, ";
+				$sql .= "PRIMARY KEY (`ID`) ";
+				$sql .= ") ENGINE = InnoDB; ";
+			$result = $wpdb->get_results($sql);
+		}
+
+		//Database table creation for roles_access
+		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_roles_access'" ) != $tbl_roles_access) {
+			$sql = "CREATE TABLE `".$tbl_roles_access."` (";
+				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`ra_key` VARCHAR(40) NOT NULL, ";
+				$sql .= "`ra_value` VARCHAR(255) NOT NULL, ";
+				$sql .= "`ra_last_update` datetime  NULL, ";
+				$sql .= "`ra_timestamp` datetime NOT NULL, ";
+				$sql .= "PRIMARY KEY (`ID`) ";
+				$sql .= ") ENGINE = InnoDB; ";
+			$result = $wpdb->get_results($sql);
+		}
+
+
 		
 		
 	}
