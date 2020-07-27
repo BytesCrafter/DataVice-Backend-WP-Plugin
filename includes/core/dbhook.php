@@ -16,7 +16,7 @@
 		
 		//Array for sql files
 		//If adding new files, pls follow the format provided
-		$sql_files = array('\dv_brgys.sql', '\dv_cities.sql', '\dv_countries.sql', '\dv_provinces.sql' );
+		$sql_files = array('/dv_brgys.sql', '/dv_cities.sql', '/dv_countries.sql', '/dv_provinces.sql' );
 
 		//Loop through the array and pass the sql filename to the importing function
 		for ($i=0; $i < count($sql_files); $i++) { 
@@ -42,7 +42,7 @@
 		/* PDO connection end */
 
 		// your config
-		$filename = plugin_dir_path(__FILE__) . '\sql-files' . $sql_table;
+		$filename = plugin_dir_url(__FILE__) . 'sql-files' . $sql_table;
 
 		$maxRuntime = 8; // less then your max script execution limit
 

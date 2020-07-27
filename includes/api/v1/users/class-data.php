@@ -11,13 +11,13 @@
 	*/
 ?>
 <?php
-	class DVC_Userdata{
+	class DV_Userdata{
 
                 // REST API for getting the user data
                 public static function initialize(){
 
                         //User verification
-                        $verified = DVC_Verification::initialize();
+                        $verified = DV_Verification::initialize();
 
                         //Convert object to array
                         $array =  (array) $verified;
@@ -63,7 +63,7 @@
                         global $wpdb;
                         
                         //User verification
-                        $verified = DVC_Verification::initialize();
+                        $verified = DV_Verification::initialize();
 
                         //Convert object to array
                         $array =  (array) $verified;
@@ -99,7 +99,7 @@
                 public static function get_countries(){
                        
                         // Validate user
-                        if (DVC_Userdata::validate_user() == false) {
+                        if (DV_Userdata::validate_user() == false) {
                                 return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -143,7 +143,7 @@
                 public static function get_provinces(){
                         
                         // Validate user
-                        if (DVC_Userdata::validate_user() == false) {
+                        if (DV_Userdata::validate_user() == false) {
                                 return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -186,7 +186,7 @@
                 public static function get_cities(){
                         
                         // Validate user
-                        if (DVC_Userdata::validate_user() == false) {
+                        if (DV_Userdata::validate_user() == false) {
                                 return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -255,7 +255,7 @@
                 public static function get_brgy(){
                         
                         // Validate user
-                        if (DVC_Userdata::validate_user() == false) {
+                        if (DV_Userdata::validate_user() == false) {
                                 return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -323,7 +323,7 @@
                 public static function validate_user(){
             
                         //User verification
-                        $verified = DVC_Verification::initialize();
+                        $verified = DV_Verification::initialize();
             
                         //Convert object to array
                         $array =  (array) $verified;
