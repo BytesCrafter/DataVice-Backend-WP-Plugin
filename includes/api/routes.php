@@ -10,7 +10,6 @@
 		* This is the primary gateway of all the rest api request.
 	*/
 ?>
-
 <?php
 
     //Require the USocketNet class which have the core function of this plguin. 

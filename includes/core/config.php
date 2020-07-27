@@ -18,9 +18,6 @@
 	define('DV_USER', 'root');
 	define('DV_PASS', '');
 	define('DV_NAME', 'wordpress');
-
-
-
-	
+	define('PLUGIN_PATH', plugin_dir_path( __FILE__ ));
 
 ?>
