@@ -83,8 +83,8 @@
                         global $wpdb;
 
                         //Table details creation
-                        $ctry_table = COUNTRY_TABLE;
-                        $ctry_fields = COUNTRY_FIELDS; 
+                        $ctry_table = DV_COUNTRY_TABLE;
+                        $ctry_fields = DV_COUNTRY_FIELDS; 
 
                         $countries =  $wpdb->get_results("SELECT $ctry_fields 
                                 FROM $ctry_table
@@ -125,11 +125,13 @@
                         global $wpdb;
 
                         //Table details creation
-                        $prv_table = PRV_TABLE;
-                        $prv_fields = PRV_FIELDS;
-                        
+                        $prv_table = DV_PRV_TABLE;
+                        $prv_fields = DV_PRV_FIELDS;
+                        $prv_where = DV_PRV_WHERE;
+
                         $provinces =  $wpdb->get_results("SELECT $prv_fields
                                 FROM $prv_table
+                                WHERE $prv_where
                                 ORDER BY prov_name ASC
                         ");
 
@@ -190,12 +192,14 @@
                         $province_code = $_POST["PC"];
 
                         //Table details creation
-                        $cty_table = CTY_TABLE;
-                        $cty_fields = CTY_FIELDS; 
+                        $cty_table = DV_CTY_TABLE;
+                        $cty_fields = DV_CTY_FIELDS;
+                        $cty_where = DV_CTY_WHERE; 
 
                         $cities =  $wpdb->get_results("SELECT $cty_fields
                                 FROM $cty_table
                                 WHERE prov_code = $province_code
+                                AND $cty_where
                                 ORDER BY citymun_name ASC
                         ");
 
@@ -257,12 +261,14 @@
                         $city_code = $_POST["CC"];
 
                         //Table details creation
-                        $brgy_table = BRGY_TABLE; 
-                        $brgy_fields = BRGY_FIELDS;
+                        $brgy_table = DV_BRGY_TABLE; 
+                        $brgy_fields = DV_BRGY_FIELDS;
+                        $brgy_where = DV_BRGY_WHERE; 
 
                         $brgys =  $wpdb->get_results("SELECT $brgy_fields
                                 FROM $brgy_table
                                 WHERE city_code = $city_code
+                                AND $brgy_where
                                 ORDER BY brgy_name ASC
                         ");
 
