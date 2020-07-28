@@ -16,27 +16,15 @@
                 // REST API for getting the user data
                 public static function initialize(){
 
-                        //User verification
-                        $verified = DV_Verification::initialize();
-
-                        //Convert object to array
-                        $array =  (array) $verified;
-
-                        // Pass the ID in a variable
-                        $user_id =  $array['data']['wpid']; 
-
-                        //Get user data and pass it to $wp_user
-                        $wp_user = get_user_by("ID", $user_id);
-                        
-                        // Check if $wp_user has value
-                        if ($wp_user == false) {
-                                return rest_ensure_response( 
-                                        array(
-                                                "status" => "failed",
-                                                "message" => "Please contact your administrator. User Not Found!"
-                                        )
-                                );
+                        //User validation
+                        $result = DV_Globals::validate_user();
+			
+			if ($result['status'] !== 'success') {
+				return $result;
                         }
+
+                        //Find user in db using wpid
+                        $wp_user = get_user_by("ID", $result['wpid']);
                         
                         // Return success status and complete object.
                         return rest_ensure_response( 
@@ -63,24 +51,10 @@
                         global $wpdb;
                         
                         //User verification
-                        $verified = DV_Verification::initialize();
-
-                        //Convert object to array
-                        $array =  (array) $verified;
-
-                        // Pass request status in a variable
-                        $response =  $array['data']['status'];
-                        
-                        // Pass wpid in a variable
-                        $wpid =  $array['data']['wpid'];
-
-                        if ($response != 'success') {
-                                return rest_ensure_response( 
-                                        array(
-                                                "status" => "failed",
-                                                "message" => "Please contact your administrator. User Not Found!"
-                                        )
-                                );
+                        $result = DV_Globals::validate_user();
+			
+			if ($result['status'] !== 'success') {
+				return $result;
                         }
 
                         //Ensures that fields are set
@@ -98,23 +72,21 @@
                 //Rest API for retrieving countries
                 public static function get_countries(){
                        
-                        // Validate user
-                        if (DV_Userdata::validate_user() == false) {
-                                return rest_ensure_response( 
-					array(
-						"status" => "unknown",
-						"message" => "Please contact your administrator. Request Unknown!",
-					)
-				);
+                        //User verification
+                        $result = DV_Globals::validate_user();
+			
+			if ($result['status'] !== 'success') {
+				return $result;
                         }
 
                         //Initialize wordpress global variable
                         global $wpdb;
 
-                        //Table name creation
-                        $ctry_table = DV_PREFIX.'countries'; 
+                        //Table details creation
+                        $ctry_table = COUNTRY_TABLE;
+                        $ctry_fields = COUNTRY_FIELDS; 
 
-                        $countries =  $wpdb->get_results("SELECT * 
+                        $countries =  $wpdb->get_results("SELECT $ctry_fields 
                                 FROM $ctry_table
                                 ORDER BY country_name ASC
                                 ");
@@ -142,23 +114,21 @@
                 //Rest API for retrieving provinces
                 public static function get_provinces(){
                         
-                        // Validate user
-                        if (DV_Userdata::validate_user() == false) {
-                                return rest_ensure_response( 
-					array(
-						"status" => "unknown",
-						"message" => "Please contact your administrator. Request Unknown!",
-					)
-				);
-                        }
-                        
+                         //User verification
+                         $result = DV_Globals::validate_user();
+			
+                         if ($result['status'] !== 'success') {
+                                 return $result;
+                         }
+
                         //Initialize wordpress global variable
                         global $wpdb;
 
-                        //Table name creation
-                        $prv_table = DV_PREFIX.'provinces';
+                        //Table details creation
+                        $prv_table = PRV_TABLE;
+                        $prv_fields = PRV_FIELDS;
                         
-                        $provinces =  $wpdb->get_results("SELECT id, prov_name as prov
+                        $provinces =  $wpdb->get_results("SELECT $prv_fields
                                 FROM $prv_table
                                 ORDER BY prov_name ASC
                         ");
@@ -185,14 +155,11 @@
                 //Rest API for retrieving cities
                 public static function get_cities(){
                         
-                        // Validate user
-                        if (DV_Userdata::validate_user() == false) {
-                                return rest_ensure_response( 
-					array(
-						"status" => "unknown",
-						"message" => "Please contact your administrator. Request Unknown!",
-					)
-				);
+                        //User verification
+                        $result = DV_Globals::validate_user();
+			
+                        if ($result['status'] !== 'success') {
+                                return $result;
                         }
 
                         //Initialize wordpress global variable
@@ -222,13 +189,14 @@
                         //Pass province code to a variable
                         $province_code = $_POST["PC"];
 
-                        //Table name creation
-                        $cty_table = DV_PREFIX.'cities'; 
+                        //Table details creation
+                        $cty_table = CTY_TABLE;
+                        $cty_fields = CTY_FIELDS; 
 
-                        $cities =  $wpdb->get_results("SELECT *
+                        $cities =  $wpdb->get_results("SELECT $cty_fields
                                 FROM $cty_table
                                 WHERE prov_code = $province_code
-                                ORDER BY city_name ASC
+                                ORDER BY citymun_name ASC
                         ");
 
                         if (!$cities) {
@@ -254,14 +222,11 @@
                 //Rest API for retrieving barangays
                 public static function get_brgy(){
                         
-                        // Validate user
-                        if (DV_Userdata::validate_user() == false) {
-                                return rest_ensure_response( 
-					array(
-						"status" => "unknown",
-						"message" => "Please contact your administrator. Request Unknown!",
-					)
-				);
+                        //User verification
+                        $result = DV_Globals::validate_user();
+			
+                        if ($result['status'] !== 'success') {
+                                return $result;
                         }
 
                         //Initialize wordpress global variable
@@ -291,10 +256,11 @@
                         //Pass province code to a variable
                         $city_code = $_POST["CC"];
 
-                        //Table name creation
-                        $brgy_table = DV_PREFIX.'brgys'; 
+                        //Table details creation
+                        $brgy_table = BRGY_TABLE; 
+                        $brgy_fields = BRGY_FIELDS;
 
-                        $brgys =  $wpdb->get_results("SELECT *
+                        $brgys =  $wpdb->get_results("SELECT $brgy_fields
                                 FROM $brgy_table
                                 WHERE city_code = $city_code
                                 ORDER BY brgy_name ASC

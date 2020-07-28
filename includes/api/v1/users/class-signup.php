@@ -51,7 +51,7 @@
 
             } else {
                 // step2 : check call user create function from global
-                $user_result =  DV_Globals::user_create($username,  $user_email);
+                $user_result =  DV_Signup::user_create($username,  $user_email);
 
                 // step3 : check if user creation false
                 if ($user_result == false) {
@@ -130,13 +130,9 @@
                 }    
                 
             }
-
-
-           
             
         }
 
-            
         //Sending email for account verification
         public static function send_mail_activation($user_id, $adt_rp_key, $user_login){
             global $wpdb;
@@ -158,5 +154,20 @@
             }
 
         }
+
+        // user create
+        public static function user_create($username,  $email){
+            $user_login = wp_slash( $username );
+            $user_email = wp_slash( $email );
+            $userdata = compact( 'user_login', 'user_email' );
+            return wp_insert_user( $userdata );
+            
+        }
+
+        public static function signup($user_table_name, $data){
+            global $wpdb;
+            return $wpdb->insert($user_table_name, $data);
+        }
+
     }
 ?>

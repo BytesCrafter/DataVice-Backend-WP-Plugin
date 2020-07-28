@@ -20,7 +20,6 @@
 	require plugin_dir_path(__FILE__) . '/v1/users/class-data.php';
 	require plugin_dir_path(__FILE__) . '/v1/users/class-signup.php';
 	require plugin_dir_path(__FILE__) . '/v1/globals/class-globals.php';
-    require plugin_dir_path(__FILE__) . '/v1/feeds/class-feeds.php';
 	
 	// Init check if USocketNet successfully request from wapi.
     function datavice_route()
@@ -57,22 +56,22 @@
         ));
 
         register_rest_route( 'datavice/v1/feeds', 'profile', array(
-            'methods' => 'GET',
+            'methods' => 'POST',
             'callback' => array('DV_Newsfeed', 'get_feeds'),
         ));
 
         register_rest_route( 'datavice/v1/feeds', 'p_feeds', array(
-            'methods' => 'GET',
+            'methods' => 'POST',
             'callback' => array('DV_Newsfeed', 'get_additional_feeds'),
         ));
 
         register_rest_route( 'datavice/v1/feeds', 'home', array(
-            'methods' => 'GET',
+            'methods' => 'POST',
             'callback' => array('DV_Newsfeed', 'home_feeds'),
         ));
 
         register_rest_route( 'datavice/v1/feeds', 'home_add_feeds', array(
-            'methods' => 'GET',
+            'methods' => 'POST',
             'callback' => array('DV_Newsfeed', 'home_additional_feeds'),
         ));
 
@@ -101,10 +100,6 @@
             'callback' => array('DV_Userdata', 'get_brgy'),
         ));
 
-        register_rest_route( 'datavice/v1/user', 'test', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Userdata', 'test'),
-        ));
                 
     }
     add_action( 'rest_api_init', 'datavice_route' );

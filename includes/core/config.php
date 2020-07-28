@@ -25,6 +25,24 @@
 	define('ROLES_TABLE', DV_PREFIX.'roles');
 	define('ROLES_META_TABLE', DV_PREFIX.'roles_meta');
 	define('ROLES_ACCESS_TABLE', DV_PREFIX.'roles_access');
+	define('COUNTRY_TABLE', DV_PREFIX.'countries');
+	define('PRV_TABLE', DV_PREFIX.'provinces');
+	define('CTY_TABLE', DV_PREFIX.'cities');
+	define('BRGY_TABLE', DV_PREFIX.'brgys');
+
+
+	
+
+	//Initializing table fields
+	define('COUNTRY_FIELDS', '*');
+	define('PRV_FIELDS', 'id, prov_name as prov');
+	define('CTY_FIELDS', '*');
+	define('BRGY_FIELDS', '*');
+
+
+
+
+
 
 
 
