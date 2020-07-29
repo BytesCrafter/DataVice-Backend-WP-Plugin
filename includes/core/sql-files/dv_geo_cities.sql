@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 28, 2020 at 08:55 AM
+-- Generation Time: Jul 29, 2020 at 06:51 AM
 -- Server version: 10.4.13-MariaDB
 -- PHP Version: 7.4.7
 
@@ -24,13 +24,12 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `dv_cities`
+-- Table structure for table `dv_geo_cities`
 --
 
-DROP TABLE IF EXISTS `dv_cities`;
+DROP TABLE IF EXISTS `dv_geo_cities`;
 
-
-CREATE TABLE `dv_cities` (
+CREATE TABLE `dv_geo_cities` (
   `id` int(255) NOT NULL,
   `citymun_name` text DEFAULT NULL,
   `prov_code` varchar(255) DEFAULT NULL,
@@ -39,10 +38,10 @@ CREATE TABLE `dv_cities` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `dv_cities`
+-- Dumping data for table `dv_geo_cities`
 --
 
-INSERT INTO `dv_cities` (`id`, `citymun_name`, `prov_code`, `city_code`, `status`) VALUES
+INSERT INTO `dv_geo_cities` (`id`, `citymun_name`, `prov_code`, `city_code`, `status`) VALUES
 (1, 'Adams', '0128', '012801', 0),
 (2, 'Bacarra', '0128', '012802', 0),
 (3, 'Badoc', '0128', '012803', 0),
@@ -1309,7 +1308,7 @@ INSERT INTO `dv_cities` (`id`, `citymun_name`, `prov_code`, `city_code`, `status
 (1264, 'City Of Digos (Capital)', '1124', '112403', 0),
 (1265, 'Hagonoy', '1124', '112404', 0),
 (1266, 'Kiblawan', '1124', '112406', 0);
-INSERT INTO `dv_cities` (`id`, `citymun_name`, `prov_code`, `city_code`, `status`) VALUES
+INSERT INTO `dv_geo_cities` (`id`, `citymun_name`, `prov_code`, `city_code`, `status`) VALUES
 (1267, 'Magsaysay', '1124', '112407', 0),
 (1268, 'Malalag', '1124', '112408', 0),
 (1269, 'Matanao', '1124', '112410', 0),
@@ -1697,9 +1696,9 @@ INSERT INTO `dv_cities` (`id`, `citymun_name`, `prov_code`, `city_code`, `status
 --
 
 --
--- Indexes for table `dv_cities`
+-- Indexes for table `dv_geo_cities`
 --
-ALTER TABLE `dv_cities`
+ALTER TABLE `dv_geo_cities`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1707,9 +1706,9 @@ ALTER TABLE `dv_cities`
 --
 
 --
--- AUTO_INCREMENT for table `dv_cities`
+-- AUTO_INCREMENT for table `dv_geo_cities`
 --
-ALTER TABLE `dv_cities`
+ALTER TABLE `dv_geo_cities`
   MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1648;
 COMMIT;
 

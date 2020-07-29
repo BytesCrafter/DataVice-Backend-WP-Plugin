@@ -18,20 +18,21 @@
 	define('DV_USER', 'root');
 	define('DV_PASS', '');
 	define('DV_NAME', 'wordpress');
-	define('PLUGIN_PATH', plugin_dir_path( __FILE__ ));
+	define('DV_PLUGIN_PATH', plugin_dir_path( __FILE__ ));
 
 	//Initializing table names
 	define('DV_ADDRESS_TABLE', DV_PREFIX.'address');
 	define('DV_ROLES_TABLE', DV_PREFIX.'roles');
 	define('DV_ROLES_META_TABLE', DV_PREFIX.'roles_meta');
 	define('DV_ROLES_ACCESS_TABLE', DV_PREFIX.'roles_access');
-	define('DV_COUNTRY_TABLE', DV_PREFIX.'countries');
-	define('DV_PRV_TABLE', DV_PREFIX.'provinces');
-	define('DV_CTY_TABLE', DV_PREFIX.'cities');
-	define('DV_BRGY_TABLE', DV_PREFIX.'brgys');
+	define('DV_COUNTRY_TABLE', DV_PREFIX.'geo_countries');
+	define('DV_PRV_TABLE', DV_PREFIX.'geo_provinces');
+	define('DV_CTY_TABLE', DV_PREFIX.'geo_cities');
+	define('DV_BRGY_TABLE', DV_PREFIX.'geo_brgys');
+	define('DV_CONFIG_TABLE', DV_PREFIX.'configs');
+	define('DV_CONTACTS_TABLE', DV_PREFIX.'contacts');
 
 
-	
 
 	//Initializing table fields
 	define('DV_COUNTRY_FIELDS', '*');

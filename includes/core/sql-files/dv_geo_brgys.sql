@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 28, 2020 at 08:54 AM
+-- Generation Time: Jul 29, 2020 at 06:51 AM
 -- Server version: 10.4.13-MariaDB
 -- PHP Version: 7.4.7
 
@@ -24,12 +24,12 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `dv_brgys`
+-- Table structure for table `dv_geo_brgys`
 --
 
-DROP TABLE IF EXISTS `dv_brgys`;
+DROP TABLE IF EXISTS `dv_geo_brgys`;
 
-CREATE TABLE `dv_brgys` (
+CREATE TABLE `dv_geo_brgys` (
   `id` int(11) NOT NULL,
   `brgy_name` text DEFAULT NULL,
   `prov_code` varchar(255) DEFAULT NULL,
@@ -38,10 +38,10 @@ CREATE TABLE `dv_brgys` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `dv_brgys`
+-- Dumping data for table `dv_geo_brgys`
 --
 
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (1, 'Adams (Pob.)', '0128', '012801', 0),
 (2, 'Bani', '0128', '012802', 0),
 (3, 'Buyon', '0128', '012802', 0),
@@ -1256,9 +1256,9 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (1212, 'Namnama (Pob.)', '0129', '012930', 0),
 (1213, 'Pacis', '0129', '012930', 0),
 (1214, 'Paratong', '0129', '012930', 0),
-(1215, 'Dean Leopoldo Yabes (Pug-os)', '0129', '012930', 0),
-(1216, 'Purag', '0129', '012930', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(1215, 'Dean Leopoldo Yabes (Pug-os)', '0129', '012930', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(1216, 'Purag', '0129', '012930', 0),
 (1217, 'Quibit-quibit', '0129', '012930', 0),
 (1218, 'Quimmallogong', '0129', '012930', 0),
 (1219, 'Rang-ay (Pob.)', '0129', '012930', 0),
@@ -2491,9 +2491,9 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (2446, 'Cabinuangan', '0155', '015523', 0),
 (2447, 'Calzada', '0155', '015523', 0),
 (2448, 'Caranglaan', '0155', '015523', 0),
-(2449, 'De Guzman', '0155', '015523', 0),
-(2450, 'Luna', '0155', '015523', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(2449, 'De Guzman', '0155', '015523', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(2450, 'Luna', '0155', '015523', 0),
 (2451, 'Magalong', '0155', '015523', 0),
 (2452, 'Nibaliw', '0155', '015523', 0),
 (2453, 'Patar', '0155', '015523', 0),
@@ -3713,9 +3713,9 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (3667, 'Capissayan Norte', '0215', '021513', 0),
 (3668, 'Capissayan Sur', '0215', '021513', 0),
 (3669, 'Casicallan Sur', '0215', '021513', 0),
-(3670, 'Casicallan Norte', '0215', '021513', 0),
-(3671, 'Centro Norte (Pob.)', '0215', '021513', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(3670, 'Casicallan Norte', '0215', '021513', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(3671, 'Centro Norte (Pob.)', '0215', '021513', 0),
 (3672, 'Centro Sur (Pob.)', '0215', '021513', 0),
 (3673, 'Cullit', '0215', '021513', 0),
 (3674, 'Cumao', '0215', '021513', 0),
@@ -4924,9 +4924,9 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (4877, 'Dappig', '0231', '023127', 0),
 (4878, 'Laoag', '0231', '023127', 0),
 (4879, 'Mapalad', '0231', '023127', 0),
-(4880, 'Masaya Centro (Pob.)', '0231', '023127', 0),
-(4881, 'Masaya Norte', '0231', '023127', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(4880, 'Masaya Centro (Pob.)', '0231', '023127', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(4881, 'Masaya Norte', '0231', '023127', 0),
 (4882, 'Masaya Sur', '0231', '023127', 0),
 (4883, 'Nemmatan', '0231', '023127', 0),
 (4884, 'Palacian', '0231', '023127', 0),
@@ -6149,9 +6149,9 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (6101, 'Bunsuran III', '0314', '031415', 0),
 (6102, 'Bunsuran I', '0314', '031415', 0),
 (6103, 'Bunsuran II', '0314', '031415', 0),
-(6104, 'Cacarong Bata', '0314', '031415', 0),
-(6105, 'Cacarong Matanda', '0314', '031415', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(6104, 'Cacarong Bata', '0314', '031415', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(6105, 'Cacarong Matanda', '0314', '031415', 0),
 (6106, 'Cupang', '0314', '031415', 0),
 (6107, 'Malibong Bata', '0314', '031415', 0),
 (6108, 'Malibong Matanda', '0314', '031415', 0),
@@ -7346,9 +7346,9 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (7297, 'San Juan Bano', '0354', '035403', 0),
 (7298, 'San Mateo', '0354', '035403', 0),
 (7299, 'San Nicolas', '0354', '035403', 0),
-(7300, 'San Roque Bitas', '0354', '035403', 0),
-(7301, 'Cupang (Santa Lucia)', '0354', '035403', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(7300, 'San Roque Bitas', '0354', '035403', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(7301, 'Cupang (Santa Lucia)', '0354', '035403', 0),
 (7302, 'Matamo (Santa Lucia)', '0354', '035403', 0),
 (7303, 'Santo Niño Tabuan', '0354', '035403', 0),
 (7304, 'Suclayin', '0354', '035403', 0),
@@ -8557,9 +8557,9 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (8507, 'Poblacion South', '0371', '037113', 0),
 (8508, 'Tabalong', '0371', '037113', 0),
 (8509, 'Tubotubo North', '0371', '037113', 0),
-(8510, 'Tubotubo South', '0371', '037113', 0),
-(8511, 'Bulawon', '0371', '037113', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(8510, 'Tubotubo South', '0371', '037113', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(8511, 'Bulawon', '0371', '037113', 0),
 (8512, 'Aningway Sacatihan', '0371', '037114', 0),
 (8513, 'Asinan Poblacion', '0371', '037114', 0),
 (8514, 'Asinan Proper', '0371', '037114', 0),
@@ -9767,9 +9767,9 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (9716, 'San Isidro', '0410', '041032', 0),
 (9717, 'San Marcelino', '0410', '041032', 0),
 (9718, 'Santo Niño', '0410', '041032', 0),
-(9719, 'Tilambo', '0410', '041032', 0),
-(9720, 'Corona', '0410', '041033', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(9719, 'Tilambo', '0410', '041032', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(9720, 'Corona', '0410', '041033', 0),
 (9721, 'Gamao', '0410', '041033', 0),
 (9722, 'Makawayan', '0410', '041033', 0),
 (9723, 'Marikaban', '0410', '041033', 0),
@@ -10895,9 +10895,9 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (10843, 'Balubad', '0434', '043413', 0),
 (10844, 'Caliraya', '0434', '043413', 0),
 (10845, 'Concepcion', '0434', '043413', 0),
-(10846, 'Lewin', '0434', '043413', 0),
-(10847, 'Maracta (Pob.)', '0434', '043413', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(10846, 'Lewin', '0434', '043413', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(10847, 'Maracta (Pob.)', '0434', '043413', 0),
 (10848, 'Maytalang I', '0434', '043413', 0),
 (10849, 'Maytalang II', '0434', '043413', 0),
 (10850, 'Primera Parang (Pob.)', '0434', '043413', 0),
@@ -12060,9 +12060,9 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (12007, 'San Isidro', '0456', '045628', 0),
 (12008, 'San Pedro', '0456', '045628', 0),
 (12009, 'Santa Rosa', '0456', '045628', 0),
-(12010, 'Cabuyao Norte', '0456', '045629', 0),
-(12011, 'Cabuyao Sur', '0456', '045629', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(12010, 'Cabuyao Norte', '0456', '045629', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(12011, 'Cabuyao Sur', '0456', '045629', 0),
 (12012, 'Danlagan', '0456', '045629', 0),
 (12013, 'Duhat', '0456', '045629', 0),
 (12014, 'Hinguiwin', '0456', '045629', 0),
@@ -13245,9 +13245,9 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (13191, 'Maidlang', '1752', '175205', 0),
 (13192, 'Malad', '1752', '175205', 0),
 (13193, 'Malamig', '1752', '175205', 0),
-(13194, 'Managpi', '1752', '175205', 0),
-(13195, 'Masipit', '1752', '175205', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(13194, 'Managpi', '1752', '175205', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(13195, 'Masipit', '1752', '175205', 0),
 (13196, 'Nag-Iba I', '1752', '175205', 0),
 (13197, 'Navotas', '1752', '175205', 0),
 (13198, 'Pachoca', '1752', '175205', 0),
@@ -14439,9 +14439,9 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (14384, 'Bgy. 14 - Ilawod Pob. (Ilawod 2)', '0505', '050506', 0),
 (14385, 'Bgy. 15 - Ilawod East Pob. (Ilawod 3)', '0505', '050506', 0),
 (14386, 'Bgy. 16 - Kawit-East Washington Drive (Pob.)', '0505', '050506', 0),
-(14387, 'Bgy. 17 - Rizal Sreet., Ilawod (Pob.)', '0505', '050506', 0),
-(14388, 'Bgy. 19 - Cabagñan', '0505', '050506', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(14387, 'Bgy. 17 - Rizal Sreet., Ilawod (Pob.)', '0505', '050506', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(14388, 'Bgy. 19 - Cabagñan', '0505', '050506', 0),
 (14389, 'Bgy. 2 - Em\'s Barrio South (Pob.)', '0505', '050506', 0),
 (14390, 'Bgy. 18 - Cabagñan West (Pob.)', '0505', '050506', 0),
 (14391, 'Bgy. 21 - Binanuahan West (Pob.)', '0505', '050506', 0),
@@ -15601,10 +15601,10 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (15545, 'Scout Fuentebella', '0517', '051715', 0),
 (15546, 'Tabgon', '0517', '051715', 0),
 (15547, 'Tagongtong', '0517', '051715', 0),
-(15548, 'Tamban (Mabini)', '0517', '051715', 0),
+(15548, 'Tamban (Mabini)', '0517', '051715', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (15549, 'Taytay (Halgon East)', '0517', '051715', 0),
-(15550, 'Antipolo', '0517', '051716', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(15550, 'Antipolo', '0517', '051716', 0),
 (15551, 'Cristo Rey', '0517', '051716', 0),
 (15552, 'Del Rosario (Banao)', '0517', '051716', 0),
 (15553, 'Francia', '0517', '051716', 0),
@@ -16784,11 +16784,11 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (16727, 'Pasig', '0541', '054107', 0),
 (16728, 'Peñafrancia', '0541', '054107', 0),
 (16729, 'Quezon', '0541', '054107', 0),
-(16730, 'San Isidro', '0541', '054107', 0),
+(16730, 'San Isidro', '0541', '054107', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (16731, 'San Ramon', '0541', '054107', 0),
 (16732, 'San Vicente', '0541', '054107', 0),
-(16733, 'Taguilid', '0541', '054107', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(16733, 'Taguilid', '0541', '054107', 0),
 (16734, 'Imelda', '0541', '054107', 0),
 (16735, 'Balantay', '0541', '054108', 0),
 (16736, 'Balocawe', '0541', '054108', 0),
@@ -18003,12 +18003,12 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (17945, 'Tondog', '0604', '060417', 0),
 (17946, 'Vivo', '0604', '060417', 0),
 (17947, 'Bayo Grande', '0606', '060601', 0),
-(17948, 'Bayo Pequeño', '0606', '060601', 0),
+(17948, 'Bayo Pequeño', '0606', '060601', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (17949, 'Butuan', '0606', '060601', 0),
 (17950, 'Casay', '0606', '060601', 0),
 (17951, 'Casay Viejo', '0606', '060601', 0),
-(17952, 'Iba', '0606', '060601', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(17952, 'Iba', '0606', '060601', 0),
 (17953, 'Igbarabatuan', '0606', '060601', 0),
 (17954, 'Igpalge', '0606', '060601', 0),
 (17955, 'Igtumarom', '0606', '060601', 0),
@@ -19224,12 +19224,12 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (19165, 'Quiasan', '0630', '063005', 0),
 (19166, 'Salong', '0630', '063005', 0),
 (19167, 'Salvacion', '0630', '063005', 0),
-(19168, 'Tingui-an', '0630', '063005', 0),
+(19168, 'Tingui-an', '0630', '063005', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (19169, 'Zaragosa', '0630', '063005', 0),
 (19170, 'Alacaygan', '0630', '063006', 0),
 (19171, 'Bariga', '0630', '063006', 0),
-(19172, 'Belen', '0630', '063006', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(19172, 'Belen', '0630', '063006', 0),
 (19173, 'Bobon', '0630', '063006', 0),
 (19174, 'Bularan', '0630', '063006', 0),
 (19175, 'Carmelo', '0630', '063006', 0),
@@ -20417,12 +20417,12 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (20357, 'Batuan Ilaud', '0630', '063034', 0),
 (20358, 'Batuan Ilaya', '0630', '063034', 0),
 (20359, 'Bita Norte', '0630', '063034', 0),
-(20360, 'Bita Sur', '0630', '063034', 0),
+(20360, 'Bita Sur', '0630', '063034', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (20361, 'Botong', '0630', '063034', 0),
 (20362, 'Buray', '0630', '063034', 0),
 (20363, 'Cabanbanan', '0630', '063034', 0),
-(20364, 'Caboloan Norte', '0630', '063034', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(20364, 'Caboloan Norte', '0630', '063034', 0),
 (20365, 'Caboloan Sur', '0630', '063034', 0),
 (20366, 'Cadinglian', '0630', '063034', 0),
 (20367, 'Cagbang', '0630', '063034', 0),
@@ -21598,12 +21598,12 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (21537, 'Poblacion', '0645', '064530', 0),
 (21538, 'Sagua Banua', '0645', '064530', 0),
 (21539, 'Tabao Proper', '0645', '064530', 0),
-(21540, 'Barangay I (Pob.)', '0645', '064531', 0),
+(21540, 'Barangay I (Pob.)', '0645', '064531', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (21541, 'Barangay II (Pob.)', '0645', '064531', 0),
 (21542, 'Barangay III (Pob.)', '0645', '064531', 0),
 (21543, 'Barangay IV (Pob.)', '0645', '064531', 0),
-(21544, 'Barangay V (Pob.)', '0645', '064531', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(21544, 'Barangay V (Pob.)', '0645', '064531', 0),
 (21545, 'Barangay VI (Pob.)', '0645', '064531', 0),
 (21546, 'Barangay VII (Pob.)', '0645', '064531', 0),
 (21547, 'Barangay VIII (Pob.)', '0645', '064531', 0),
@@ -22814,13 +22814,13 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (22752, 'Marawis', '0712', '071247', 0),
 (22753, 'Maubo', '0712', '071247', 0),
 (22754, 'Nailo', '0712', '071247', 0),
-(22755, 'Omjon', '0712', '071247', 0),
+(22755, 'Omjon', '0712', '071247', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (22756, 'Pangi-an', '0712', '071247', 0),
 (22757, 'Poblacion Occidental', '0712', '071247', 0),
 (22758, 'Poblacion Oriental', '0712', '071247', 0),
 (22759, 'Simang', '0712', '071247', 0),
-(22760, 'Taug', '0712', '071247', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(22760, 'Taug', '0712', '071247', 0),
 (22761, 'Tausion', '0712', '071247', 0),
 (22762, 'Taytay', '0712', '071247', 0),
 (22763, 'Ticum', '0712', '071247', 0),
@@ -24054,13 +24054,13 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (23991, 'Amdus', '0746', '074602', 0),
 (23992, 'Jandalamanon', '0746', '074602', 0),
 (23993, 'Anibong', '0746', '074602', 0),
-(23994, 'Atabay', '0746', '074602', 0),
+(23994, 'Atabay', '0746', '074602', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (23995, 'Awa-an', '0746', '074602', 0),
 (23996, 'Ban-ban', '0746', '074602', 0),
 (23997, 'Calagcalag', '0746', '074602', 0),
 (23998, 'Candana-ay', '0746', '074602', 0),
-(23999, 'Carol-an', '0746', '074602', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(23999, 'Carol-an', '0746', '074602', 0),
 (24000, 'Gomentoc', '0746', '074602', 0),
 (24001, 'Inacban', '0746', '074602', 0),
 (24002, 'Iniban', '0746', '074602', 0),
@@ -25254,13 +25254,13 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (25190, 'San Roque (Bugay)', '0826', '082619', 0),
 (25191, 'Santa Cruz', '0826', '082619', 0),
 (25192, 'Tacla-on', '0826', '082619', 0),
-(25193, 'Tagbacan', '0826', '082619', 0),
+(25193, 'Tagbacan', '0826', '082619', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (25194, 'Palanas', '0826', '082619', 0),
 (25195, 'Talangdawan', '0826', '082619', 0),
 (25196, 'Bunacan', '0826', '082620', 0),
 (25197, 'Campidhan', '0826', '082620', 0),
-(25198, 'Casoroy', '0826', '082620', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(25198, 'Casoroy', '0826', '082620', 0),
 (25199, 'Libas', '0826', '082620', 0),
 (25200, 'Nena (Luna)', '0826', '082620', 0),
 (25201, 'Pagbabangnan', '0826', '082620', 0),
@@ -26450,13 +26450,13 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (26385, 'Barangay 24 (Pob.)', '0837', '083738', 0),
 (26386, 'Barangay 25 (Pob.)', '0837', '083738', 0),
 (26387, 'Barangay 26 (Pob.)', '0837', '083738', 0),
-(26388, 'Barangay 27 (Pob.)', '0837', '083738', 0),
+(26388, 'Barangay 27 (Pob.)', '0837', '083738', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (26389, 'Barangay 28 (Pob.)', '0837', '083738', 0),
 (26390, 'Barangay 3 (Pob.)', '0837', '083738', 0),
 (26391, 'Barangay 4 (Pob.)', '0837', '083738', 0),
 (26392, 'Barangay 5 (Pob.)', '0837', '083738', 0),
-(26393, 'Barangay 6 (Pob.)', '0837', '083738', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(26393, 'Barangay 6 (Pob.)', '0837', '083738', 0),
 (26394, 'Barangay 7 (Pob.)', '0837', '083738', 0),
 (26395, 'Barangay 8 (Pob.)', '0837', '083738', 0),
 (26396, 'Barangay 9 (Pob.)', '0837', '083738', 0),
@@ -27625,15 +27625,15 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (27559, 'Anislag', '0860', '086003', 0),
 (27560, 'Ba-ay', '0860', '086003', 0),
 (27561, 'Bagacay', '0860', '086003', 0),
-(27562, 'Baja', '0860', '086003', 0),
+(27562, 'Baja', '0860', '086003', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (27563, 'Balud (Pob.)', '0860', '086003', 0),
 (27564, 'Bante', '0860', '086003', 0),
 (27565, 'Bantian', '0860', '086003', 0),
 (27566, 'Basud', '0860', '086003', 0),
 (27567, 'Bayo', '0860', '086003', 0),
 (27568, 'Begaho', '0860', '086003', 0),
-(27569, 'Binaliw', '0860', '086003', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(27569, 'Binaliw', '0860', '086003', 0),
 (27570, 'Bugtong', '0860', '086003', 0),
 (27571, 'Buenavista', '0860', '086003', 0),
 (27572, 'Cabacungan', '0860', '086003', 0),
@@ -28834,15 +28834,15 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (28767, 'Lipanto', '0864', '086412', 0),
 (28768, 'Magatas', '0864', '086412', 0),
 (28769, 'Magbagacay', '0864', '086412', 0),
-(28770, 'Mahayag', '0864', '086412', 0),
+(28770, 'Mahayag', '0864', '086412', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (28771, 'Mahayahay', '0864', '086412', 0),
 (28772, 'Malibago', '0864', '086412', 0),
 (28773, 'Malinao', '0864', '086412', 0),
 (28774, 'Panian', '0864', '086412', 0),
 (28775, 'San Isidro', '0864', '086412', 0),
 (28776, 'Santa Cruz', '0864', '086412', 0),
-(28777, 'Sug-angon', '0864', '086412', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(28777, 'Sug-angon', '0864', '086412', 0),
 (28778, 'Tabontabon', '0864', '086412', 0),
 (28779, 'Tambis I', '0864', '086412', 0),
 (28780, 'Tambis II', '0864', '086412', 0),
@@ -30058,15 +30058,15 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (29990, 'Tapodoc', '0973', '097312', 0),
 (29991, 'Tawagan Norte', '0973', '097312', 0),
 (29992, 'Upper Campo Islam (Pob.)', '0973', '097312', 0),
-(29993, 'Upper Pulacan', '0973', '097312', 0),
+(29993, 'Upper Pulacan', '0973', '097312', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (29994, 'Combo', '0973', '097312', 0),
 (29995, 'Dimasangca', '0973', '097312', 0),
 (29996, 'Lower Sang-an', '0973', '097312', 0),
 (29997, 'Upper Sang-an', '0973', '097312', 0),
 (29998, 'Bulawan', '0973', '097313', 0),
 (29999, 'Carpoc', '0973', '097313', 0),
-(30000, 'Danganan', '0973', '097313', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(30000, 'Danganan', '0973', '097313', 0),
 (30001, 'Dansal', '0973', '097313', 0),
 (30002, 'Dumara', '0973', '097313', 0),
 (30003, 'Linokmadalum', '0973', '097313', 0),
@@ -31270,14 +31270,14 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (31201, 'Barangay 3 (Pob.)', '1013', '101312', 0),
 (31202, 'Barangay 4 (Pob.)', '1013', '101312', 0),
 (31203, 'Barangay 5 (Pob.)', '1013', '101312', 0),
-(31204, 'Barangay 6 (Pob.)', '1013', '101312', 0),
+(31204, 'Barangay 6 (Pob.)', '1013', '101312', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (31205, 'Barangay 7 (Pob.)', '1013', '101312', 0),
 (31206, 'Barangay 8 (Pob.)', '1013', '101312', 0),
 (31207, 'Barangay 9 (Pob.)', '1013', '101312', 0),
 (31208, 'Barangay 10 (Pob.)', '1013', '101312', 0),
 (31209, 'Barangay 11 (Pob.)', '1013', '101312', 0),
-(31210, 'Saint Peter', '1013', '101312', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(31210, 'Saint Peter', '1013', '101312', 0),
 (31211, 'San Jose', '1013', '101312', 0),
 (31212, 'San Martin', '1013', '101312', 0),
 (31213, 'Santo Niño', '1013', '101312', 0),
@@ -32483,15 +32483,15 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (32413, 'Manga', '1042', '104215', 0),
 (32414, 'Maquilao', '1042', '104215', 0),
 (32415, 'Barangay III- Market Kalubian (Pob.)', '1042', '104215', 0),
-(32416, 'Minsubong', '1042', '104215', 0),
+(32416, 'Minsubong', '1042', '104215', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (32417, 'Owayan', '1042', '104215', 0),
 (32418, 'Paiton', '1042', '104215', 0),
 (32419, 'Panalsalan', '1042', '104215', 0),
 (32420, 'Pangabuan', '1042', '104215', 0),
 (32421, 'Prenza', '1042', '104215', 0),
 (32422, 'Salimpuno', '1042', '104215', 0),
-(32423, 'San Antonio', '1042', '104215', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(32423, 'San Antonio', '1042', '104215', 0),
 (32424, 'San Apolinario', '1042', '104215', 0),
 (32425, 'San Vicente', '1042', '104215', 0),
 (32426, 'Santa Cruz', '1042', '104215', 0),
@@ -33678,15 +33678,15 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (33607, 'Katipunan', '1124', '112414', 0),
 (33608, 'Kiblagon', '1124', '112414', 0),
 (33609, 'Labon', '1124', '112414', 0),
-(33610, 'Laperas', '1124', '112414', 0),
+(33610, 'Laperas', '1124', '112414', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (33611, 'Lapla', '1124', '112414', 0),
 (33612, 'Litos', '1124', '112414', 0),
 (33613, 'Luparan', '1124', '112414', 0),
 (33614, 'Mckinley', '1124', '112414', 0),
 (33615, 'New Cebu', '1124', '112414', 0),
 (33616, 'Osmeña', '1124', '112414', 0),
-(33617, 'Palili', '1124', '112414', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(33617, 'Palili', '1124', '112414', 0),
 (33618, 'Parame', '1124', '112414', 0),
 (33619, 'Poblacion', '1124', '112414', 0),
 (33620, 'Roxas', '1124', '112414', 0),
@@ -34899,15 +34899,15 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (34827, 'Liberty', '1263', '126314', 0),
 (34828, 'Maltana', '1263', '126314', 0),
 (34829, 'Poblacion', '1263', '126314', 0),
-(34830, 'Tablu', '1263', '126314', 0),
+(34830, 'Tablu', '1263', '126314', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (34831, 'Buto', '1263', '126314', 0),
 (34832, 'Lampitak', '1263', '126314', 0),
 (34833, 'Palo', '1263', '126314', 0),
 (34834, 'Pula-bato', '1263', '126314', 0),
 (34835, 'Danlag', '1263', '126314', 0),
 (34836, 'San Isidro', '1263', '126314', 0),
-(34837, 'Santa Cruz', '1263', '126314', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(34837, 'Santa Cruz', '1263', '126314', 0),
 (34838, 'Bukay Pait', '1263', '126315', 0),
 (34839, 'Cabuling', '1263', '126315', 0),
 (34840, 'Dumadalig', '1263', '126315', 0),
@@ -36074,15 +36074,15 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (36001, 'Barangay 658', '1339', '133909', 0),
 (36002, 'Barangay 689', '1339', '133910', 0),
 (36003, 'Barangay 690', '1339', '133910', 0),
-(36004, 'Barangay 691', '1339', '133910', 0),
+(36004, 'Barangay 691', '1339', '133910', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (36005, 'Barangay 692', '1339', '133910', 0),
 (36006, 'Barangay 693', '1339', '133910', 0),
 (36007, 'Barangay 694', '1339', '133910', 0),
 (36008, 'Barangay 695', '1339', '133910', 0),
 (36009, 'Barangay 696', '1339', '133910', 0),
 (36010, 'Barangay 697', '1339', '133910', 0),
-(36011, 'Barangay 698', '1339', '133910', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(36011, 'Barangay 698', '1339', '133910', 0),
 (36012, 'Barangay 699', '1339', '133910', 0),
 (36013, 'Barangay 700', '1339', '133910', 0),
 (36014, 'Barangay 701', '1339', '133910', 0),
@@ -37234,7 +37234,8 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (37160, 'Poblacion (Talampac)', '1401', '140109', 0),
 (37161, 'Aguet', '1401', '140110', 0),
 (37162, 'Bacooc', '1401', '140110', 0),
-(37163, 'Balais', '1401', '140110', 0),
+(37163, 'Balais', '1401', '140110', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (37164, 'Cayapa', '1401', '140110', 0),
 (37165, 'Dalaguisen', '1401', '140110', 0),
 (37166, 'Laang', '1401', '140110', 0),
@@ -37242,8 +37243,7 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (37168, 'Laguiben', '1401', '140110', 0),
 (37169, 'Nagtipulan', '1401', '140110', 0),
 (37170, 'Nagtupacan', '1401', '140110', 0),
-(37171, 'Paganao', '1401', '140110', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(37171, 'Paganao', '1401', '140110', 0),
 (37172, 'Pawa', '1401', '140110', 0),
 (37173, 'Poblacion', '1401', '140110', 0),
 (37174, 'Presentar', '1401', '140110', 0),
@@ -38435,7 +38435,8 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (38360, 'Sinulatan', '1507', '150707', 0),
 (38361, 'Bohetambis', '1507', '150707', 0),
 (38362, 'Duga-a', '1507', '150707', 0),
-(38363, 'Mahawid', '1507', '150707', 0),
+(38363, 'Mahawid', '1507', '150707', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (38364, 'Lower Sinangkapan', '1507', '150707', 0),
 (38365, 'Tablas Usew', '1507', '150707', 0),
 (38366, 'Calut', '1507', '150707', 0),
@@ -38443,8 +38444,7 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (38368, 'Lower Tablas', '1507', '150707', 0),
 (38369, 'Caddayan', '1507', '150708', 0),
 (38370, 'Linongan', '1507', '150708', 0),
-(38371, 'Lower Bato-bato', '1507', '150708', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(38371, 'Lower Bato-bato', '1507', '150708', 0),
 (38372, 'Mangalut', '1507', '150708', 0),
 (38373, 'Manguso', '1507', '150708', 0),
 (38374, 'Paguengan', '1507', '150708', 0),
@@ -39625,7 +39625,8 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (39549, 'Bayog', '1536', '153638', 0),
 (39550, 'Cadayonan', '1536', '153638', 0),
 (39551, 'Dagonalan', '1536', '153638', 0),
-(39552, 'Dimalama', '1536', '153638', 0),
+(39552, 'Dimalama', '1536', '153638', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (39553, 'Gayakay', '1536', '153638', 0),
 (39554, 'Inodaran', '1536', '153638', 0),
 (39555, 'Kalilangan', '1536', '153638', 0),
@@ -39634,8 +39635,7 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (39558, 'Kitaon', '1536', '153638', 0),
 (39559, 'Bagoaingud', '1536', '153638', 0),
 (39560, 'Malinao', '1536', '153638', 0),
-(39561, 'Malingon', '1536', '153638', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(39561, 'Malingon', '1536', '153638', 0),
 (39562, 'Mama-an Pagalongan', '1536', '153638', 0),
 (39563, 'Marawi', '1536', '153638', 0),
 (39564, 'Maimbaguiang', '1536', '153638', 0),
@@ -40844,15 +40844,15 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (40767, 'Cabcabon', '1602', '160202', 0),
 (40768, 'Camayahan', '1602', '160202', 0),
 (40769, 'Baan Riverside Pob. (Bgy. 20)', '1602', '160202', 0),
-(40770, 'Dankias', '1602', '160202', 0),
+(40770, 'Dankias', '1602', '160202', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (40771, 'Imadejas Pob. (Bgy. 24)', '1602', '160202', 0),
 (40772, 'Diego Silang Pob. (Bgy. 6)', '1602', '160202', 0),
 (40773, 'Doongan', '1602', '160202', 0),
 (40774, 'Dumalagan', '1602', '160202', 0),
 (40775, 'Golden Ribbon Pob. (Bgy. 2)', '1602', '160202', 0),
 (40776, 'Dagohoy Pob. (Bgy. 7)', '1602', '160202', 0),
-(40777, 'Jose Rizal Pob. (Bgy. 25)', '1602', '160202', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(40777, 'Jose Rizal Pob. (Bgy. 25)', '1602', '160202', 0),
 (40778, 'Holy Redeemer Pob. (Bgy. 23)', '1602', '160202', 0),
 (40779, 'Humabon Pob. (Bgy. 11)', '1602', '160202', 0),
 (40780, 'Kinamlutan', '1602', '160202', 0),
@@ -42055,7 +42055,8 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (41977, 'White Beach (Pob.)', '1685', '168503', 0),
 (41978, 'Bagumbayan', '1685', '168503', 0),
 (41979, 'New Mabuhay', '1685', '168503', 0),
-(41980, 'Wadas', '1685', '168503', 0),
+(41980, 'Wadas', '1685', '168503', 0);
+INSERT INTO `dv_geo_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
 (41981, 'Cayetano', '1685', '168503', 0),
 (41982, 'Justiniana Edera', '1685', '168503', 0),
 (41983, 'Albor (Pob.)', '1685', '168504', 0),
@@ -42063,8 +42064,7 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 (41985, 'Bayanihan', '1685', '168504', 0),
 (41986, 'Doña Helen', '1685', '168504', 0),
 (41987, 'Garcia', '1685', '168504', 0),
-(41988, 'General Aguinaldo (Bolod-bolod)', '1685', '168504', 0);
-INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) VALUES
+(41988, 'General Aguinaldo (Bolod-bolod)', '1685', '168504', 0),
 (41989, 'Kanihaan', '1685', '168504', 0),
 (41990, 'Magsaysay', '1685', '168504', 0),
 (41991, 'Osmeña', '1685', '168504', 0),
@@ -42112,9 +42112,9 @@ INSERT INTO `dv_brgys` (`id`, `brgy_name`, `prov_code`, `city_code`, `status`) V
 --
 
 --
--- Indexes for table `dv_brgys`
+-- Indexes for table `dv_geo_brgys`
 --
-ALTER TABLE `dv_brgys`
+ALTER TABLE `dv_geo_brgys`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -42122,9 +42122,9 @@ ALTER TABLE `dv_brgys`
 --
 
 --
--- AUTO_INCREMENT for table `dv_brgys`
+-- AUTO_INCREMENT for table `dv_geo_brgys`
 --
-ALTER TABLE `dv_brgys`
+ALTER TABLE `dv_geo_brgys`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42030;
 COMMIT;
 

@@ -16,7 +16,7 @@
 		
 		//Array for sql files
 		//If adding new files, pls follow the format provided
-		$sql_files = array('\dv_brgys.sql', '\dv_cities.sql', '\dv_countries.sql', '\dv_provinces.sql' );
+		$sql_files = array('\dv_geo_brgys.sql', '\dv_geo_cities.sql', '\dv_geo_countries.sql', '\dv_geo_provinces.sql' );
 
 		//Loop through the array and pass the sql filename to the importing function
 		for ($i=0; $i < count($sql_files); $i++) { 
@@ -26,71 +26,58 @@
 		global $wpdb;
 
 		//Passing from global defined variable to local variable
-		$tbl_address = ADDRESS_TABLE;
-		$tbl_roles = ROLES_TABLE;
-		$tbl_roles_meta = ROLES_META_TABLE;
-		$tbl_roles_access = ROLES_ACCESS_TABLE;
+		$tbl_address = DV_ADDRESS_TABLE;
+		$tbl_roles = DV_ROLES_TABLE;
+		$tbl_roles_meta = DV_ROLES_META_TABLE;
+		$tbl_roles_access = DV_ROLES_ACCESS_TABLE;
+		$tbl_configs = DV_CONFIG_TABLE;
+		$tbl_contacts = DV_CONTACTS_TABLE;
+
+
+		//Database table creation for dv_contacts
+		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_contacts'" ) != $tbl_contacts) {
+			$sql = "CREATE TABLE `".$tbl_contacts."` (";
+				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`status` ENUM('active','inactive') NOT NULL, ";
+				$sql .= "`phone` VARCHAR(15) NOT NULL, ";
+				$sql .= "`email` VARCHAR(50) NOT NULL, ";
+				$sql .= "`created_by` int(11) NOT NULL, ";
+				$sql .= "`date_created` datetime NOT NULL, ";
+				$sql .= "PRIMARY KEY (`ID`) ";
+				$sql .= ") ENGINE = InnoDB; ";
+			$result = $wpdb->get_results($sql);
+		}
+
+		//Database table creation for dv_configs
+		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_configs'" ) != $tbl_configs) {
+			$sql = "CREATE TABLE `".$tbl_configs."` (";
+				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`config_desc` varchar(255) NOT NULL COMMENT 'Config Description', ";
+				$sql .= "`config_key` varchar(50) NOT NULL COMMENT 'Config KEY',";
+				$sql .= "`config_value` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Config VALUES', ";
+				$sql .= "PRIMARY KEY (`ID`) ";
+				$sql .= ") ENGINE = InnoDB; ";
+			$result = $wpdb->get_results($sql);
+		}
 
 
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_address'" ) != $tbl_address) {
 			$sql = "CREATE TABLE `".$tbl_address."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
-				$sql .= "`user_id` int(11) NOT NULL, ";
-				$sql .= "`store_id` int(11) NOT NULL DEFAULT 0, ";
-				$sql .= "`supplier_id` int(11) NOT NULL DEFAULT 0, ";
-				$sql .= "`a_street` varchar(120) NULL, ";
-				$sql .= "`a_brgy_id` int(11) NOT NULL, ";
-				$sql .= "`a_city_id` int(11) NOT NULL, ";
-				$sql .= "`a_province_id` int(11) NOT NULL, ";
-				$sql .= "`a_country_id` int(11) NOT NULL, ";
-				$sql .= "`a_timestamp` datetime NOT NULL, ";
-				$sql .= "`a_last_update` datetime NULL, ";
+				$sql .= "`wpid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID, 0 if Null', ";
+				$sql .= "`stid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Store ID, 0 if Null', ";
+				$sql .= "`types` enum('none','home','office','business') NOT NULL COMMENT 'Set this instance what type of address.', ";
+				$sql .= "`status` bigint(12) NOT NULL DEFAULT 0 COMMENT 'Value of active or inactive, 0 being inactive', ";
+				$sql .= "`street` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Street address active revision ID, 0 if Null', ";
+				$sql .= "`brgy` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Barangay active revision ID, 0 if Null', ";
+				$sql .= "`city` bigint(20) NOT NULL DEFAULT 0 COMMENT 'City active revision ID, 0 if Null', ";
+				$sql .= "`province` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Province active revision ID, 0 if Null', ";
+				$sql .= "`country` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Country active revision ID, 0 if Null', ";
+				$sql .= "`date_created` datetime DEFAULT NULL COMMENT 'The date this address is created.', ";
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
 		}
-
-		//Database table creation for roles
-		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_roles'" ) != $tbl_roles) {
-			$sql = "CREATE TABLE `".$tbl_roles."` (";
-				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
-				$sql .= "`store_id` int(11) NOT NULL, ";
-				$sql .= "`r_name` VARCHAR(40) NOT NULL, ";
-				$sql .= "`r_info` VARCHAR(255)  NULL, ";
-				$sql .= "`r_icon` VARCHAR(140)  NULL, ";
-				$sql .= "`r_timestamp` datetime NOT NULL, ";
-				$sql .= "`r_created_by` int(11) NOT NULL, ";
-				$sql .= "PRIMARY KEY (`ID`) ";
-				$sql .= ") ENGINE = InnoDB; ";
-			$result = $wpdb->get_results($sql);
-		}
-
-		//Database table creation for roles_meta
-		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_roles_meta'" ) != $tbl_roles_meta) {
-			$sql = "CREATE TABLE `".$tbl_roles_meta."` (";
-				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
-				$sql .= "`r_group` int(11) NOT NULL, ";
-				$sql .= "`r_per_id` int(11) NOT NULL, ";
-				$sql .= "`rm_status` tinyint(4)  NULL, ";
-				$sql .= "`rm_timestamp` datetime NOT NULL, ";
-				$sql .= "PRIMARY KEY (`ID`) ";
-				$sql .= ") ENGINE = InnoDB; ";
-			$result = $wpdb->get_results($sql);
-		}
-
-		//Database table creation for roles_access
-		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_roles_access'" ) != $tbl_roles_access) {
-			$sql = "CREATE TABLE `".$tbl_roles_access."` (";
-				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
-				$sql .= "`ra_key` VARCHAR(40) NOT NULL, ";
-				$sql .= "`ra_value` VARCHAR(255) NOT NULL, ";
-				$sql .= "`ra_last_update` datetime  NULL, ";
-				$sql .= "`ra_timestamp` datetime NOT NULL, ";
-				$sql .= "PRIMARY KEY (`ID`) ";
-				$sql .= ") ENGINE = InnoDB; ";
-			$result = $wpdb->get_results($sql);
-		}
-
 
 		
 		
@@ -112,7 +99,7 @@
 		/* PDO connection end */
 
 		// your config
-		$filename = untrailingslashit(PLUGIN_PATH) . '\sql-files' . $sql_table;
+		$filename = untrailingslashit(DV_PLUGIN_PATH) . '\sql-files' . $sql_table;
 
 		$maxRuntime = 8; // less then your max script execution limit
 

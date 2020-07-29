@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 27, 2020 at 06:11 AM
+-- Generation Time: Jul 29, 2020 at 06:51 AM
 -- Server version: 10.4.13-MariaDB
 -- PHP Version: 7.4.7
 
@@ -24,22 +24,22 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `dv_countries`
+-- Table structure for table `dv_geo_countries`
 --
 
-DROP TABLE IF EXISTS `dv_countries`;
+DROP TABLE IF EXISTS `dv_geo_countries`; 
 
-CREATE TABLE `dv_countries` (
+CREATE TABLE `dv_geo_countries` (
   `id` int(11) NOT NULL,
   `country_code` varchar(2) NOT NULL DEFAULT '',
   `country_name` varchar(100) NOT NULL DEFAULT ''
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `dv_countries`
+-- Dumping data for table `dv_geo_countries`
 --
 
-INSERT INTO `dv_countries` (`id`, `country_code`, `country_name`) VALUES
+INSERT INTO `dv_geo_countries` (`id`, `country_code`, `country_name`) VALUES
 (1, 'AF', 'Afghanistan'),
 (2, 'AL', 'Albania'),
 (3, 'DZ', 'Algeria'),
@@ -292,9 +292,9 @@ INSERT INTO `dv_countries` (`id`, `country_code`, `country_name`) VALUES
 --
 
 --
--- Indexes for table `dv_countries`
+-- Indexes for table `dv_geo_countries`
 --
-ALTER TABLE `dv_countries`
+ALTER TABLE `dv_geo_countries`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -302,9 +302,9 @@ ALTER TABLE `dv_countries`
 --
 
 --
--- AUTO_INCREMENT for table `dv_countries`
+-- AUTO_INCREMENT for table `dv_geo_countries`
 --
-ALTER TABLE `dv_countries`
+ALTER TABLE `dv_geo_countries`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=247;
 COMMIT;
 
