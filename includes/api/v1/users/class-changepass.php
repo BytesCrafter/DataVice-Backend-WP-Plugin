@@ -10,9 +10,8 @@
         * @version 0.1.0
 	*/
 ?>
-
 <?php
-	class DVC_Changepassword {
+	class DV_Changepassword {
 
 
         // REST API for creating new password

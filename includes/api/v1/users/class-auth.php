@@ -12,10 +12,10 @@
 	*/
 ?>
 <?php
-	class DVC_Authenticate {
+	class DV_Authenticate {
 
 		//Get the user session token string and if nothing, create and return one.
-		public static function dvc_get_session( $user_id ) {
+		public static function dv_get_session( $user_id ) {
 			//Grab WP_Session_Token from wordpress.
 			$wp_session_token = WP_Session_Tokens::get_instance($user_id);
 
@@ -60,7 +60,7 @@
 				array(
 					"status" => "success",
 					"data" => array(
-						"snky" => DVC_Authenticate::dvc_get_session($user->ID), 
+						"snky" => DV_Authenticate::dv_get_session($user->ID), 
 						"wpid" => $user->ID
 						)
 					)  

@@ -11,7 +11,7 @@
 	*/
 ?>
 <?php
-  	class DVC_Globals {
+  	class DV_Globals {
          
         public static function create($table_name, $data){
             global $wpdb;
@@ -82,19 +82,24 @@
            
         }
 
-        // user create
-        public static function user_create($username,  $email){
-            $user_login = wp_slash( $username );
-            $user_email = wp_slash( $email );
-            $userdata = compact( 'user_login', 'user_email' );
-            return wp_insert_user( $userdata );
+
+        //User validation
+        public static function validate_user(){
+            
+            //User verification
+            $verified = DV_Verification::initialize();
+
+            //Convert object to array
+            $array =  (array) $verified;
+
+            //Return data
+            return $array['data'];
             
         }
 
-        public static function signup($user_table_name, $data){
-            global $wpdb;
-            return $wpdb->insert($user_table_name, $data);
-        }
+        
+       
+
         
     }
 ?>
