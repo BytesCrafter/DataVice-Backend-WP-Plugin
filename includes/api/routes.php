@@ -14,6 +14,7 @@
 
     //Require the USocketNet class which have the core function of this plguin. 
     require plugin_dir_path(__FILE__) . '/v1/users/class-auth.php';
+    require plugin_dir_path(__FILE__) . '/v1/users/class-contact.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-verify.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-forgotpass.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-changepass.php';
@@ -27,6 +28,11 @@
         register_rest_route( 'datavice/v1/user', 'auth', array(
             'methods' => 'POST',
             'callback' => array('DV_Authenticate','initialize'),
+        ));
+        // new
+        register_rest_route( 'datavice/v1/user', 'contact', array(
+            'methods' => 'POST',
+            'callback' => array('DV_Contact','add_contact'),
         ));
 
         register_rest_route( 'datavice/v1/user', 'verify', array(

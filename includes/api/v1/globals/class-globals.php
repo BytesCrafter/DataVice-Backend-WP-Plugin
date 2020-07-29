@@ -97,6 +97,14 @@
             
         }
 
+          // date stamp 
+        public static function date_stamp(){
+            // Timezone
+            date_default_timezone_set('Asia/Manila');
+            // Return Curent DateTime
+            return date("Y-m-d h:i:s");
+
+        }
         
        
 
