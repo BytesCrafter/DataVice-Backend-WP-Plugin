@@ -31,6 +31,8 @@
 	define('DV_BRGY_TABLE', DV_PREFIX.'geo_brgys');
 	define('DV_CONFIG_TABLE', DV_PREFIX.'configs');
 	define('DV_CONTACTS_TABLE', DV_PREFIX.'contacts');
+	define('DV_REVS_TABLE', DV_PREFIX.'revisions');
+
 
 
 
