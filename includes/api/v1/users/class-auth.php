@@ -40,7 +40,7 @@
 			}
 
 			//Listens for POST values.
-			$username = sanitize_user($_POST["UN"]);
+			$username = $_POST["UN"];
 			$password = $_POST["PW"];
 
 			//Initialize wp authentication process.
