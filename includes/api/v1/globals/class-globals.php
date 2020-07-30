@@ -84,19 +84,41 @@
 
 
         //User validation
-        public static function validate_user(){
+        // public static function validate_user(){
             
-            //User verification
-            $verified = DV_Verification::initialize();
+        //     //User verification
+        //     $verified = DV_Verification::initialize();
 
+        //     //Convert object to array
+        //     $array =  (array) $verified;
+
+        //     //Return data
+        //     return $array['data'];
+            
+        // }
+
+        public static function validate_user(){
+            $verified = DV_Verification::initialize();
             //Convert object to array
             $array =  (array) $verified;
-
-            //Return data
-            return $array['data'];
-            
+            // Pass request status in a variable
+            $response =  $array['data']['status'];
+            if ($response != 'success') {
+                    return $verified;
+            } else {
+                    return true;
+            }
         }
 
+
+          // date stamp 
+        public static function date_stamp(){
+            // Timezone
+            date_default_timezone_set('Asia/Manila');
+            // Return Curent DateTime
+            return date("Y-m-d h:i:s");
+
+        }
         
        
 
