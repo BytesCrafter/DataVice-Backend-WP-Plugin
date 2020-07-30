@@ -16,7 +16,7 @@
     require plugin_dir_path(__FILE__) . '/v1/users/class-auth.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-verify.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-forgotpass.php';
-    require plugin_dir_path(__FILE__) . '/v1/users/class-changepass.php';
+    require plugin_dir_path(__FILE__) . '/v1/users/class-reset.php';
 	require plugin_dir_path(__FILE__) . '/v1/users/class-data.php';
 	require plugin_dir_path(__FILE__) . '/v1/users/class-signup.php';
 	require plugin_dir_path(__FILE__) . '/v1/globals/class-globals.php';
@@ -29,9 +29,9 @@
             'callback' => array('DV_Authenticate','listen'),
         ));
 
-        register_rest_route( 'datavice/v1/user', 'verify', array(
+        register_rest_route( 'datavice/api/v1/user', 'verify', array(
             'methods' => 'POST',
-            'callback' => array('DV_Verification','initialize'),
+            'callback' => array('DV_Verification','listen'),
             
         ));
 
@@ -42,7 +42,7 @@
 
         register_rest_route( 'datavice/v1/user', 'reset', array(
             'methods' => 'POST',
-            'callback' => array('DV_Changepassword','initialize'),
+            'callback' => array('DV_Reset','listen'),
         ));
 
         register_rest_route( 'datavice/v1/user', 'data', array(
