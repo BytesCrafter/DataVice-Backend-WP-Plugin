@@ -24,9 +24,9 @@
 	// Init check if USocketNet successfully request from wapi.
     function datavice_route()
     {
-        register_rest_route( 'datavice/v1/user', 'auth', array(
+        register_rest_route( 'datavice/api/v1/user', 'auth', array(
             'methods' => 'POST',
-            'callback' => array('DV_Authenticate','initialize'),
+            'callback' => array('DV_Authenticate','listen'),
         ));
 
         register_rest_route( 'datavice/v1/user', 'verify', array(
