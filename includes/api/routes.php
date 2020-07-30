@@ -35,6 +35,28 @@
             'callback' => array('DV_Contact','add_contact'),
         ));
 
+        register_rest_route( 'datavice/v1/user', 'get_contacts', array(
+            'methods' => 'POST',
+            'callback' => array('DV_Contact','get_contacts'),
+        ));
+
+        register_rest_route( 'datavice/v1/user', 'get_contactsByid', array(
+            'methods' => 'POST',
+            'callback' => array('DV_Contact','get_contactsByid'),
+        ));
+
+
+        register_rest_route( 'datavice/v1/user', 'delete_contact', array(
+            'methods' => 'POST',
+            'callback' => array('DV_Contact','delete_contact'),
+        ));
+
+        register_rest_route( 'datavice/v1/user', 'update_contact', array(
+            'methods' => 'POST',
+            'callback' => array('DV_Contact','update_contact'),
+        ));
+// =========================
+
         register_rest_route( 'datavice/v1/user', 'verify', array(
             'methods' => 'POST',
             'callback' => array('DV_Verification','initialize'),
