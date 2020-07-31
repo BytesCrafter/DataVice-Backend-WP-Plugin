@@ -39,12 +39,8 @@
 				);
 			}
 
-			//Listens for POST values.
-			$username = $_POST["UN"];
-			$password = $_POST["PW"];
-
 			//Initialize wp authentication process.
-			$user = wp_authenticate($username, $password);
+			$user = wp_authenticate($_POST["un"], $$_POST["pw"]);
 			
 			// Check for WordPress authentication issue.
 			if ( is_wp_error($user) ) {
