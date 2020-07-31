@@ -38,6 +38,13 @@
     //Includes assets if page is defined.
     include_once ( plugin_dir_path( __FILE__ ) . '/includes/core/assets.php' );
 
+    //Include source page for data sources.
+    include_once ( plugin_dir_path( __FILE__ ) . '/includes/source/geo-countries.php' );
+    include_once ( plugin_dir_path( __FILE__ ) . '/includes/source/geo-cities.php' );
+    include_once ( plugin_dir_path( __FILE__ ) . '/includes/source/geo-provinces.php' );
+    include_once ( plugin_dir_path( __FILE__ ) . '/includes/source/geo-barangays.php' );
+
+
     //Include the REST API of USocketNet to be accessible.
     include_once ( plugin_dir_path( __FILE__ ) . '/includes/api/routes.php' );
 

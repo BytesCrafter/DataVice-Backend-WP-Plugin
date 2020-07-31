@@ -16,12 +16,12 @@
 		
 		//Array for sql files
 		//If adding new files, pls follow the format provided
-		$sql_files = array('\dv_geo_brgys.sql', '\dv_geo_cities.sql', '\dv_geo_countries.sql', '\dv_geo_provinces.sql' );
+		// $sql_files = array('\dv_geo_brgys.sql', '\dv_geo_cities.sql', '\dv_geo_countries.sql', '\dv_geo_provinces.sql' );
 
-		//Loop through the array and pass the sql filename to the importing function
-		for ($i=0; $i < count($sql_files); $i++) { 
-			file_importing($sql_files[$i]);
-		}
+		// //Loop through the array and pass the sql filename to the importing function
+		// for ($i=0; $i < count($sql_files); $i++) { 
+		// 	file_importing($sql_files[$i]);
+		// }
 
 		global $wpdb;
 
@@ -33,6 +33,11 @@
 		$tbl_configs = DV_CONFIG_TABLE;
 		$tbl_contacts = DV_CONTACTS_TABLE;
 		$tbl_revs = DV_REVS_TABLE;
+		$tbl_countries = DV_COUNTRY_TABLE;
+		$tbl_prv = DV_PRV_TABLE;
+		$tbl_cty = DV_CTY_TABLE;
+
+		$tbl_brgy = DV_BRGY_TABLE;
 
 		//Database table creation for dv_revisions
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_revs'" ) != $tbl_revs) {
@@ -94,86 +99,93 @@
 			$result = $wpdb->get_results($sql);
 		}
 
-		
-		
+		//Database table creation for dv_geo_countries
+		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_countries'" ) != $tbl_countries) {
+			$sql = "CREATE TABLE `".$tbl_countries."` (";
+				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`country_code` varchar(2) NOT NULL DEFAULT '', ";
+				$sql .= "`country_name` varchar(100) NOT NULL DEFAULT '', ";
+				$sql .= "`status` tinyint(4) NOT NULL DEFAULT 0, ";
+				$sql .= "PRIMARY KEY (`ID`) ";
+				$sql .= ") ENGINE = InnoDB; ";
+			$result = $wpdb->get_results($sql);
+			
+			//Pass the globally defined constant to a variable
+			$ctry_list = CTRY_LIST;
+			$ctry_fields = CTRY_DATA_FIELDS;
+
+			//Dumping data into tables
+			$wpdb->query("INSERT INTO `".$tbl_countries."` $ctry_fields VALUES $ctry_list");
+
+		}
+
+		//Database table creation for dv_geo_provinces
+		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_prv'" ) != $tbl_prv) {
+			$sql = "CREATE TABLE `".$tbl_prv."` (";
+				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`prov_name` text DEFAULT NULL, ";
+				$sql .= "`prov_code` varchar(255) DEFAULT NULL, ";
+				$sql .= "`country_code` varchar(2) DEFAULT NULL, ";
+				$sql .= "`status` tinyint(4) NOT NULL DEFAULT 0, ";
+				$sql .= "PRIMARY KEY (`ID`) ";
+				$sql .= ") ENGINE = InnoDB; ";
+			$result = $wpdb->get_results($sql);
+			
+			//Pass the globally defined constant to a variable
+			$prov_list = PROV_LIST;
+			$prov_fields = PROV_DATA_FIELDS;
+
+			//Dumping data into tables
+			$wpdb->query("INSERT INTO `".$tbl_prv."` $prov_fields VALUES $prov_list");
+
+
+
+		}
+
+		//Database table creation for dv_geo_cities
+		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_cty'" ) != $tbl_cty) {
+			$sql = "CREATE TABLE `".$tbl_cty."` (";
+				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`citymun_name` text DEFAULT NULL, ";
+				$sql .= "`prov_code` varchar(255) DEFAULT NULL,";
+				$sql .= "`city_code` varchar(255) DEFAULT NULL, ";
+				$sql .= "`status` tinyint(4) NOT NULL DEFAULT 0, ";
+				$sql .= "PRIMARY KEY (`ID`) ";
+				$sql .= ") ENGINE = InnoDB; ";
+			$result = $wpdb->get_results($sql);
+			
+			//Pass the globally defined constant to a variable
+			$cty_list = CTY_LIST;
+			$cty_fields = CTY_DATA_FIELDS;
+
+			//Dumping data into tables
+			$wpdb->query("INSERT INTO `".$tbl_cty."` $cty_fields VALUES $cty_list");
+
+		}
+
+		//Database table creation for dv_geo_brgys
+		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_brgy'" ) != $tbl_brgy) {
+			$sql = "CREATE TABLE `".$tbl_brgy."` (";
+				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`brgy_name` text DEFAULT NULL, ";
+				$sql .= "`prov_code` varchar(255) DEFAULT NULL,";
+				$sql .= "`city_code` varchar(255) DEFAULT NULL, ";
+				$sql .= "`status` tinyint(4) NOT NULL DEFAULT 0, ";
+				$sql .= "PRIMARY KEY (`ID`) ";
+				$sql .= ") ENGINE = InnoDB; ";
+			$result = $wpdb->get_results($sql);
+			
+			//Pass the globally defined constant to a variable
+			$brgy_list = BRGY_LIST;
+			$brgy_fields = BRGY_DATA_FIELDS;
+			
+			//Dumping data into tables
+			$wpdb->query("INSERT INTO `".$tbl_brgy."` $brgy_fields VALUES $brgy_list");
+
+		}
+
 	}
 
-
-	//Function for importing .sql files
-	function file_importing($sql_table){
-
-		$server  =  DV_SERVER; 
-		$username   = DV_USER; 
-		$password   = DV_PASS;  
-		$database = DV_NAME;
-
-		/* PDO connection start */
-		$conn = new PDO("mysql:host=$server; dbname=$database", $username, $password);
-		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);         
-		$conn->exec("SET CHARACTER SET utf8");     
-		/* PDO connection end */
-
-		// your config
-		$filename = untrailingslashit(DV_PLUGIN_PATH) . '\sql-files' . $sql_table;
-
-		$maxRuntime = 8; // less then your max script execution limit
-
-
-		$deadline = time()+$maxRuntime; 
-		$progressFilename = $filename.'_filepointer'; // tmp file for progress
-		$errorFilename = $filename.'_error'; // tmp file for erro
-
-
-
-		($fp = fopen($filename, 'r')) OR die('failed to open file:'.$filename);
-
-		// check for previous error
-		if( file_exists($errorFilename) ){
-			die('<pre> previous error: '.file_get_contents($errorFilename));
-		}
-
-		// activate automatic reload in browser
-		echo '<html><head> <meta http-equiv="refresh" content="'.($maxRuntime+2).'"><pre>';
-
-		// go to previous file position
-		$filePosition = 0;
-		if( file_exists($progressFilename) ){
-			$filePosition = file_get_contents($progressFilename);
-			fseek($fp, $filePosition);
-		}
-
-		$queryCount = 0;
-		$query = '';
-		while( $deadline>time() AND ($line=fgets($fp, 1024000)) ){
-			if(substr($line,0,2)=='--' OR trim($line)=='' ){
-				continue;
-			}
-
-			$query .= $line;
-			if( substr(trim($query),-1)==';' ){
-
-				$igweze_prep= $conn->prepare($query);
-
-				if(!($igweze_prep->execute())){ 
-					$error = 'Error performing query \'<strong>' . $query . '\': ' . print_r($conn->errorInfo());
-					file_put_contents($errorFilename, $error."\n");
-					exit;
-				}
-				$query = '';
-				// file_put_contents($progressFilename, ftell($fp)); // save the current file position for 
-				$queryCount++;
-			}
-		}
-
-		if( feof($fp) ){
-			echo 'Files successfully imported!';
-		}else{
-			echo ftell($fp).'/'.filesize($filename).' '.(round(ftell($fp)/filesize($filename), 2)*100).'%'."\n";
-			echo $queryCount.' queries processed! please reload or wait for automatic browser refresh!';
-		}
-	
-	
-	} // end of function
 
     add_action( 'activated_plugin', 'dv_dbhook_activate' );
 
