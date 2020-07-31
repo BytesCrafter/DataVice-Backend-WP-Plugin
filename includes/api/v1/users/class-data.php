@@ -73,40 +73,7 @@
                 public static function get_countries(){
                        
                         //User verification
-                        $result = DV_Globals::validate_user();
-			
-			if ($result['status'] !== 'success') {
-				return $result;
-                        }
-
-                        //Initialize wordpress global variable
-                        global $wpdb;
-
-                        //Table details creation
-                        $ctry_table = DV_COUNTRY_TABLE;
-                        $ctry_fields = DV_COUNTRY_FIELDS; 
-
-                        $countries =  $wpdb->get_results("SELECT $ctry_fields 
-                                FROM $ctry_table
-                                ORDER BY country_name ASC
-                                ");
-
-                        if (!$countries) {
-                                return rest_ensure_response( 
-					array(
-						"status" => "error",
-						"message" => "An error occured while fetching data from the server",
-					)
-				);
-                        }
-
-                        return rest_ensure_response( 
-                                array(
-                                        "status" => "success",
-                                        "data" => $countries
-                                )
-                        );
-
+                       
 
 
                 }

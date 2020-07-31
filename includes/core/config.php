@@ -37,15 +37,18 @@
 
 
 	//Initializing table fields
-	define('DV_COUNTRY_FIELDS', '*');
-	define('DV_PRV_FIELDS', 'id, prov_name as prov');
-	define('DV_CTY_FIELDS', '*');
-	define('DV_BRGY_FIELDS', '*');
+	define('DV_COUNTRY_FIELDS', 'country_code as code, country_name as name');
+	define('DV_PRV_FIELDS', 'prov_code as code, prov_name as name');
+	define('DV_CTY_FIELDS', 'city_code as code, citymun_name as name');
+	define('DV_BRGY_FIELDS', 'id as code, brgy_name as name');
 
 	//Initializing table where clause
-	define('DV_PRV_WHERE', 'status = 1');
-	define('DV_CTY_WHERE', 'status = 1');
-	define('DV_BRGY_WHERE', 'status = 1');
+	define('DV_CTRY_WHERE', 'WHERE status = 1');
+	define('DV_PRV_WHERE', 'WHERE status = 1 AND country_code = ');
+	define('DV_CTY_WHERE', 'WHERE status = 1 AND prov_code = ');
+	define('DV_BRGY_WHERE', 'WHERE status = 1 AND city_code =');
+
+
 
 
 
