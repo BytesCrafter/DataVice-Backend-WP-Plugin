@@ -69,19 +69,15 @@
             if( !is_wp_error($created_id) ) {
 
                 // Insert Gender etc. 
-                $add_key_meta = update_user_meta( $user_id->id, 'gender', $user['gender'] );
-                $add_key_meta = update_user_meta( $user_id->id, 'birthday', $user['birthday'] );
+                $add_key_meta = update_user_meta( $created_id, 'gender', $user['gender'] );
+                $add_key_meta = update_user_meta( $created_id, 'birthday', $user['birthday'] );
 
-                // TODO: Insert Address. 
-                // $add_key_meta = update_user_meta( $user_id->id, 'brgy_code', $user['br'] );
-                // $add_key_meta = update_user_meta( $user_id->id, 'city_code', $user['ct'] );
-                // $add_key_meta = update_user_meta( $user_id->id, 'province_code', $user['pv'] );
-                // $add_key_meta = update_user_meta( $user_id->id, 'country', $user['co'] );
-                $add_key_meta = update_user_meta( $user_id->id, 'address_home', "ID of address" );                
+                // TODO: Insert Address. $user['br'] $user['ct'] $user['pv'] $user['co']
+                $add_key_meta = update_user_meta( $created_id, 'address_home', "ID of address" );                
 
                 // Insert user meta for expiration of current activation_key.
                 $expiration_date = date( 'Y-m-d H:i:s', strtotime("now") + 1800 ); // seconds = 30 minutes
-                $add_key_meta = update_user_meta( $user_id->id, 'reset_pword_expiry', $expiration_date );
+                $add_key_meta = update_user_meta( $created_id, 'reset_pword_expiry', $expiration_date );
 
                 // Update the user activation key.
                 $wpdb->get_row("UPDATE {$wpdb->prefix}users 
