@@ -30,6 +30,11 @@
             'callback' => array('DV_Signup', 'listen'),
         ));
 
+        register_rest_route( 'datavice/v1/user', 'reset', array(
+            'methods' => 'POST',
+            'callback' => array('DV_Reset','listen'),
+        ));
+
         register_rest_route( 'datavice/v1/user', 'auth', array(
             'methods' => 'POST',
             'callback' => array('DV_Authenticate','listen'),
