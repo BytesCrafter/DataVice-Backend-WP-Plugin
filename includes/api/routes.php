@@ -25,6 +25,11 @@
     require plugin_dir_path(__FILE__) . '/v1/contacts/class-select.php';
     require plugin_dir_path(__FILE__) . '/v1/contacts/class-delete.php';
 
+    require plugin_dir_path(__FILE__) . '/v1/location/class-countries.php';
+    require plugin_dir_path(__FILE__) . '/v1/location/class-provinces.php';
+    require plugin_dir_path(__FILE__) . '/v1/location/class-cities.php';
+	require plugin_dir_path(__FILE__) . '/v1/location/class-barangays.php';
+
 	require plugin_dir_path(__FILE__) . '/v1/users/class-data.php';
 	require plugin_dir_path(__FILE__) . '/v1/globals/class-globals.php';
 	
@@ -127,26 +132,48 @@
             'callback' => array('DV_Userdata', 'add_address'),
         ));
 
-        register_rest_route( 'datavice/v1/user', 'ctry', array(
+        // register_rest_route( 'datavice/v1/location', 'ctry', array(
+        //     'methods' => 'POST',
+        //     'callback' => array('DV_Countries', 'get_countries'),
+        // ));
+
+        // register_rest_route( 'datavice/v1/user', 'prv', array(
+        //     'methods' => 'POST',
+        //     'callback' => array('DV_Userdata', 'get_provinces'),
+        // ));
+
+        // register_rest_route( 'datavice/v1/user', 'city', array(
+        //     'methods' => 'POST',
+        //     'callback' => array('DV_Userdata', 'get_cities'),
+        // ));
+
+        // register_rest_route( 'datavice/v1/user', 'brgy', array(
+        //     'methods' => 'POST',
+        //     'callback' => array('DV_Userdata', 'get_brgy'),
+        // ));
+
+        //Lorz Route for Address REST
+        register_rest_route( 'datavice/v1/location', 'ctry', array(
             'methods' => 'POST',
-            'callback' => array('DV_Userdata', 'get_countries'),
+            'callback' => array('DV_Countries', 'listen'),
+        ));  
+        
+        register_rest_route( 'datavice/v1/location', 'prv', array(
+            'methods' => 'POST',
+            'callback' => array('DV_Provinces', 'listen'),
         ));
 
-        register_rest_route( 'datavice/v1/user', 'prv', array(
+        register_rest_route( 'datavice/v1/location', 'cty', array(
             'methods' => 'POST',
-            'callback' => array('DV_Userdata', 'get_provinces'),
+            'callback' => array('DV_Cities', 'listen'),
         ));
 
-        register_rest_route( 'datavice/v1/user', 'city', array(
+        register_rest_route( 'datavice/v1/location', 'brgy', array(
             'methods' => 'POST',
-            'callback' => array('DV_Userdata', 'get_cities'),
+            'callback' => array('DV_Barangays', 'listen'),
         ));
 
-        register_rest_route( 'datavice/v1/user', 'brgy', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Userdata', 'get_brgy'),
-        ));
-
+    
     }
     add_action( 'rest_api_init', 'datavice_route' );
 

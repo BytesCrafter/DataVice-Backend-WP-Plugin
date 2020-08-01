@@ -20,22 +20,11 @@
                        
         }
         
-        // NOTE: unfinished
-        public static function retrieve($table_name, $fields, $sort_field, $sort){
+        //Working
+        public static function retrieve($table_name, $fields, $where, $sort_field, $sort){
             global $wpdb;
-            // fields
-            $data = implode( ', ', $fields );
-            
-            // sort_fields
-            $str_sortFiled = implode( ', ', $sort_field );
-            $sorted_field = preg_replace('/[0-9,]+/', '', $str_sortFiled);
-            
-            // sort
-            $sorted = implode( ', ', $sort );
-            // $sorts = preg_replace('/[0-9,]+/', '', $str_sort);
 
-
-            return $wpdb->get_results("SELECT $data FROM $table_name $sorted_field $sorted ");
+            return $wpdb->get_results("SELECT $fields FROM $table_name $where $sort_field $sort ");
         }
 
         /**
