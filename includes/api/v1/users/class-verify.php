@@ -23,10 +23,11 @@
 		public static function is_verified() {
 
 			// Catch verification result.
-			$verified = DV_Verification::verify();
-
-			// Convert verification status to bool.
-			return $verified->status == 'success' ? true : false;
+			 $verified = DV_Verification::verify();
+			
+			 // Convert verification status to bool.
+			return $verified['status'] == 'success' ? true : false;
+			
 		}
 
 		public static function verify() {
@@ -70,12 +71,10 @@
 			}
 
 			// STEP 3 - Return a success status only. 
-			return rest_ensure_response( 
-				array(
-					"status" => "success"
-				)
+			return array(
+				"status" => "success"
 			);
-
+	
 		}
 	}
 
