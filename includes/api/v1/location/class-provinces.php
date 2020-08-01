@@ -20,15 +20,25 @@
         public static function get_provinces(){
             
 
-            // Check if country code is passed
-			if (!isset($_POST["cc"]) || empty($_POST["cc"])) {
+             // Step 1 : Check if country code is passed.
+            if ( !isset($_POST["cc"]) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
 						"message" => "Please contact your administrator. Request Unknown!",
 					)
 				);
-            }
+			}
+
+			// Step 2 : Check if country code is empty.
+            if ( empty($_POST['cc']) ) {
+                return rest_ensure_response( 
+                    array(
+                            "status" => "failed",
+                            "message" => "Required fields cannot be empty.",
+                    )
+                );
+			}
             
             $country_code = $_POST["cc"];
 

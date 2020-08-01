@@ -18,17 +18,26 @@
         }
 
         public static function get_brgys(){
-            
 
-            // Check if country code is passed
-			if (!isset($_POST["ctc"]) || empty($_POST["ctc"])) {
+            // Step 1 : Check if city code is passed.
+            if ( !isset($_POST["ctc"]) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
 						"message" => "Please contact your administrator. Request Unknown!",
 					)
 				);
-            }
+			}
+
+			// Step 2 : Check if city code is empty.
+            if ( empty($_POST['ctc']) ) {
+                return rest_ensure_response( 
+                    array(
+                            "status" => "failed",
+                            "message" => "Required fields cannot be empty.",
+                    )
+                );
+			}
             
             $city_code = $_POST["ctc"];
 
