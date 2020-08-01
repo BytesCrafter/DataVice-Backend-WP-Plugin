@@ -113,7 +113,7 @@
                 return rest_ensure_response(
                     array(
                         "status" => "failed",
-                        "message" => "Password was not change successfully!"
+                        "message" => "Password was not change"
                     )
                 );
             }
