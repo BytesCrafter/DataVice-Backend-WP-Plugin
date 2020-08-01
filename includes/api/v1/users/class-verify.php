@@ -30,6 +30,14 @@
 				);
 			}
 
+			// Step 2 : Check if id or key is not empty.
+            if ( empty($_POST['wpid']) || empty($_POST['snky']) ) {
+                return array(
+                    "status" => "failed",
+                    "message" => "Required field cannot be empty.",
+                );
+			}
+
 			// Catch the Post parameters.
 			$request =  array(
 				'wpid' => $_POST["wpid"],
