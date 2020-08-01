@@ -14,17 +14,20 @@
 	class DV_Userdata{
 
                 // REST API for getting the user data
-                public static function initialize(){
+                public static function listen(){
 
                         //User validation
-                        $result = DV_Globals::validate_user();
-			
-			if ($result['status'] !== 'success') {
-				return $result;
+                        if (DV_Verification::is_verified() == false) {
+				return rest_ensure_response( 
+					array(
+						"status" => "unknown",
+						"message" => "Please contact your administrator. Request Unknown!",
+					)
+			        );
                         }
 
-                        //Find user in db using wpid
-                        $wp_user = get_user_by("ID", $result['wpid']);
+                        // Find user in db using wpid
+                        $wp_user = get_user_by("ID", $_POST['wpid']);
                         
                         // Return success status and complete object.
                         return rest_ensure_response( 
@@ -44,240 +47,6 @@
                 
                 }// End of function initialize()
 
-                //REST API for adding user address
-                public static function add_address(){
-
-                        //Initialize wp global variable
-                        global $wpdb;
-                        
-                        //User verification
-                        $result = DV_Globals::validate_user();
-			
-			if ($result['status'] !== 'success') {
-				return $result;
-                        }
-
-                        //Ensures that fields are set
-                        if (!isset($_POST["st"]) || !isset($_POST["br"]) || !isset($_POST["ct"]) || !isset($_POST["pr"]) || !isset($_POST["ctr"]) ) {
-				return rest_ensure_response( 
-					array(
-						"status" => "unknown",
-						"message" => "Please contact your administrator. Request Unknown!",
-					)
-				);
-                        }
-
-                } 
-
-                //Rest API for retrieving countries
-                public static function get_countries(){
-                       
-                        //User verification
-                       
-
-
-                }
-
-                //Rest API for retrieving provinces
-                public static function get_provinces(){
-                        
-                         //User verification
-                         $result = DV_Globals::validate_user();
-			
-                         if ($result['status'] !== 'success') {
-                                 return $result;
-                         }
-
-                        //Initialize wordpress global variable
-                        global $wpdb;
-
-                        //Table details creation
-                        $prv_table = DV_PRV_TABLE;
-                        $prv_fields = DV_PRV_FIELDS;
-                        $prv_where = DV_PRV_WHERE;
-
-                        $provinces =  $wpdb->get_results("SELECT $prv_fields
-                                FROM $prv_table
-                                WHERE $prv_where
-                                ORDER BY prov_name ASC
-                        ");
-
-                        if (!$provinces) {
-                                return rest_ensure_response( 
-                                        array(
-                                                "status" => "error",
-                                                "message" => "An error occured while fetching data from the server",
-                                        )
-                                );
-                        }
-
-                        return rest_ensure_response( 
-                                array(
-                                        "status" => "success",
-                                        "data" => $provinces
-                                )
-                        );
-
-
-                } 
-
-                //Rest API for retrieving cities
-                public static function get_cities(){
-                        
-                        //User verification
-                        $result = DV_Globals::validate_user();
-			
-                        if ($result['status'] !== 'success') {
-                                return $result;
-                        }
-
-                        //Initialize wordpress global variable
-                        global $wpdb;
-
-                        //Check if province code is passed
-                        if (!isset($_POST["PC"]) ) {
-				return rest_ensure_response( 
-					array(
-						"status" => "unknown",
-						"message" => "Please contact your administrator. Request Unknown",
-					)
-				);
-                        }
-
-                        if (!is_numeric($_POST["PC"]) ) {
-				return rest_ensure_response( 
-					array(
-						"status" => "unknown",
-						"message" => "Please contact your administrator. Invalid province code!",
-					)
-				);
-                        }
-
-
-                        
-                        //Pass province code to a variable
-                        $province_code = $_POST["PC"];
-
-                        //Table details creation
-                        $cty_table = DV_CTY_TABLE;
-                        $cty_fields = DV_CTY_FIELDS;
-                        $cty_where = DV_CTY_WHERE; 
-
-                        $cities =  $wpdb->get_results("SELECT $cty_fields
-                                FROM $cty_table
-                                WHERE prov_code = $province_code
-                                AND $cty_where
-                                ORDER BY citymun_name ASC
-                        ");
-
-                        if (!$cities) {
-                                return rest_ensure_response( 
-                                        array(
-                                                "status" => "error",
-                                                "message" => "An error occured while fetching data from the server",
-                                        )
-                                );
-                        }
-
-                        return rest_ensure_response( 
-                                array(
-                                        "status" => "success",
-                                        "data" => $cities
-                                )
-                        );
-
-
-                }
-
-
-                //Rest API for retrieving barangays
-                public static function get_brgy(){
-                        
-                        //User verification
-                        $result = DV_Globals::validate_user();
-			
-                        if ($result['status'] !== 'success') {
-                                return $result;
-                        }
-
-                        //Initialize wordpress global variable
-                        global $wpdb;
-
-                        //Check if city code is passed
-                        if (!isset($_POST["CC"]) ) {
-				return rest_ensure_response( 
-					array(
-						"status" => "unknown",
-						"message" => "Please contact your administrator. Request Unknown",
-					)
-				);
-                        }
-
-                        if (!is_numeric($_POST["CC"]) ) {
-				return rest_ensure_response( 
-					array(
-						"status" => "unknown",
-						"message" => "Please contact your administrator. Invalid city code!",
-					)
-				);
-                        }
-
-
-                        
-                        //Pass province code to a variable
-                        $city_code = $_POST["CC"];
-
-                        //Table details creation
-                        $brgy_table = DV_BRGY_TABLE; 
-                        $brgy_fields = DV_BRGY_FIELDS;
-                        $brgy_where = DV_BRGY_WHERE; 
-
-                        $brgys =  $wpdb->get_results("SELECT $brgy_fields
-                                FROM $brgy_table
-                                WHERE city_code = $city_code
-                                AND $brgy_where
-                                ORDER BY brgy_name ASC
-                        ");
-
-                        if (!$brgys) {
-                                return rest_ensure_response( 
-                                        array(
-                                                "status" => "error",
-                                                "message" => "An error occured while fetching data from the server",
-                                        )
-                                );
-                        }
-
-                        return rest_ensure_response( 
-                                array(
-                                        "status" => "success",
-                                        "data" => $brgys
-                                )
-                        );
-
-                }
-
-
-                //Function for user validation and verification
-                public static function validate_user(){
-            
-                        //User verification
-                        $verified = DV_Verification::initialize();
-            
-                        //Convert object to array
-                        $array =  (array) $verified;
-            
-                        // Pass request status in a variable
-                        $response =  $array['data']['status'];
-                        
-                        if ($response == 'success') {
-                                return true;
-                        } else {
-                                return false;
-                        }
-                        
-                }
-        
 	} // End of class
 
 ?>
