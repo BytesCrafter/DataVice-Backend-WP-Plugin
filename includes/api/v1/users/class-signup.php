@@ -19,7 +19,7 @@
             if( !isset($_POST['un']) || !isset($_POST['em']) || 
                 !isset($_POST['fn']) || !isset($_POST['ln']) || 
                 !isset($_POST['gd']) || !isset($_POST['bd']) || 
-                !isset($_POST['co']) || !isset($_POST['pr']) || 
+                !isset($_POST['co']) || !isset($_POST['pv']) || 
                 !isset($_POST['ct']) || !isset($_POST['bg']) ){
                 return rest_ensure_response( 
                     array(
@@ -33,7 +33,7 @@
             if ( empty($_POST['un']) || empty($_POST['em'])
                 || empty($_POST['fn']) || empty($_POST['ln'])
                 || empty($_POST['gd']) || empty($_POST['bd'])
-                || empty($_POST['co']) || empty($_POST['pr']) 
+                || empty($_POST['co']) || empty($_POST['pv']) 
                 || empty($_POST['ct']) || empty($_POST['bg']) ) {
                 return rest_ensure_response( 
                     array(
@@ -53,7 +53,7 @@
                 );
             }
 
-            //TODO: Check gd, bd, co, pr, ct has a proper value.
+            //TODO: Check gd, bd, co, pr, ct, bg has a proper value. else return with failed event.
 
             // Step 3 : Actual creation of user.
             // Initialize WordPress Core DB.
@@ -72,17 +72,15 @@
                 $add_key_meta = update_user_meta( $created_id, 'gender', $user['gender'] );
                 $add_key_meta = update_user_meta( $created_id, 'birthday', $user['birthday'] );
 
-                // TODO: Insert Address. $user['br'] $user['ct'] $user['pv'] $user['co']
-                $add_key_meta = update_user_meta( $created_id, 'address_home', "ID of address" );                
+                // TODO: Insert Address. $user['br'] $user['ct'] $user['pv'] $user['co'],  ID of address type of home
+                $add_key_meta = update_user_meta( $created_id, 'address_home', "{ID}" );                
 
                 // Insert user meta for expiration of current activation_key.
-                $expiration_date = date( 'Y-m-d H:i:s', strtotime("now") + 1800 ); // seconds = 30 minutes
+                // TODO: Put this on config (1800). value is int in seconds. 'pword_expiry_span'
+                // TODO: We get the value by a global function named, dv_get_config('key') which return value.
+                // TODO: We set the value by a global function named, dv_get_config('key', {value}) which bool.
+                $expiration_date = date( 'Y-m-d H:i:s', strtotime("now") + 1800 );
                 $add_key_meta = update_user_meta( $created_id, 'reset_pword_expiry', $expiration_date );
-
-                // Update the user activation key.
-                $wpdb->get_row("UPDATE {$wpdb->prefix}users 
-                    SET `user_activation_key` = {$user['user_activation_key']} 
-                    WHERE `ID` = {$created_id};");
                 
                 // Try to send mail.
                 if( DV_Signup::is_success_sendmail( $user ) ) {
@@ -116,7 +114,7 @@
         {
             $cur_user = array();
 
-            $cur_user['user_login'] = "Research.";
+            $cur_user['user_login'] = $_POST['un'];
             $cur_user['user_pass'] = wp_generate_password( 49, false, false );
             $cur_user['user_email'] = $_POST['em'];
 
