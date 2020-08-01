@@ -23,10 +23,10 @@
 		public static function is_verified() {
 
 			// Catch verification result.
-			$verified = verify();
+			$verified = DV_Verification::verify();
 
 			// Convert verification status to bool.
-			return $verified['status'] == 'success' ? true : false;
+			return $verified->status == 'success' ? true : false;
 		}
 
 		public static function verify() {
