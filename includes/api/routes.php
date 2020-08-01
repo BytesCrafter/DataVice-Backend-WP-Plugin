@@ -13,13 +13,19 @@
 <?php
 
     //Require the USocketNet class which have the core function of this plguin. 
-    require plugin_dir_path(__FILE__) . '/v1/users/class-auth.php';
-    require plugin_dir_path(__FILE__) . '/v1/users/class-contact.php';
-    require plugin_dir_path(__FILE__) . '/v1/users/class-verify.php';
-    require plugin_dir_path(__FILE__) . '/v1/users/class-forgot.php';
+    require plugin_dir_path(__FILE__) . '/v1/users/class-signup.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-reset.php';
+    require plugin_dir_path(__FILE__) . '/v1/users/class-forgot.php';
+    require plugin_dir_path(__FILE__) . '/v1/users/class-auth.php';
+    require plugin_dir_path(__FILE__) . '/v1/users/class-verify.php';
+
+    require plugin_dir_path(__FILE__) . '/v1/contacts/class-insert.php';
+    require plugin_dir_path(__FILE__) . '/v1/contacts/class-listing.php';
+    require plugin_dir_path(__FILE__) . '/v1/contacts/class-update.php';
+    require plugin_dir_path(__FILE__) . '/v1/contacts/class-select.php';
+    require plugin_dir_path(__FILE__) . '/v1/contacts/class-delete.php';
+
 	require plugin_dir_path(__FILE__) . '/v1/users/class-data.php';
-	require plugin_dir_path(__FILE__) . '/v1/users/class-signup.php';
 	require plugin_dir_path(__FILE__) . '/v1/globals/class-globals.php';
 	
 	// Init check if USocketNet successfully request from wapi.
@@ -29,67 +35,67 @@
          * USER RESTAPI
         */
 
-        register_rest_route( 'datavice/v1/user', 'signup', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Signup', 'listen'),
-        ));
+            register_rest_route( 'datavice/v1/user', 'signup', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Signup', 'listen'),
+            ));
 
-        register_rest_route( 'datavice/v1/user', 'reset', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Reset','listen'),
-        ));
+            register_rest_route( 'datavice/v1/user', 'reset', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Reset','listen'),
+            ));
 
-        register_rest_route( 'datavice/v1/user', 'forgot', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Forgot','listen'),
-        ));
+            register_rest_route( 'datavice/v1/user', 'forgot', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Forgot','listen'),
+            ));
 
-        register_rest_route( 'datavice/v1/user', 'auth', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Authenticate','listen'),
-        ));
+            register_rest_route( 'datavice/v1/user', 'auth', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Authenticate','listen'),
+            ));
 
-        register_rest_route( 'datavice/v1/user', 'verify', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Verification','listen'),
-            
-        ));
+            register_rest_route( 'datavice/v1/user', 'verify', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Verification','listen'),
+                
+            ));
+
+        /*
+         * CONTACT RESTAPI
+        */
+
+            register_rest_route( 'datavice/v1/contact', 'insert', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Contact_Inser','listen'),
+            ));
+
+            register_rest_route( 'datavice/v1/contact', 'list', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Contact_Listing','listen'),
+            ));
+
+            register_rest_route( 'datavice/v1/contact', 'update', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Contact_Update','listen'),
+            ));
+
+            register_rest_route( 'datavice/v1/contact', 'select', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Contact_Select','listen'),
+            ));
+
+            register_rest_route( 'datavice/v1/contact', 'delete', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Contact_Delete','listen'),
+            ));
 
         /*
          * START UNKNOWN
         */
 
-        register_rest_route( 'datavice/v1/user', 'contact', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Contact','add_contact'),
-        ));
-
-        register_rest_route( 'datavice/v1/user', 'get_contacts', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Contact','get_contacts'),
-        ));
-
-        register_rest_route( 'datavice/v1/user', 'get_contactsByid', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Contact','get_contactsByid'),
-        ));
-
-
-        register_rest_route( 'datavice/v1/user', 'delete_contact', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Contact','delete_contact'),
-        ));
-
-        register_rest_route( 'datavice/v1/user', 'update_contact', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Contact','update_contact'),
-        ));
         
-
-        register_rest_route( 'datavice/v1/user', 'reset', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Reset','listen'),
-        ));
+        
 
         register_rest_route( 'datavice/v1/user', 'data', array(
             'methods' => 'POST',

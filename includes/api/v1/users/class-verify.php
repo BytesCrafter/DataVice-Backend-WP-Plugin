@@ -20,6 +20,15 @@
 			);
 		}
 
+		public static function is_verified() {
+
+			// Catch verification result.
+			$verified = verify();
+
+			// Convert verification status to bool.
+			return $verified['status'] == 'success' ? true : false;
+		}
+
 		public static function verify() {
 			
 			// STEP 1: Check if WPID and SNID is passed as this is REQUIRED!
