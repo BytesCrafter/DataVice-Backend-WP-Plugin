@@ -35,6 +35,13 @@
             'callback' => array('DV_Reset','listen'),
         ));
 
+        register_rest_route( 'datavice/v1/user', 'forgot', array(
+            'methods' => 'POST',
+            'callback' => array('DV_Forgot','listen'),
+        ));
+
+
+
         register_rest_route( 'datavice/v1/user', 'auth', array(
             'methods' => 'POST',
             'callback' => array('DV_Authenticate','listen'),
@@ -71,11 +78,6 @@
             'methods' => 'POST',
             'callback' => array('DV_Verification','listen'),
             
-        ));
-
-        register_rest_route( 'datavice/v1/user', 'forgot', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Forgotpassword','initialize'),
         ));
 
         register_rest_route( 'datavice/v1/user', 'reset', array(
