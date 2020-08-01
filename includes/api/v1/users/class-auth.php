@@ -19,6 +19,9 @@
 			//Grab WP_Session_Token from wordpress.
 			$wp_session_token = WP_Session_Tokens::get_instance($user_id);
 
+			// TODO: Put this on config (30). value is int in days. 'token_expiry_span'
+            // TODO: We get the value by a global function named, dv_get_config('key') which return value.
+            // TODO: We set the value by a global function named, dv_get_config('key', {value}) which bool.
 			//Create a session entry unto the session tokens of user with X expiry.
 			$expiration = time() + apply_filters('auth_cookie_expiration', 30 * DAY_IN_SECONDS, $user_id, true); //
 			$session_now = $wp_session_token->create($expiration);

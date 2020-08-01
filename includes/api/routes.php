@@ -40,12 +40,12 @@
             'callback' => array('DV_Forgot','listen'),
         ));
 
-
-
         register_rest_route( 'datavice/v1/user', 'auth', array(
             'methods' => 'POST',
             'callback' => array('DV_Authenticate','listen'),
         ));
+
+        
 
         register_rest_route( 'datavice/v1/user', 'contact', array(
             'methods' => 'POST',
