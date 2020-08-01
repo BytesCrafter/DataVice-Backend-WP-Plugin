@@ -25,6 +25,10 @@
 	// Init check if USocketNet successfully request from wapi.
     function datavice_route()
     {
+        /*
+         * USER RESTAPI
+        */
+
         register_rest_route( 'datavice/v1/user', 'signup', array(
             'methods' => 'POST',
             'callback' => array('DV_Signup', 'listen'),
@@ -45,7 +49,15 @@
             'callback' => array('DV_Authenticate','listen'),
         ));
 
-        
+        register_rest_route( 'datavice/v1/user', 'verify', array(
+            'methods' => 'POST',
+            'callback' => array('DV_Verification','listen'),
+            
+        ));
+
+        /*
+         * START UNKNOWN
+        */
 
         register_rest_route( 'datavice/v1/user', 'contact', array(
             'methods' => 'POST',
@@ -72,13 +84,7 @@
             'methods' => 'POST',
             'callback' => array('DV_Contact','update_contact'),
         ));
-// =========================
-
-        register_rest_route( 'datavice/api/v1/user', 'verify', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Verification','listen'),
-            
-        ));
+        
 
         register_rest_route( 'datavice/v1/user', 'reset', array(
             'methods' => 'POST',
@@ -135,7 +141,6 @@
             'callback' => array('DV_Userdata', 'get_brgy'),
         ));
 
-                
     }
     add_action( 'rest_api_init', 'datavice_route' );
 
