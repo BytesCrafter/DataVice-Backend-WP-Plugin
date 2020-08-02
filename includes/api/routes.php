@@ -32,9 +32,9 @@
     require plugin_dir_path(__FILE__) . '/v1/location/class-provinces.php';
     require plugin_dir_path(__FILE__) . '/v1/location/class-cities.php';
 	require plugin_dir_path(__FILE__) . '/v1/location/class-barangays.php';
-
-	require plugin_dir_path(__FILE__) . '/v1/users/class-data.php';
-	require plugin_dir_path(__FILE__) . '/v1/globals/class-globals.php';
+    require plugin_dir_path(__FILE__) . '/v1/users/class-data.php';
+    
+	require plugin_dir_path(__FILE__) . '/v1/globals.php';
 	
 	// Init check if USocketNet successfully request from wapi.
     function datavice_route()
