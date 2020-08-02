@@ -12,6 +12,9 @@
 ?>
 <?php
 
+    // For debugging purpose only.
+    require plugin_dir_path(__FILE__) . '/test/demoguy.php';
+
     //Require the USocketNet class which have the core function of this plguin. 
     require plugin_dir_path(__FILE__) . '/v1/users/class-signup.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-reset.php';
@@ -36,6 +39,15 @@
 	// Init check if USocketNet successfully request from wapi.
     function datavice_route()
     {
+        /*
+         * TEST RESTAPI
+        */
+
+            register_rest_route( 'datavice/test', 'demoguy', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Demoguy', 'listen'),
+            ));
+
         /*
          * USER RESTAPI
         */
