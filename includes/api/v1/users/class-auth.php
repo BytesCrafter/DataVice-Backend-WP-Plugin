@@ -51,7 +51,7 @@
                 return rest_ensure_response( 
                     array(
                             "status" => "failed",
-                            "message" => "Required field cannot be empty.",
+                            "message" => "Required fields cannot be empty.",
                     )
                 );
 			}
