@@ -7,7 +7,7 @@
 	/**
      * @package datavice-wp-plugin
      * @version 0.1.0
-     * Here is where you check if there is an update on our plugin repo for this project.
+     * Data for Earth's Countries
     */
 
 	$dv_country_list = "('AF', 'Afghanistan'),

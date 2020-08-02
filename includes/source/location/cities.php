@@ -7,7 +7,7 @@
 	/**
 	 * @package datavice-wp-plugin
      * @version 0.1.0
-     * Here is where you check if there is an update on our plugin repo for this project.
+     * Data for list of cities in Philippines only.
     */
 
 	$dv_city_list = "('0128', '012801', 'Adams'),

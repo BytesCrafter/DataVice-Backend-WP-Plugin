@@ -10,8 +10,8 @@
      * This is where you provide all the constant config.
     */
     
-    //Include source page for data sources.
-    include_once ( DV_PLUGIN_PATH . '/includes/source/geo-countries.php' );
-    include_once ( DV_PLUGIN_PATH. '/includes/source/geo-cities.php' );
-    include_once ( DV_PLUGIN_PATH . '/includes/source/geo-provinces.php' );
-    include_once ( DV_PLUGIN_PATH . '/includes/source/geo-barangays.php' );
+    //Include source data for locaation category.
+    include_once ( DV_PLUGIN_PATH . '/includes/source/location/countries.php' );
+    include_once ( DV_PLUGIN_PATH. '/includes/source/location/cities.php' );
+    include_once ( DV_PLUGIN_PATH . '/includes/source/location/provinces.php' );
+    include_once ( DV_PLUGIN_PATH . '/includes/source/location/barangay.php' );
