@@ -20,24 +20,29 @@
 		//Passing from global defined variable to local variable
 		$tbl_configs = DV_CONFIG_TABLE;
 		$tbl_contacts = DV_CONTACTS_TABLE;
+		$tbl_address = DV_ADDRESS_TABLE;
 		$tbl_revs = DV_REVS_TABLE;
 
-		$tbl_address = DV_ADDRESS_TABLE;
-		$tbl_roles = DV_ROLES_TABLE;
-		$tbl_roles_meta = DV_ROLES_META_TABLE;
-		$tbl_roles_access = DV_ROLES_ACCESS_TABLE;
-
 		// Database table creation for dv_configs - QA: 01/08/2020
+		$tbl_configs = DV_CONFIG_TABLE;
+
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_configs'" ) != $tbl_configs) {
 			$sql = "CREATE TABLE `".$tbl_configs."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
-				$sql .= "`title` varchar(255) NOT NULL COMMENT 'Title', ";
-				$sql .= "`info` varchar(255) NOT NULL COMMENT 'Description', ";
-				$sql .= "`config_key` varchar(50) NOT NULL COMMENT 'KEY',";
-				$sql .= "`config_val` bigint(20) NOT NULL DEFAULT 0 COMMENT 'VALUE', ";
+				$sql .= "`title` varchar(255) NOT NULL, ";
+				$sql .= "`info` varchar(255) NOT NULL, ";
+				$sql .= "`config_key` varchar(50) NOT NULL,";
+				$sql .= "`config_val` bigint(20) NOT NULL DEFAULT 0, ";
 				$sql .= "PRIMARY KEY (`ID`) ";
-				$sql .= ") ENGINE = InnoDB; ";
+				$sql .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; ";
 			$result = $wpdb->get_results($sql);
+
+			//Pass the globally defined constant to a variable
+			$conf_list = DV_CONFIG_DATA;
+			$conf_fields = DV_CONFIG_FIELD;
+
+			//Dumping data into tables
+			$wpdb->query("INSERT INTO `".$tbl_configs."` $conf_fields VALUES $conf_list");
 		}
 
 		// Database table creation for dv_address - QA: 01/08/2020

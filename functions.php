@@ -34,6 +34,7 @@
     //Important config files and plugin updates.
     include_once ( plugin_dir_path( __FILE__ ) . '/includes/core/source.php' );
     include_once ( plugin_dir_path( __FILE__ ) . '/includes/core/config.php' );
+    include_once ( plugin_dir_path( __FILE__ ) . '/includes/core/library.php' );
     include_once ( plugin_dir_path( __FILE__ ) . '/includes/core/update.php' );
 
      //Make sure to create required mysql tables.
