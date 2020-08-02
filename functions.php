@@ -28,7 +28,11 @@
     }
     #endregion
 
+    // Root plugin path
+    define('DV_PLUGIN_PATH', plugin_dir_path( __FILE__ ));
+
     //Important config files and plugin updates.
+    include_once ( plugin_dir_path( __FILE__ ) . '/includes/core/source.php' );
     include_once ( plugin_dir_path( __FILE__ ) . '/includes/core/config.php' );
     include_once ( plugin_dir_path( __FILE__ ) . '/includes/core/update.php' );
 
@@ -37,13 +41,6 @@
 
     //Includes assets if page is defined.
     include_once ( plugin_dir_path( __FILE__ ) . '/includes/core/assets.php' );
-
-    //Include source page for data sources.
-    include_once ( plugin_dir_path( __FILE__ ) . '/includes/source/geo-countries.php' );
-    include_once ( plugin_dir_path( __FILE__ ) . '/includes/source/geo-cities.php' );
-    include_once ( plugin_dir_path( __FILE__ ) . '/includes/source/geo-provinces.php' );
-    include_once ( plugin_dir_path( __FILE__ ) . '/includes/source/geo-barangays.php' );
-
 
     //Include the REST API of USocketNet to be accessible.
     include_once ( plugin_dir_path( __FILE__ ) . '/includes/api/routes.php' );

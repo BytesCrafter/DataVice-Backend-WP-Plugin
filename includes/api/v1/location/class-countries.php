@@ -22,7 +22,7 @@
             //Table details creation
             $ctry_table = DV_COUNTRY_TABLE;
             $ctry_fields = DV_COUNTRY_FIELDS; 
-            $where = DV_CTRY_WHERE;
+            $where = DV_COUNTRY_WHERE;
 
             $countries =  DV_Globals::retrieve($ctry_table, $ctry_fields, $where, 'ORDER BY name', 'ASC');
 
