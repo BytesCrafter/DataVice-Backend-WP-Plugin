@@ -85,14 +85,13 @@
                 }
             }
             
-            // Generate an activation key.
-            // TODO: Put this on config (12). value is int for length. 'pword_resetkey_length'
-            // TODO: We get the value by a global function named, dv_get_config('key', {default value}, string) which return value.
-            // TODO: We set the value by a global function named, dv_set_config('key', {value}) which bool.
-
-            //Generate desired key length for password reset.
-            //Params: 1 = Table, 2 = Config key, 3 = Default value if key not found
-            $pword_resetkey_length = DV_Library_Config:: dv_get_config(DV_CONFIG_TABLE, 'pword_resetkey_length', 12);
+            /** Getting the length of password reset key
+			 * Returns the value of the length of password reset key from the database
+			 * Returns default value if not exists
+			 * @param1 = {key};
+			 * @param2 = {default value}
+			 */
+            $pword_resetkey_length = DV_Library_Config:: dv_get_config('pword_resetkey_length', 12);
 
             $cur_user->activation_key = wp_generate_password( $pword_resetkey_length, false, false );
 
@@ -111,11 +110,16 @@
                 );
             }
 
-            // Set new expiration of current activation key.
-            // TODO: Put this on config (1800). value is int in seconds. 'pword_expiry_span'
-            // TODO: We get the value by a global function named, dv_get_config('key') which return value.
-            // TODO: We set the value by a global function named, dv_set_config('key', {value}) which bool.
-            $expiration_date = date( 'Y-m-d H:i:s', strtotime("now") + 1800 );
+            /** Getting the value of password reset expiration time
+			 * Returns the value of the length of password reset expiration time from the database
+			 * Returns default value if not exists
+			 * @param1 = {key};
+			 * @param2 = {default value}
+			 */
+            $pword_expiry_span = DV_Library_Config::dv_get_config('pword_expiry_span', 1800);
+            
+            $expiration_date = date( 'Y-m-d H:i:s', strtotime("now") + (int)$pword_expiry_span );
+            
             $add_key_meta = update_user_meta( $cur_user->ID, 'reset_pword_expiry', $expiration_date );  
 
             if (DV_Forgot::is_success_sendmail($cur_user) == false) {

@@ -22,7 +22,7 @@
             if (!$result) {
                 return $default;
             } else {
-                return intval($result->config_value);
+                return $result->config_value;
             }
         }
 
