@@ -232,17 +232,80 @@
                 $add_key_meta = update_user_meta( $created_id, 'gender', $user['gender'] );
                 $add_key_meta = update_user_meta( $created_id, 'birthday', $user['birthday'] );
 
-                // TODO: Insert Address. $user['br'] $user['ct'] $user['pv'] $user['co'],  ID of address type of home
-                // $address_id = $wpdb->query("INSERT INTO {DV_ADDRESS_TABLE}
-                //     (`wpid`, `types`, `status`, ``)
-                // ");
-                $add_key_meta = update_user_meta( $created_id, 'address_home', "{ID}" );                
+                
+                //Start for mysql transaction.
+                //This is crucial in inserting data with connection with each other
+                $wpdb->query("START TRANSACTION");
+                
+                $dv_rev_table = DV_REVS_TABLE;
+                
+                $date = DV_Globals:: date_stamp();
+
+                $rev_fields = DV_INSERT_REV_FIELDS;
+
+                $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'status', 'active', $created_id, '$date');");
+                
+                $revtype = $wpdb->insert_id;
+
+                $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'street', 'test street', $created_id, '$date');");
+                
+                $street = $wpdb->insert_id;
+
+                $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'brgy', {$user["brgy"]}, $created_id, '$date');");
+                
+                $brgy = $wpdb->insert_id;
+
+                $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'city', {$user["city"]}, $created_id, '$date');");
+                
+                $city = $wpdb->insert_id;
+                
+                $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'province', {$user["province"]}, $created_id, '$date');");
+                
+                $province = $wpdb->insert_id;
+
+                $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'country', {$user["country"]}, $created_id, '$date');");
+                
+                $country = $wpdb->insert_id;
+                
+                //Check if any of the insert queries above failed
+                if ($revtype < 1 || $street < 1 || $brgy < 1 ||
+                   $province < 1 || $city < 1 || $country < 1 ) {
+
+                    //If failed, do mysql rollback (discard the insert queries(no inserted data))
+                    $wpdb->query("ROLLBACK");
+                   
+                    return rest_ensure_response( 
+                        array(
+                            "status" => "failed",
+                            "message" => "An error occured while submitting data to the server"
+                        )
+                    );
+                }
+
+                //If no problems found in queries above, do mysql commit (do changes(insert rows))
+                $wpdb->query("COMMIT");
+
+                
+                $table_address = DV_ADDRESS_TABLE;
+
+                $address_fields = DV_INSERT_ADDRESS_FIELDS;
+
+                //Save the address in the parent table
+                $wpdb->query("INSERT INTO $table_address ($address_fields) VALUES ('1', $created_id, '0', 'home', $street, $brgy, $city, $province, $country, '$date')");
+
+                $address_id = $wpdb->insert_id;
+
+                $add_key_meta = update_user_meta( $created_id, 'address_home', "{$address_id}" );                
 
                 // Insert user meta for expiration of current activation_key.
-                // TODO: Put this on config (1800). value is int in seconds. 'pword_expiry_span'
-                // TODO: We get the value by a global function named, dv_get_config('key') which return value.
-                // TODO: We set the value by a global function named, dv_get_config('key', {value}) which bool.
-                $expiration_date = date( 'Y-m-d H:i:s', strtotime("now") + 1800 );
+
+                /** Get the password expiration time in config table
+                 * @param1 = key
+                 * @param2 = default value if no value found
+                **/
+                $pword_expiry_span = DV_Library_Config::dv_get_config('pword_expiry_span', 1800);
+    
+                $expiration_date = date( 'Y-m-d H:i:s', strtotime("now") + (int)$pword_expiry_span );
                 $add_key_meta = update_user_meta( $created_id, 'reset_pword_expiry', $expiration_date );
                 
                 // Try to send mail.

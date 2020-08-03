@@ -19,6 +19,11 @@
 	define('DV_ADDRESS_TABLE', DV_PREFIX.'address');
 	define('DV_REVS_TABLE', DV_PREFIX.'revisions');
 
+	//Insert Fields
+	define('DV_INSERT_REV_FIELDS', '`revs_type`, `child_key`, `child_val`, `created_by`, `date_created`');
+	define('DV_INSERT_ADDRESS_FIELDS', '`status`, `wpid`, `stid`, `types`, `street`, `brgy`, `city`, `province`, `country`, `date_created`');
+
+
 	// Config CONSTANT
 	define('DV_CONFIG_TABLE', DV_PREFIX.'configs');
 	define("DV_CONFIG_DATA", $dv_config_list);

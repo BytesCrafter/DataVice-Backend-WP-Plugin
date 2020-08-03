@@ -17,12 +17,12 @@
             global $wpdb; 
             $tbl_config = DV_CONFIG_TABLE;
             
-            $result = $wpdb->get_row("SELECT config_value FROM {$tbl_config} WHERE config_key = '$key'");
+            $result = $wpdb->get_row("SELECT config_val FROM {$tbl_config} WHERE config_key = '$key'");
 
             if (!$result) {
                 return $default;
             } else {
-                return $result->config_value;
+                return $result->config_val;
             }
         }
 
@@ -31,7 +31,7 @@
             global $wpdb; 
             $tbl_config = DV_CONFIG_TABLE;
             
-            $result = $wpdb->query("INSERT INTO {$tbl_config} (`title`, `info`, `config_key`, `config_value`) VALUES ('$title', '$info', '$key', '$value');");
+            $result = $wpdb->query("INSERT INTO {$tbl_config} (`title`, `info`, `config_key`, `config_val`) VALUES ('$title', '$info', '$key', '$value');");
 
             if (!$result) {
                 return false;
@@ -45,7 +45,7 @@
             global $wpdb; 
             $tbl_config = DV_CONFIG_TABLE;
             
-            $result = $wpdb->query("UPDATE {$tbl_config} SET `config_key`='$key', `config_value`='$value';");
+            $result = $wpdb->query("UPDATE {$tbl_config} SET `config_key`='$key', `config_val`='$value';");
 
             if (!$result) {
                 return false;
