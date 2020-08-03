@@ -19,11 +19,16 @@
 			//Grab WP_Session_Token from wordpress.
 			$wp_session_token = WP_Session_Tokens::get_instance($user_id);
 
-			// TODO: Put this on config (30). value is int in days. 'token_expiry_span'
-            // TODO: We get the value by a global function named, dv_get_config('key') which return value.
-            // TODO: We set the value by a global function named, dv_get_config('key', {value}) which bool.
+			/** Token Expiry Function
+			 * Returns the value of token_expiry_span in the database
+			 * Returns default value if not exists
+			 * @param1 = {key};
+			 * @param2 = {default value}
+			 */
+			$token_expiry = DV_Library_Config::dv_get_config('token_expiry_span', 3600);
+			
 			//Create a session entry unto the session tokens of user with X expiry.
-			$expiration = time() + apply_filters('auth_cookie_expiration', 30 * DAY_IN_SECONDS, $user_id, true);
+			$expiration = time() + apply_filters('auth_cookie_expiration', (int)$token_expiry, $user_id, true);
 
 			// TODO: PENDING! Consider not inserting new session on database. For example, we must check if
 			// there is a session with the same device id as we currently use then reused that session.
