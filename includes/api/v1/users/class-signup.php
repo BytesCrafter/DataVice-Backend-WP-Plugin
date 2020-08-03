@@ -53,7 +53,167 @@
                 );
             }
 
-            //TODO: Check gd, bd, co, pr, ct, bg has a proper value. else return with failed event.
+            // Step 2 : Check if gender value is either Male or Female only.
+            if (!($_POST['gd'] === 'Male') && !($_POST['gd'] === 'Female')) {
+                return rest_ensure_response( 
+                    array(
+                            "status" => "failed",
+                            "message" => "Invalid value for gender.",
+                    )
+                );
+            }
+
+            // Step 2 : Check if email is in valid format.
+            if ( !is_email($_POST['em']) ) {
+                return rest_ensure_response( 
+                    array(
+                            "status" => "failed",
+                            "message" => "Invalid email address",
+                    )
+                );
+            }
+
+            // Step 2 : Check if birthday is in valid format (eg. 2020-08-02).
+            if ( date('Y-m-d', strtotime($_POST['bd'])) !== date($_POST['bd']) ) {
+                return rest_ensure_response( 
+                    array(
+                            "status" => "failed",
+                            "message" => "Invalid birthday format",
+                    )
+                );
+            }
+
+            //Country input validation
+                // Step 2 : Check if country passed is in integer format.
+                if ( !is_numeric($_POST['co']) ) {
+                    return rest_ensure_response( 
+                        array(
+                                "status" => "failed",
+                                "message" => "Invalid value for country.",
+                        )
+                    );
+                }
+
+                // Step 2 : Check if country_id is in database. 
+                $co_status = DV_Globals:: check_availability(DV_COUNTRY_TABLE, $_POST['co']);
+                
+                if ( $co_status == false ) {
+                    return rest_ensure_response( 
+                        array(
+                                "status" => "failed",
+                                "message" => "Invalid value for country.",
+                        )
+                    );
+                }
+                
+                if ( $co_status === "unavail" ) {
+                    return rest_ensure_response( 
+                        array(
+                                "status" => "failed",
+                                "message" => "Not available yet in selected country",
+                        )
+                    );
+                }
+            //end of country validation
+
+            //Province input validation
+                // Step 2 : Check if province passed is in integer format.
+                if ( !is_numeric($_POST['pv']) ) {
+                    return rest_ensure_response( 
+                        array(
+                                "status" => "failed",
+                                "message" => "Invalid value for province.",
+                        )
+                    );
+                }
+
+                // Step 2 : Check if province is in database. 
+                $pv_status = DV_Globals:: check_availability(DV_PROVINCE_TABLE, $_POST['pv']);
+                
+                if ( $pv_status == false ) {
+                    return rest_ensure_response( 
+                        array(
+                                "status" => "failed",
+                                "message" => "Invalid value for province.",
+                        )
+                    );
+                }
+                
+                if ( $pv_status === "unavail" ) {
+                    return rest_ensure_response( 
+                        array(
+                                "status" => "failed",
+                                "message" => "Not available yet in selected province",
+                        )
+                    );
+                }
+            // end of province validation
+
+            //City input validation
+                // Step 2 : Check if city passed is in integer format.
+                if ( !is_numeric($_POST['ct']) ) {
+                    return rest_ensure_response( 
+                        array(
+                                "status" => "failed",
+                                "message" => "Invalid value for city.",
+                        )
+                    );
+                }
+
+                // Step 2 : Check if city is in database. 
+                $ct_status = DV_Globals:: check_availability(DV_CITY_TABLE, $_POST['ct']);
+                
+                if ( $ct_status == false ) {
+                    return rest_ensure_response( 
+                        array(
+                                "status" => "failed",
+                                "message" => "Invalid value for city.",
+                        )
+                    );
+                }
+                
+                if ( $ct_status === "unavail" ) {
+                    return rest_ensure_response( 
+                        array(
+                                "status" => "failed",
+                                "message" => "Not available yet in selected city",
+                        )
+                    );
+                }
+            // end of city validation
+
+            //Barangay input validation
+                // Step 2 : Check if barangay passed is in integer format.
+                if ( !is_numeric($_POST['bg']) ) {
+                    return rest_ensure_response( 
+                        array(
+                                "status" => "failed",
+                                "message" => "Invalid value for barangay.",
+                        )
+                    );
+                }
+
+                // Step 2 : Check if barangay is in database. 
+                $bg_status = DV_Globals:: check_availability(DV_BRGY_TABLE, $_POST['bg']);
+                
+                if ( $bg_status == false ) {
+                    return rest_ensure_response( 
+                        array(
+                                "status" => "failed",
+                                "message" => "Invalid value for barangay.",
+                        )
+                    );
+                }
+                
+                if ( $bg_status === "unavail" ) {
+                    return rest_ensure_response( 
+                        array(
+                                "status" => "failed",
+                                "message" => "Not available yet in selected barangay",
+                        )
+                    );
+                }
+            // end of barangay validation
 
             // Step 3 : Actual creation of user.
             // Initialize WordPress Core DB.
@@ -73,6 +233,9 @@
                 $add_key_meta = update_user_meta( $created_id, 'birthday', $user['birthday'] );
 
                 // TODO: Insert Address. $user['br'] $user['ct'] $user['pv'] $user['co'],  ID of address type of home
+                // $address_id = $wpdb->query("INSERT INTO {DV_ADDRESS_TABLE}
+                //     (`wpid`, `types`, `status`, ``)
+                // ");
                 $add_key_meta = update_user_meta( $created_id, 'address_home', "{ID}" );                
 
                 // Insert user meta for expiration of current activation_key.
@@ -128,7 +291,7 @@
             $cur_user['gender'] = $_POST['gd']; //Male, Female
             $cur_user['birthday'] = $_POST['bd']; //Y-m-d
 
-            $cur_user['country'] = $_POST['gd'];
+            $cur_user['country'] = $_POST['co'];
             $cur_user['province'] = $_POST['pv'];
             $cur_user['city'] = $_POST['ct'];
             $cur_user['brgy'] = $_POST['bg'];

@@ -12,12 +12,23 @@
 ?>
 <?php
   	class DV_Globals {
+
+        //Declare a private variable for mysql table name
+        private $table;
          
-        // TODO: Define what this function do?
-        public static function retrieve($table_name, $fields, $where, $sort_field, $sort){
+        /** Global function for retrieving from database 
+		* @param1 = {table name in database};
+        * @param2 = {fields to be selected}
+        * @param3 = {optional. WHERE clause}
+		* @param4 = {optional. ORDER BY field}
+		* @param5 = {optional. ASC or DESC}
+	    */
+        public static function retrieve($table_name, $fields, $where = NULL, $sort_field = NULL , $sort = NULL){
             global $wpdb;
 
-            return $wpdb->get_results("SELECT $fields FROM $table_name $where $sort_field $sort ");
+            $table = $table_name;
+
+            return $wpdb->get_results("SELECT $fields FROM $table $where $sort_field $sort ");
         }
 
         // Return Current DateTime
@@ -31,5 +42,29 @@
             //step 2 - USe that tzone to convert date_time to current timezone.
         }
 
-    }
+     
+        /** Checking if $id has row. Returns boolean
+	    * Returns true if  row found, false if not found, "unavail" if status is not active
+		* @param1 = {table name in database};
+        * @param2 = {id key}
+		* @param3 = {optional. additional where clause}
+	    */
+        public static function check_availability($table_name, $id, $where = NULL){
+            global $wpdb;
+
+            $table = $table_name;
+
+            $result = $wpdb->get_row("SELECT id, status FROM $table WHERE id = $id $where");
+            
+            if (!$result) {
+                return false;
+            } else if ($result->status == 0){
+                return "unavail";
+            } else {
+                return true;
+            }
+        }
+
+
+    } // end of class
 ?>
