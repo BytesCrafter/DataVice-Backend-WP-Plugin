@@ -78,6 +78,12 @@
                 
             ));
 
+            register_rest_route( 'datavice/v1/user', 'data', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Userdata', 'listen'),
+            ));
+    
+
         /*
          * CONTACT RESTAPI
         */
@@ -111,14 +117,7 @@
          * START UNKNOWN
         */
 
-        
-        
-
-        register_rest_route( 'datavice/v1/user', 'data', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Userdata', 'initialize'),
-        ));
-
+       
         register_rest_route( 'datavice/v1/feeds', 'profile', array(
             'methods' => 'POST',
             'callback' => array('DV_Newsfeed', 'get_feeds'),
@@ -143,26 +142,6 @@
             'methods' => 'POST',
             'callback' => array('DV_Userdata', 'add_address'),
         ));
-
-        // register_rest_route( 'datavice/v1/location', 'ctry', array(
-        //     'methods' => 'POST',
-        //     'callback' => array('DV_Countries', 'get_countries'),
-        // ));
-
-        // register_rest_route( 'datavice/v1/user', 'prv', array(
-        //     'methods' => 'POST',
-        //     'callback' => array('DV_Userdata', 'get_provinces'),
-        // ));
-
-        // register_rest_route( 'datavice/v1/user', 'city', array(
-        //     'methods' => 'POST',
-        //     'callback' => array('DV_Userdata', 'get_cities'),
-        // ));
-
-        // register_rest_route( 'datavice/v1/user', 'brgy', array(
-        //     'methods' => 'POST',
-        //     'callback' => array('DV_Userdata', 'get_brgy'),
-        // ));
 
         //Lorz Route for Address REST
         register_rest_route( 'datavice/v1/location', 'ctry', array(
