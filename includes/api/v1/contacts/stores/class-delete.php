@@ -11,7 +11,7 @@
 	*/
 ?>
 <?php
-    class DV_Contact_Delete{
+    class DV_Contact_Stores_Delete{
 
         public static function listen(){
             

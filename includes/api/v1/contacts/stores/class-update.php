@@ -11,7 +11,7 @@
 	*/
 ?>
 <?php
-    class DV_Contact_Update{
+    class DV_Contact_Stores_Update{
 
         public static function listen(){
 

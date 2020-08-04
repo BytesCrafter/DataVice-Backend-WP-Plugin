@@ -15,7 +15,7 @@
         
         public static function listen() {
             global $wpdb;
-            
+            return 'test';
             //Validate user
             if ( DV_Verification::is_verified() ) {
                 return rest_ensure_response( 

@@ -11,7 +11,7 @@
 	*/
 ?>
 <?php
-    class DV_Contact_Insert{
+    class DV_Contact_Stores_Insert{
         
         public static function listen() {
             global $wpdb;

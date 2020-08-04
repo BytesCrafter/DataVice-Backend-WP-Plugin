@@ -122,27 +122,27 @@
             //Stores
             register_rest_route( 'datavice/v1/contact/stores', 'insert', array(
                 'methods' => 'POST',
-                'callback' => array('DV_Contact_Insert','listen'),
+                'callback' => array('DV_Contact_Stores_Insert','listen'),
             ));
 
             register_rest_route( 'datavice/v1/contact/stores', 'list', array(
                 'methods' => 'POST',
-                'callback' => array('DV_Contact_Listing','listen'),
+                'callback' => array('DV_Contact_Stores_Listing','listen'),
             ));
 
             register_rest_route( 'datavice/v1/contact/stores', 'update', array(
                 'methods' => 'POST',
-                'callback' => array('DV_Contact_Update','listen'),
+                'callback' => array('DV_Contact_Stores_Update','listen'),
             ));
 
             register_rest_route( 'datavice/v1/contact/stores', 'select', array(
                 'methods' => 'POST',
-                'callback' => array('DV_Contact_Select','listen'),
+                'callback' => array('DV_Contact_Stores_Select','listen'),
             ));
 
             register_rest_route( 'datavice/v1/contact/stores', 'delete', array(
                 'methods' => 'POST',
-                'callback' => array('DV_Contact_Delete','listen'),
+                'callback' => array('DV_Contact_Stores_Delete','listen'),
             ));
 
         /*
