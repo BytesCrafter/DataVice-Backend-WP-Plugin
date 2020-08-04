@@ -22,11 +22,17 @@
     require plugin_dir_path(__FILE__) . '/v1/users/class-auth.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-verify.php';
 
-    require plugin_dir_path(__FILE__) . '/v1/contacts/class-insert.php';
-    require plugin_dir_path(__FILE__) . '/v1/contacts/class-listing.php';
-    require plugin_dir_path(__FILE__) . '/v1/contacts/class-update.php';
-    require plugin_dir_path(__FILE__) . '/v1/contacts/class-select.php';
-    require plugin_dir_path(__FILE__) . '/v1/contacts/class-delete.php';
+    require plugin_dir_path(__FILE__) . '/v1/contacts/users/class-insert.php';
+    require plugin_dir_path(__FILE__) . '/v1/contacts/users/class-listing.php';
+    require plugin_dir_path(__FILE__) . '/v1/contacts/users/class-update.php';
+    require plugin_dir_path(__FILE__) . '/v1/contacts/users/class-select.php';
+    require plugin_dir_path(__FILE__) . '/v1/contacts/users/class-delete.php';
+
+    require plugin_dir_path(__FILE__) . '/v1/contacts/stores/class-insert.php';
+    require plugin_dir_path(__FILE__) . '/v1/contacts/stores/class-listing.php';
+    require plugin_dir_path(__FILE__) . '/v1/contacts/stores/class-update.php';
+    require plugin_dir_path(__FILE__) . '/v1/contacts/stores/class-select.php';
+    require plugin_dir_path(__FILE__) . '/v1/contacts/stores/class-delete.php';
 
     require plugin_dir_path(__FILE__) . '/v1/location/class-countries.php';
     require plugin_dir_path(__FILE__) . '/v1/location/class-provinces.php';
@@ -87,28 +93,54 @@
         /*
          * CONTACT RESTAPI
         */
-
-            register_rest_route( 'datavice/v1/contact', 'insert', array(
+            //Users
+            register_rest_route( 'datavice/v1/contact/users', 'insert', array(
                 'methods' => 'POST',
-                'callback' => array('DV_Contact_Inser','listen'),
+                'callback' => array('DV_Contact_Insert','listen'),
             ));
 
-            register_rest_route( 'datavice/v1/contact', 'list', array(
+            register_rest_route( 'datavice/v1/contact/users', 'list', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Contact_Listing','listen'),
             ));
 
-            register_rest_route( 'datavice/v1/contact', 'update', array(
+            register_rest_route( 'datavice/v1/contact/users', 'update', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Contact_Update','listen'),
             ));
 
-            register_rest_route( 'datavice/v1/contact', 'select', array(
+            register_rest_route( 'datavice/v1/contact/users', 'select', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Contact_Select','listen'),
             ));
 
-            register_rest_route( 'datavice/v1/contact', 'delete', array(
+            register_rest_route( 'datavice/v1/contact/users', 'delete', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Contact_Delete','listen'),
+            ));
+
+            //Stores
+            register_rest_route( 'datavice/v1/contact/stores', 'insert', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Contact_Insert','listen'),
+            ));
+
+            register_rest_route( 'datavice/v1/contact/stores', 'list', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Contact_Listing','listen'),
+            ));
+
+            register_rest_route( 'datavice/v1/contact/stores', 'update', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Contact_Update','listen'),
+            ));
+
+            register_rest_route( 'datavice/v1/contact/stores', 'select', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Contact_Select','listen'),
+            ));
+
+            register_rest_route( 'datavice/v1/contact/stores', 'delete', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Contact_Delete','listen'),
             ));
