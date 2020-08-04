@@ -99,7 +99,7 @@
                 'callback' => array('DV_Contact_Insert','listen'),
             ));
 
-            register_rest_route( 'datavice/v1/contact/users', 'list', array(
+            register_rest_route( 'datavice/v1/contact/users', 'list/all', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Contact_Listing','listen'),
             ));
@@ -109,7 +109,7 @@
                 'callback' => array('DV_Contact_Update','listen'),
             ));
 
-            register_rest_route( 'datavice/v1/contact/users', 'select', array(
+            register_rest_route( 'datavice/v1/contact/users', 'list/type', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Contact_Select','listen'),
             ));
@@ -125,7 +125,7 @@
                 'callback' => array('DV_Contact_Stores_Insert','listen'),
             ));
 
-            register_rest_route( 'datavice/v1/contact/stores', 'list', array(
+            register_rest_route( 'datavice/v1/contact/stores', 'list/all', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Contact_Stores_Listing','listen'),
             ));
@@ -135,7 +135,7 @@
                 'callback' => array('DV_Contact_Stores_Update','listen'),
             ));
 
-            register_rest_route( 'datavice/v1/contact/stores', 'select', array(
+            register_rest_route( 'datavice/v1/contact/stores', 'list/type', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Contact_Stores_Select','listen'),
             ));
