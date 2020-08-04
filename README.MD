@@ -332,6 +332,30 @@ IF SUCCESS:
     }
 ```
 
+#### INSERT USER CONTACTS => /datavice/v1/contact/users/insert
+REQUEST:
+- Method: POST
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=type (value=type of contact), key=value (value= value of contact), key=id (value = id of owner of this contact) 
+
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
+- code: 'failed' message: 'Required fields cannot be empty.' data: null
+- code: 'failed' message: 'Invalid value for type.' data: null
+- code: 'failed' message: 'Please contact your administrator. ID not in valid format!' data: null
+- code: 'failed' message: 'No results found!' data: null
+- code: 'failed' message: 'Email not in valid format.' data: null
+- code: 'failed' message: 'An error occured while submitting data to the server' data: null
+
+
+IF SUCCESS:
+```
+    {
+        "status": "success",
+        "message" : "Contact added successfully!"
+    }
+```
+
 
 ## Contributing
 

@@ -14,10 +14,11 @@
     class DV_Contact_Insert{
         
         public static function listen() {
+            
             global $wpdb;
-            return 'test';
+
             //Validate user
-            if ( DV_Verification::is_verified() ) {
+            if ( DV_Verification::is_verified() == false ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "unknown",
@@ -27,7 +28,7 @@
             }
 
             // Step1 : Sanitize all Request
-			if ( !isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['value']) || !isset($_POST['type']) || !isset($_POST['own']) ) {
+			if ( !isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['value']) || !isset($_POST['type']) || !isset($_POST['id'])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -36,7 +37,8 @@
                 );
             }
 
-            if ( empty($_POST["wpid"]) || empty($_POST["snky"]) || empty($_POST['value']) || empty($_POST['type']) || empty($_POST['own']) ) {
+            // Check if required fields are not empty
+            if ( empty($_POST["wpid"]) || empty($_POST["snky"]) || empty($_POST['value']) || empty($_POST['type']) || empty($_POST['id']) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
@@ -45,7 +47,7 @@
                 );
             }
 
-            // Step 2 : Check if gender value is either Male or Female only.
+            // Check if value of type is valid
             if (!($_POST['type'] === 'phone') && !($_POST['type'] === 'email') && !($_POST['type'] === 'emergency')) {
                 return rest_ensure_response( 
                     array(
@@ -54,19 +56,9 @@
                     )
                 );
             }
-
-            //TO DO: Please fillup appropriate error message for this one
-            if (!($_POST['own'] === 'user') && !($_POST['own'] === 'store')) {
-                return rest_ensure_response( 
-                    array(
-                            "status" => "failed",
-                            "message" => "Invalid value.",
-                    )
-                );
-            }
             
-              // Step 2: Check if ID is in valid format (integer)
-			if (!is_numeric($_POST["wpid"]) ) {
+              // Check if ID is in valid format (integer)
+			if (!is_numeric($_POST["wpid"]) || !is_numeric($_POST["id"]) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
@@ -76,12 +68,12 @@
                 
 			}
 
-			// Step 3: Check if ID exists
-			if (!get_user_by("ID", $_POST['wpid'])) {
+			// Step 2: Check if id(owner) of this contact exists
+			if (!get_user_by("ID", $_POST['id'])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
-						"message" => "User not found!",
+						"message" => "No results found",
 					)
                 );
             }
@@ -93,55 +85,71 @@
              //Catching post values
              $wpid = $_POST['wpid'];
              $snky = $_POST['snky'];
-             $own = $_POST['own'];
+             $id = $_POST['id'];
+             $value = $_POST['value'];
              $revs_type = 'contacts';
              $date_stamp = DV_Globals::date_stamp();
 
+
+            // Check if current logged user is the same as owner of the id
+             if ($_POST['wpid'] === $_POST['id']) {
+                 
+                //If the same, pass the value of wpid (user id) to id params
+                $id = $_POST['wpid'];
+            
+            } else {
+                
+                //If not, retain id value
+                $id = $_POST['id'];
+             
+            }
+
+
             //Check contact type if phone, email, or emergency
             if ($_POST['type'] == 'phone') {
+                
                 $type = 'phone';
+
             } else if ($_POST['type'] == 'email') {
+                
                 $type = 'email';
-            } else {
-                $type = 'emergency';
-            }
-
-            // Check if value is email or phone number
-            if (is_email($_POST['value'])) {
-                $value = 'email';
-            } else {
-                $value = 'phone';
-            }
-
-            //Check own contact if user or store
-            if ($_POST['own'] == 'user') {
-                $own = 'user';
-                 $wpdb->query("INSERT INTO `$table_contact` (`status`, `types`, `revs`, `wpid`, `stid`, `date_created`) VALUES ('1', '$type', '0', $wpid, 0, '$date_stamp');");
-
-            } else {
-                $own = 'store';
-                 $wpdb->query("INSERT INTO `$table_contact` (`status`, `types`, `revs`, `wpid`, `stid`, `date_created`) VALUES ('1', '$type', '0', $wpid, 0, '$date_stamp');");
-
-            }
+                
+                //if type is email, make sure to sanitize if its a valid email format
+                if (!is_email($_POST['value'])) {
+                    return rest_ensure_response( 
+                        array(
+                            "status" => "failed",
+                            "message" => "Email not in valid format."
+                        )
+                    );
+                }
             
-            return $wpdb->insert_id();
+            } else {
 
+                $type = 'emergency';
+            
+            }
+
+            //Step 3: Start mysql transaction
             $wpdb->query("START TRANSACTION ");
 
-
+                $wpdb->query("INSERT INTO `$table_contact` (`status`, `types`, `revs`, `wpid`, `created_by`, `date_created`) 
+                                VALUES ('1', '$type', '0', $id, $wpid, '$date_stamp');");
+                
                 $contact_id = $wpdb->insert_id;
 
-                $wpdb->query("INSERT INTO $table_revs (revs_type, parent_id, child_key, child_val, created_by, date_created) 
-                                    VALUES ( '$revs_type', $parent_id, '$ck_phone', '$phone', $wpid, '$date_stamp'  )");
-                $phone_id = $wpdb->insert_id;
+                $wpdb->query("INSERT INTO `$table_revs` (revs_type, parent_id, child_key, child_val, created_by, date_created) 
+                                    VALUES ( '$revs_type', $contact_id, '$type', '$value', $wpid, '$date_stamp'  )");
+                
+                $revs_id = $wpdb->insert_id;
 
-                $query_update = $wpdb->query("UPDATE $table_contact SET phone = $phone_id , email = $email_id WHERE ID = $parent_id   ");
+                $wpdb->query("UPDATE `$table_contact` SET `revs` = $revs_id WHERE ID = $contact_id ");
 
             //Check if any of the insert queries above failed
-            if ($contact_id < 1 ) {
-
-             //If failed, do mysql rollback (discard the insert queries(no inserted data))
-             $wpdb->query("ROLLBACK");
+            if ($contact_id < 1  || $revs_id < 1) {
+                //If failed, do mysql rollback (discard the insert queries(no inserted data))
+                $wpdb->query("ROLLBACK");
+                
                 return rest_ensure_response( 
                     array(
                         "status" => "failed",
@@ -153,19 +161,10 @@
             //If no problems found in queries above, do mysql commit (do changes(insert rows))
             $wpdb->query("COMMIT");
 
-            if($query_contact < 0 || $query_phone < 0 || $query_email < 0 ||  $query_update < 0 ){
-                return rest_ensure_response( 
-                    array(
-                            "status" => "failed",
-                            "message" => "Please contact your Administrator. Submition failed",
-                    )
-                );
-            }
-
             return rest_ensure_response( 
                 array(
                         "status" => "Success",
-                        "message" => "Contact Created Successfully!.",
+                        "message" => "Contact added successfully!",
                 )
             );
 
