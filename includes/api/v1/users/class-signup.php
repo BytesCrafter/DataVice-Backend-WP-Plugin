@@ -295,10 +295,24 @@
 
                 $address_id = $wpdb->insert_id;
 
-                $add_key_meta = update_user_meta( $created_id, 'address_home', "{$address_id}" );                
+                //Check if insert success, if not, return error message
+                if ($address_id < 1) {
+                    return rest_ensure_response( 
+                        array(
+                            "status" => "failed",
+                            "message" => "An error occured while submitting data to the server"
+                        )
+                    );
+                }
 
+                //Update user meta for saving the address
+                $add_key_meta = update_user_meta( $created_id, 'address_home', "{$address_id}" );   
+                
+                //Update revision table for saving the parent_id(address_id)
+                $wpdb->query("UPDATE $dv_rev_table SET `parent_id` = {$address_id} WHERE ID IN ($revtype, $street, $brgy, $city, $province, $country)");
+                
+                
                 // Insert user meta for expiration of current activation_key.
-
                 /** Get the password expiration time in config table
                  * @param1 = key
                  * @param2 = default value if no value found
