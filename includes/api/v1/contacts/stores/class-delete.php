@@ -96,7 +96,7 @@
                 return rest_ensure_response( 
                     array(
                         "status" => "failed",
-                        "message" => "Please Contact your Administrator. Contact Deletion Failed!"
+                        "message" => "An error occurred while submiting data to the server."
                     )
                 );
             }

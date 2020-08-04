@@ -17,7 +17,7 @@
 
             global $wpdb;
 
-            if ( DV_Verification::is_verified() ) {
+            if ( DV_Verification::is_verified() == false ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "unknown",
@@ -28,7 +28,7 @@
 
 
             // Step1 : Sanitize all Request
-			if (!isset($_POST["wpid"]) || !isset($_POST["snky"]) ) {
+			if (!isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['stid']) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -39,7 +39,7 @@
             }
             
               // Step 2: Check if ID is in valid format (integer)
-			if (!is_numeric($_POST["wpid"]) ) {
+			if (!is_numeric($_POST["wpid"]) || !is_numeric($_POST['stid']) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
@@ -47,7 +47,18 @@
 					)
                 );
                 
-			}
+            }
+            
+               // Step1 : Sanitize all Request
+			if (empty($_POST["wpid"]) || empty($_POST["snky"]) || empty($_POST['stid']) ) {
+				return rest_ensure_response( 
+					array(
+						"status" => "failed",
+						"message" => "Required Fileds cannot be empty",
+					)
+                );
+                
+            }
 
 			// Step 3: Check if ID exists
 			if (!get_user_by("ID", $_POST['wpid'])) {
@@ -67,34 +78,41 @@
 
             $created_by = $_POST['wpid'];
 
-            $result = $wpdb->get_results("SELECT
-                revs.parent_id,
-                ctc.type,
-                ctc.`status`,
-                max( IF ( revs.child_key = 'phone', revs.child_val, '') ) AS phones,
-                max( IF ( revs.child_key = 'email', revs.child_val, '') ) AS emails,
-                max( IF ( revs.child_key = 'name', revs.child_val, '') ) AS NAME,
-                revs.revs_type 
-            FROM
-                $table_revs revs
-                INNER JOIN $table_contact ctc ON ctc.`status` = revs.ID 
-                OR ctc.phone = revs.ID 
-                OR revs.parent_id = ctc.ID 
-            WHERE
-            revs.revs_type = 'contacts' 
-                AND revs.created_by = $created_by
-                AND ctc.created_by = $created_by 
-            GROUP BY
-            revs.parent_id");
+            $stid = $_POST['stid'];
 
-            return rest_ensure_response( 
-                array(
-                    "status" => "success",
-                    "data" => array(
-                        'list' => $result, 
-                    
+            $result = $wpdb->get_results("SELECT
+                    dv_cont.ID,
+                    dv_cont.`status`,
+                    dv_cont.types,
+                    dv_rev.child_val,
+                    dv_cont.stid,
+                    dv_cont.created_by,
+                    dv_cont.date_created 
+                FROM
+                    $table_contact dv_cont
+                    INNER JOIN $table_revs dv_rev ON dv_rev.ID = dv_cont.revs
+                WHERE dv_cont.`status` = 1 AND dv_cont.stid = $stid ", OBJECT);
+
+            if (!$result) {
+                return rest_ensure_response( 
+                    array(
+                        "status" => "failed",
+                        "message" => "An error occurred while submiting data to the server."
                     )
-                )
-            );
+                );
+
+            }else {
+                return rest_ensure_response( 
+                    array(
+                        "status" => "success",
+                        "data" => array(
+                            'list' => $result, 
+                        
+                        )
+                    )
+                );
+
+            }
+            
         }
     }
