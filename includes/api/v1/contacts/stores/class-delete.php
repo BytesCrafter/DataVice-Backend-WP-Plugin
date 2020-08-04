@@ -51,27 +51,14 @@
             if (empty($_POST["wpid"]) || empty($_POST["snky"]) || empty($_POST['ctc']) ) {
 				return rest_ensure_response( 
 					array(
-						"status" => "unknown",
+						"status" => "failed",
 						"message" => "Required fields cannot be empty",
 					)
                 );
                 
             }
 
-            // Validate first if `ID` is in tp_store 
-            $id = $_POST['id'];
-            $verify = $wpdb->get_row("SELECT ID FROM tp_stores WHERE ID = $id");
-            if (!$verify) {
-                    return rest_ensure_response( 
-                        array(
-                            "status" => "failed",
-                            "message" => "No result found",
-                        )
-                    );
-               
-            }
-
-            
+          
             // Step 3: Check if ID exists
 			
             $table_contact = DV_CONTACTS_TABLE;
@@ -81,8 +68,19 @@
             $stid = $_POST['id'];
             $contact_id = $_POST['ctc'];
 
-            $query1 = $wpdb->get_row("SELECT created_by FROM dv_contacts  WHERE ID = $contact_id");
-            // verify
+            $get_contact = $wpdb->get_row("SELECT created_by FROM dv_contacts  WHERE ID = $contact_id");
+            
+            //Check if wpid match the created_by value
+             if ( !$get_contact ) {
+                return rest_ensure_response( 
+                    array(
+                        "status" => "error",
+                        "message" => "An error occurred while submiting data to the server.",
+                    )
+                );
+            }
+            
+           //Check if wpid match the created_by value
             if ($query1->created_by !== $wpid ) {
                 return rest_ensure_response( 
                     array(
@@ -97,7 +95,7 @@
             if ($result < 0) {
                 return rest_ensure_response( 
                     array(
-                        "status" => "unknown",
+                        "status" => "failed",
                         "message" => "Please Contact your Administrator. Contact Deletion Failed!"
                     )
                 );
@@ -105,7 +103,7 @@
             return rest_ensure_response( 
                 array(
                     "status" => "success",
-                    "message" => "Contact set to inactive."
+                    "message" => " successfully deleted!"
                 )
             );
         }
