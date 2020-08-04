@@ -17,7 +17,7 @@
             
             global $wpdb;
 
-            if ( DV_Verification::is_verified() ) {
+            if ( DV_Verification::is_verified() == false) {
                 return rest_ensure_response( 
                     array(
                         "status" => "unknown",
@@ -26,50 +26,73 @@
                 );
             }
 
+            // Listen `ID`  is either wpid or stid 
 
             // Step1 : Sanitize all Request
-			if (!isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST["ctcid"])) {
+			if (!isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['ctc']) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
-						"message" => "Please contact your administrator. Request unknown!",
+						"message" => "Please contact your awdawdwadministrator. Request unknown!",
 					)
                 );
                 
             }
+            if (!is_numeric($_POST["id"]) || !is_numeric($_POST['ctc']) ||  !is_numeric($_POST['wpid']) ) {
+                return rest_ensure_response( 
+                    array(
+                        "status" => "failed",
+                        "message" => "Please contact your administrator. ID not in valid format!",
+                    )
+                );
+                
+            }  
+
+            if (empty($_POST["wpid"]) || empty($_POST["snky"]) || empty($_POST['ctc']) ) {
+				return rest_ensure_response( 
+					array(
+						"status" => "unknown",
+						"message" => "Required fields cannot be empty",
+					)
+                );
+                
+            }
+
+            // Validate first if `ID` is in tp_store 
+            $id = $_POST['id'];
+            $verify = $wpdb->get_row("SELECT ID FROM tp_stores WHERE ID = $id");
+            if (!$verify) {
+                    return rest_ensure_response( 
+                        array(
+                            "status" => "failed",
+                            "message" => "No result found",
+                        )
+                    );
+               
+            }
+
             
-              // Step 2: Check if ID is in valid format (integer)
-			if (!is_numeric($_POST["wpid"]) ) {
-				return rest_ensure_response( 
-					array(
-						"status" => "failed",
-						"message" => "Please contact your administrator. ID not in valid format!",
-					)
-                );
-                
-			}
-
-			// Step 3: Check if ID exists
-			if (!get_user_by("ID", $_POST['wpid'])) {
-				return rest_ensure_response( 
-					array(
-						"status" => "failed",
-						"message" => "User not found!",
-					)
-                );
-                
-            }
-
-
+            // Step 3: Check if ID exists
+			
             $table_contact = DV_CONTACTS_TABLE;
-            
+            $table_revisions = DV_REVS_TABLE;
 
+            $wpid = $_POST['wpid'];
+            $stid = $_POST['id'];
+            $contact_id = $_POST['ctc'];
 
-            $created_by = $_POST['wpid'];
-            $contact_id = $_POST['ctcid'];
+            $query1 = $wpdb->get_row("SELECT created_by FROM dv_contacts  WHERE ID = $contact_id");
+            // verify
+            if ($query1->created_by !== $wpid ) {
+                return rest_ensure_response( 
+                    array(
+                        "status" => "error",
+                        "message" => "An error occurred while submiting data to the server.",
+                    )
+                );
+            }
 
-            $result = $wpdb->query("UPDATE $table_contact SET `status`='inactive' WHERE ID = $contact_id AND created_by = $created_by");
-
+            $result = $wpdb->query("UPDATE `$table_contact` SET `status` = '0' WHERE ID = $contact_id AND created_by = $wpid ");
 
             if ($result < 0) {
                 return rest_ensure_response( 
