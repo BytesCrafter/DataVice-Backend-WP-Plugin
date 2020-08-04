@@ -40,6 +40,11 @@
 	require plugin_dir_path(__FILE__) . '/v1/location/class-barangays.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-data.php';
     
+    require plugin_dir_path(__FILE__) . '/v1/settings/class-avatar.php';
+    require plugin_dir_path(__FILE__) . '/v1/settings/class-fname.php';
+    require plugin_dir_path(__FILE__) . '/v1/settings/class-lname.php';
+
+
 	require plugin_dir_path(__FILE__) . '/v1/globals.php';
 	
 	// Init check if USocketNet successfully request from wapi.
@@ -195,6 +200,21 @@
             'methods' => 'POST',
             'callback' => array('DV_Barangays', 'listen'),
         ));
+
+        
+        /*
+         * SETTING RESTAPI
+        */
+            
+            // register_rest_route( 'datavice/api/v1/settings', 'update_avatar', array(
+            //     'methods' => 'POST',
+            //     'callback' => array('DV_Avatar_update', 'listen'),
+            // ));
+
+            register_rest_route( 'datavice/api/v1/settings', 'update_avatar', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Avatar_update', 'initialize'),
+            ));
 
     
     }
