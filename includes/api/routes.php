@@ -140,9 +140,14 @@
                 'callback' => array('DV_Contact_Stores_Update','listen'),
             ));
 
-            register_rest_route( 'datavice/v1/contact/stores', 'list/type', array(
+            register_rest_route( 'datavice/v1/contact/stores', 'select', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Contact_Stores_Select','listen'),
+            ));
+
+            register_rest_route( 'datavice/v1/contact/stores', 'list/type', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Contact_Stores_Type','listen'),
             ));
 
             register_rest_route( 'datavice/v1/contact/stores', 'delete', array(
@@ -213,7 +218,7 @@
 
             register_rest_route( 'datavice/api/v1/settings', 'update_avatar', array(
                 'methods' => 'POST',
-                'callback' => array('DV_Avatar_update', 'initialize'),
+                'callback' => array('DV_Avatar_update', 'listen'),
             ));
 
             register_rest_route( 'datavice/api/v1/settings', 'update_fname', array(
