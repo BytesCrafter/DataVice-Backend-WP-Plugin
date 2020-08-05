@@ -171,28 +171,20 @@ IF SUCCESS:
         "status": "success",
         "data": [
            {
-                "id": "36789",
-                "brgy_name": "Alabang",
-                "prov_code": "1376",
-                "city_code": "137603"
+                "name": "Alabang",
+                "code": "36789"
             },
             {
-                "id": "36790",
-                "brgy_name": "Bayanan",
-                "prov_code": "1376",
-                "city_code": "137603"
+                "name": "Bayanan",
+                "code": "36790"
             },
             {
-                "id": "36791",
-                "brgy_name": "Buli",
-                "prov_code": "1376",
-                "city_code": "137603"
+                "name": "Buli",
+                "code": "36791"
             },
             {
-                "id": "36792",
-                "brgy_name": "Cupang",
-                "prov_code": "1376",
-                "city_code": "137603"
+                "name": "Cupang",
+                "code": "36792"
             },
         ]
     }

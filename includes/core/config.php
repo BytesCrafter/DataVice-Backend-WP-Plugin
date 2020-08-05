@@ -62,3 +62,10 @@
 	define('DV_BRGY_TABLE', DV_PREFIX.'geo_brgys');
 	define("DV_BRGY_DATA", $dv_brgy_list);
 	define("DV_BRGY_FIELD", "(brgy_name, city_code)");
+
+	//Timezone CONSTANTS
+	define('DV_TZ_TABLE', DV_PREFIX.'geo_timezone');
+	define("DV_TZ_FIELD", "(tzone_name, utc_offset, utc_dst_offset)");
+	define("DV_TZ_DATA", $dv_tz_list);
+
+

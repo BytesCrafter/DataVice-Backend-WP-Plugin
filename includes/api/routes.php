@@ -39,8 +39,13 @@
     require plugin_dir_path(__FILE__) . '/v1/location/class-countries.php';
     require plugin_dir_path(__FILE__) . '/v1/location/class-provinces.php';
     require plugin_dir_path(__FILE__) . '/v1/location/class-cities.php';
-	require plugin_dir_path(__FILE__) . '/v1/location/class-barangays.php';
-    require plugin_dir_path(__FILE__) . '/v1/users/class-data.php';
+    require plugin_dir_path(__FILE__) . '/v1/location/class-barangays.php';
+    require plugin_dir_path(__FILE__) . '/v1/location/class-timezone.php';
+	require plugin_dir_path(__FILE__) . '/v1/location/class-dst-offset.php';
+	require plugin_dir_path(__FILE__) . '/v1/location/class-offset.php';
+    
+    
+    // require plugin_dir_path(__FILE__) . '/v1/users/class-data.php';
     
     // require plugin_dir_path(__FILE__) . '/v1/settings/class-avatar.php';
     // require plugin_dir_path(__FILE__) . '/v1/settings/class-update-fname.php';
@@ -49,18 +54,6 @@
     // require plugin_dir_path(__FILE__) . '/v1/settings/class-update-em.php';
     // require plugin_dir_path(__FILE__) . '/v1/settings/class-update-un.php';
     // require plugin_dir_path(__FILE__) . '/v1/settings/class-update-gd.php';
-
-    require plugin_dir_path(__FILE__) . '/v1/address/store/class-insert.php';
-    require plugin_dir_path(__FILE__) . '/v1/address/store/class-update.php';
-    require plugin_dir_path(__FILE__) . '/v1/address/store/class-select.php';
-    require plugin_dir_path(__FILE__) . '/v1/address/store/class-select-type.php';
-    require plugin_dir_path(__FILE__) . '/v1/address/store/class-listing.php';
-
-    require plugin_dir_path(__FILE__) . '/v1/address/user/class-insert.php';
-    require plugin_dir_path(__FILE__) . '/v1/address/user/class-update.php';
-    require plugin_dir_path(__FILE__) . '/v1/address/user/class-select.php';
-    require plugin_dir_path(__FILE__) . '/v1/address/user/class-select-type.php';
-    require plugin_dir_path(__FILE__) . '/v1/address/user/class-listing.php';
 
 
 	require plugin_dir_path(__FILE__) . '/v1/globals.php';
@@ -201,6 +194,22 @@
                 'callback' => array('DV_Barangays', 'listen'),
             ));
 
+            register_rest_route( 'datavice/v1/location', 'tzone', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Timezone', 'listen'),
+            ));
+
+            register_rest_route( 'datavice/v1/location', 'dst', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Dst', 'listen'),
+            ));
+
+
+            register_rest_route( 'datavice/v1/location', 'off', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Offset', 'listen'),
+            ));
+
         
         /*
          * Start unknown
@@ -271,65 +280,7 @@
                 'methods' => 'POST',
                 'callback' => array('DV_Gender_Update', 'listen'),
             ));
-
-         /*
-         * ADDRESS RESTAPI
-        */
-            // Store Folder 
-
-            register_rest_route( 'datavice/v1/address/store', 'insert', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Insert_Store_Address', 'listen'),
-            ));
-
-            register_rest_route( 'datavice/v1/address/store', 'update', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Update_Store_Address', 'listen'),
-            ));
-            
-            register_rest_route( 'datavice/v1/address/store', 'select', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Select_Store_Address', 'listen'),
-            ));
-
-            register_rest_route( 'datavice/v1/address/store', 'list/type', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Select_type_Store_Address', 'listen'),
-            ));
-
-            register_rest_route( 'datavice/v1/address/store', 'list/all', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Select_All_Store_Address', 'listen'),
-            ));
-
-
-
-            // User Folder
-
-            register_rest_route( 'datavice/v1/address/user', 'insert', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Insert_User_Address', 'listen'),
-            ));
-
-            register_rest_route( 'datavice/v1/address/user', 'update', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Update_User_Address', 'listen'),
-            ));
-            
-            register_rest_route( 'datavice/v1/address/user', 'select', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Select_User_Address', 'listen'),
-            ));
-
-            register_rest_route( 'datavice/v1/address/user', 'list/type', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Select_type_User_Address', 'listen'),
-            ));
-
-            register_rest_route( 'datavice/v1/address/user', 'list/all', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Select_All_User_Address', 'listen'),
-            ));
+    
     }
     add_action( 'rest_api_init', 'datavice_route' );
 

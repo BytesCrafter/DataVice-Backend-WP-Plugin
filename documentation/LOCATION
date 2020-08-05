@@ -18,34 +18,34 @@ IF SUCCESS:
         "data": [
             {
                 "id": "1",
-                "country_code": "AF",
+                "code": "AF",
                 "country_name": "Afghanistan"
             },
             {
                 "id": "2",
-                "country_code": "AL",
+                "code": "AL",
                 "country_name": "Albania"
             },
             {
                 "id": "3",
-                "country_code": "DZ",
+                "code": "DZ",
                 "country_name": "Algeria"
             },
             {
                 "id": "4",
-                "country_code": "DS",
+                "code": "DS",
                 "country_name": "American Samoa"
             },
             {
                 "id": "5",
-                "country_code": "AD",
+                "code": "AD",
                 "country_name": "Andorra"
             }
         ]
     }
 ```
 
-#### GETTING PROVINCES => /datavice/api/v1/user/prv
+#### GETTING PROVINCES => /datavice/api/v1/location/prv
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
@@ -64,31 +64,13 @@ IF SUCCESS:
     {
         "status": "success",
         "data": [
-            {
-                "id": "73",
-                "prov": "Abra"
-            },
-            {
-                 "id": "84",
-                "prov": "Agusan Del Norte"
-            },
-            {
-                "id": "85",
-                "prov": "Agusan Del Sur"
-            },
-            {
-                "id": "33",
-                "prov": "Aklan"
-            },
-            {
-                "id": "27",
-                "prov": "Albay"
-            }
+            "code": "0434",
+            "name": "Laguna"
         ]
     }
 ```
 
-#### GETTING CITIES => /datavice/api/v1/user/cty
+#### GETTING CITIES => /datavice/api/v1/location/cty
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
@@ -114,7 +96,7 @@ IF SUCCESS:
     }
 ```
 
-#### GETTING BARANGAYS => /datavice/api/v1/user/brgy
+#### GETTING BARANGAYS => /datavice/api/v1/location/brgy
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
@@ -133,29 +115,99 @@ IF SUCCESS:
         "status": "success",
         "data": [
            {
-                "id": "36789",
-                "brgy_name": "Alabang",
-                "prov_code": "1376",
-                "city_code": "137603"
+                "code": "36789",
+                "name": "Alabang",
             },
             {
-                "id": "36790",
-                "brgy_name": "Bayanan",
-                "prov_code": "1376",
-                "city_code": "137603"
+                "code": "36790",
+                "name": "Bayanan",
             },
             {
-                "id": "36791",
-                "brgy_name": "Buli",
-                "prov_code": "1376",
-                "city_code": "137603"
+                "code": "36791",
+                "name": "Buli",
             },
             {
-                "id": "36792",
-                "brgy_name": "Cupang",
-                "prov_code": "1376",
-                "city_code": "137603"
+                "code": "36792",
+                "name": "Cupang",
             },
         ]
+    }
+```
+
+#### GETTING TIMEZONE BY COUTNRY ID => /datavice/api/v1/location/tzone
+REQUEST:
+- Method: POST
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=ci (value=Country id), key=mk (value=Master key)
+
+RESPONSE:
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
+- code: 'failed' message: 'Required fields cannot be empty.' data: null
+- code: 'failed' message: 'No results found.' data: null
+- code: 'error' message: 'Master keys does not match.' data: null
+
+
+IF SUCCESS:
+```
+    {
+        "status": "success",
+        "data": {
+            "code": "PH",
+            "name": "Philippines",
+            "timezone": "Asia/Manila"
+        }
+    }
+```
+
+#### GETTING UTC OFFSET BY COUTNRY ID => /datavice/api/v1/location/off
+REQUEST:
+- Method: POST
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=ci (value=Country id), key=mk (value=Master key)
+
+RESPONSE:
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
+- code: 'failed' message: 'Required fields cannot be empty.' data: null
+- code: 'failed' message: 'No results found.' data: null
+- code: 'error' message: 'Master keys does not match.' data: null
+
+
+IF SUCCESS:
+```
+    {
+        "status": "success",
+        "data": {
+            "code": "PH",
+            "name": "Philippines",
+            "offset": "+08:00"
+        }
+    }
+```
+
+#### GETTING DST OFFSET BY COUTNRY ID => /datavice/api/v1/location/dst
+REQUEST:
+- Method: POST
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=ci (value=Country id), key=mk (value=Master key)
+
+RESPONSE:
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
+- code: 'failed' message: 'Required fields cannot be empty.' data: null
+- code: 'failed' message: 'No results found.' data: null
+- code: 'error' message: 'Master keys does not match.' data: null
+
+
+IF SUCCESS:
+```
+    {
+        "status": "success",
+        "data": {
+            "code": "PH",
+            "name": "Philippines",
+            "dst": "+08:00"
+        }
     }
 ```

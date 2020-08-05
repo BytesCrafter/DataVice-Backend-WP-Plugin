@@ -180,6 +180,29 @@
 			$wpdb->query("INSERT INTO `".$tbl_brgy."` $brgy_field VALUES $brgy_data");
 		}
 
+		//Database table creation for dv_geo_timezone
+		$tbl_timezone = DV_TZ_TABLE;
+
+		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_timezone'" ) != $tbl_timezone) {
+			$sql = "CREATE TABLE `".$tbl_timezone."` (";
+				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`tzone_name` varchar(50) NOT NULL, ";
+				$sql .= "`utc_offset` varchar(10) NOT NULL, ";
+				$sql .= "`utc_dst_offset` varchar(10) NOT NULL, ";
+				$sql .= "PRIMARY KEY (`ID`) ";
+				$sql .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; ";
+			$result = $wpdb->get_results($sql);
+			
+			//Pass the globally defined constant to a variable
+			$tz_data = DV_TZ_DATA;
+			$tz_field = DV_TZ_FIELD;
+			
+			//Dumping data into tables
+			$wpdb->query("INSERT INTO `".$tbl_timezone."` $tz_field VALUES $tz_data");
+		}
+
+
+
 	}
 
     add_action( 'activated_plugin', 'dv_dbhook_activate' );

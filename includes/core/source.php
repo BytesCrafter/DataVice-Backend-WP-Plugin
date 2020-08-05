@@ -18,3 +18,4 @@
     include_once ( DV_PLUGIN_PATH. '/includes/source/location/cities.php' );
     include_once ( DV_PLUGIN_PATH . '/includes/source/location/provinces.php' );
     include_once ( DV_PLUGIN_PATH . '/includes/source/location/barangay.php' );
+    include_once ( DV_PLUGIN_PATH . '/includes/source/location/timezone.php' );
