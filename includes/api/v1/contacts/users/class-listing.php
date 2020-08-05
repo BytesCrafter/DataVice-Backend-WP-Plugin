@@ -68,33 +68,37 @@
             $created_by = $_POST['wpid'];
 
             $result = $wpdb->get_results("SELECT
-                revs.parent_id,
-                ctc.type,
-                ctc.`status`,
-                max( IF ( revs.child_key = 'phone', revs.child_val, '') ) AS phones,
-                max( IF ( revs.child_key = 'email', revs.child_val, '') ) AS emails,
-                max( IF ( revs.child_key = 'name', revs.child_val, '') ) AS NAME,
-                revs.revs_type 
-            FROM
-                $table_revs revs
-                INNER JOIN $table_contact ctc ON ctc.`status` = revs.ID 
-                OR ctc.phone = revs.ID 
-                OR revs.parent_id = ctc.ID 
-            WHERE
-            revs.revs_type = 'contacts' 
-                AND revs.created_by = $created_by
-                AND ctc.created_by = $created_by 
-            GROUP BY
-            revs.parent_id");
+                    dv_cont.ID,
+                    dv_cont.`status`,
+                    dv_cont.types,
+                    dv_rev.child_val,
+                    dv_cont.stid,
+                    dv_cont.created_by,
+                    dv_cont.date_created 
+                FROM
+                    $table_contact dv_cont
+                    INNER JOIN $table_revs dv_rev ON dv_rev.ID = dv_cont.revs
+                WHERE dv_cont.`status` = 1 AND dv_cont.stid = $stid ", OBJECT);
 
-            return rest_ensure_response( 
-                array(
-                    "status" => "success",
-                    "data" => array(
-                        'list' => $result, 
-                    
+            if (!$result) {
+                return rest_ensure_response( 
+                    array(
+                        "status" => "failed",
+                        "message" => "An error occurred while submiting data to the server."
                     )
-                )
-            );
+                );
+
+            }else {
+                return rest_ensure_response( 
+                    array(
+                        "status" => "success",
+                        "data" => array(
+                            'list' => $result, 
+                        
+                        )
+                    )
+                );
+
+            }
         }
     }
