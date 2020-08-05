@@ -116,9 +116,14 @@
                 'callback' => array('DV_Contact_Update','listen'),
             ));
 
-            register_rest_route( 'datavice/v1/contact/users', 'list/type', array(
+            register_rest_route( 'datavice/v1/contact/users', 'select', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Contact_Select','listen'),
+            ));
+
+            register_rest_route( 'datavice/v1/contact/users', 'list/type', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Contact_Type','listen'),
             ));
 
             register_rest_route( 'datavice/v1/contact/users', 'delete', array(

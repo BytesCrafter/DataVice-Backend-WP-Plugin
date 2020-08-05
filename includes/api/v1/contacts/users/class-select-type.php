@@ -11,7 +11,7 @@
 	*/
 ?>
 <?php
-    class DV_Contact_Select{
+    class DV_Contact_Type{
 
         public static function listen(){
             global $wpdb;
@@ -84,7 +84,8 @@
                 $table_revs revs
                 INNER JOIN $table_contact ctc ON revs.parent_id = ctc.ID 
             WHERE
-            revs.child_key = '$type' 
+                revs.child_key = '$type'
+                AND ctc.wpid = $owner_id 
                 AND ctc.`status` = 1");
 
 
