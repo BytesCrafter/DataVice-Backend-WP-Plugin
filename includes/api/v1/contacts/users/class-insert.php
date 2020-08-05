@@ -27,7 +27,7 @@
                 );
             }
 
-            // Step1 : Sanitize all Request
+            //  Sanitize all Request
 			if ( !isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['value']) || !isset($_POST['type']) || !isset($_POST['id'])) {
 				return rest_ensure_response( 
 					array(
@@ -68,12 +68,12 @@
                 
 			}
 
-			// Step 2: Check if id(owner) of this contact exists
+			//  Check if id(owner) of this contact exists
 			if (!get_user_by("ID", $_POST['id'])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
-						"message" => "No results found",
+						"message" => "User not found",
 					)
                 );
             }
@@ -130,7 +130,7 @@
             
             }
 
-            //Step 3: Start mysql transaction
+            // Start mysql transaction
             $wpdb->query("START TRANSACTION ");
 
                 $wpdb->query("INSERT INTO `$table_contact` (`status`, `types`, `revs`, `wpid`, `created_by`, `date_created`) 
@@ -164,7 +164,7 @@
             return rest_ensure_response( 
                 array(
                         "status" => "Success",
-                        "message" => "Contact added successfully!",
+                        "message" => "Data has been added successfully.",
                 )
             );
 
