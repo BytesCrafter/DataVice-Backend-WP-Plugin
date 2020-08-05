@@ -18,7 +18,7 @@
 
 
               //Validate user
-              if ( DV_Verification::is_verified() == false ) {
+            if ( DV_Verification::is_verified() == false ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "unknown",
@@ -72,20 +72,7 @@
 
             $lname = $_POST['ln'];
 
-            // Get last First name for validation
-            $wp_user = get_user_by("ID", $_POST['wpid']);
-            $last_lname = $wp_user->last_name;
-            
-            if ($lname === $last_lname) {
-                return rest_ensure_response( 
-					array(
-						"status" => "failed",
-						"message" => "This name is already exist",
-					)
-                );
-            }
-           
-            $result = update_user_meta( $_POST['wpid'], 'first_name', $lname,  $prev_value = $last_lname );
+            $result = update_user_meta( $_POST['wpid'], 'first_name', $lname);
 
             if ($result == false) {
                 return rest_ensure_response( 

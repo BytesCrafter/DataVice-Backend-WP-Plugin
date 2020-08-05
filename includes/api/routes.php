@@ -241,6 +241,24 @@
                 'methods' => 'POST',
                 'callback' => array('DV_Lname_update', 'listen'),
             ));
+            
+            register_rest_route( 'datavice/v1/settings', 'update_bd', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Brithdate_update', 'listen'),
+            ));
+            
+            register_rest_route( 'datavice/v1/settings', 'update_em', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Email_Update', 'listen'),
+            ));
+
+            register_rest_route( 'datavice/v1/settings', 'update_gd', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Gender_Update', 'listen'),
+            ));
+
+
+            
 
 
     

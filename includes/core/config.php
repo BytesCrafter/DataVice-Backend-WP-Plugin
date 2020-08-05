@@ -14,6 +14,12 @@
 	define('DV_PREFIX', 'dv_');
 	define('DV_MASTER', 'masterkey');
 	
+	define('WP_PREFIX', 'wp_');
+	
+	// Wordpress CONSTANT
+	define('WP_USERS_META', WP_PREFIX.'usermeta');
+
+	
 	// Primary Table Constant
 	define('DV_CONTACTS_TABLE', DV_PREFIX.'contacts');
 	define('DV_ADDRESS_TABLE', DV_PREFIX.'address');
