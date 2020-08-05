@@ -16,8 +16,8 @@
         public static function listen(){
 
             global $wpdb;
-
-            if ( DV_Verification::is_verified() ) {
+            
+            if ( DV_Verification::is_verified() == false ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "unknown",
@@ -28,7 +28,7 @@
 
 
             // Step1 : Sanitize all Request
-			if (!isset($_POST["wpid"]) || !isset($_POST["snky"]) ) {
+			if (!isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['id']) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -39,7 +39,7 @@
             }
             
               // Step 2: Check if ID is in valid format (integer)
-			if (!is_numeric($_POST["wpid"]) ) {
+			if (!is_numeric($_POST["wpid"]) || !is_numeric($_POST['id']) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
@@ -47,25 +47,33 @@
 					)
                 );
                 
-			}
+            }
+            
+               // Step1 : Sanitize all Request
+			if (empty($_POST["wpid"]) || empty($_POST["snky"]) || empty($_POST['id']) ) {
+				return rest_ensure_response( 
+					array(
+						"status" => "failed",
+						"message" => "Required Fileds cannot be empty",
+					)
+                );
+                
+            }
 
 			// Step 3: Check if ID exists
-			if (!get_user_by("ID", $_POST['wpid'])) {
+			if (!get_user_by("ID", $_POST['id'])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
 						"message" => "User not found!",
 					)
                 );
-                
             }
 
-            
             $table_contact = DV_CONTACTS_TABLE;
             $table_revs = DV_REVS_TABLE;
 
-
-            $created_by = $_POST['wpid'];
+            $id = $_POST['id'];
 
             $result = $wpdb->get_results("SELECT
                     dv_cont.ID,
@@ -78,7 +86,7 @@
                 FROM
                     $table_contact dv_cont
                     INNER JOIN $table_revs dv_rev ON dv_rev.ID = dv_cont.revs
-                WHERE dv_cont.`status` = 1 AND dv_cont.stid = $stid ", OBJECT);
+                WHERE dv_cont.`status` = 1 AND dv_cont.wpid = $id ", OBJECT);
 
             if (!$result) {
                 return rest_ensure_response( 
@@ -100,5 +108,6 @@
                 );
 
             }
+            
         }
     }
