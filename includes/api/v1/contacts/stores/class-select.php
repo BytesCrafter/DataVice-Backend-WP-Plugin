@@ -102,8 +102,8 @@
                 dv_revs.child_val AS `phone`,
                 dv_ctcs.date_created 
             FROM
-                dv_contacts dv_ctcs
-                INNER JOIN dv_revisions dv_revs ON dv_revs.ID = dv_ctcs.revs 
+                $table_contact dv_ctcs
+                INNER JOIN $table_revs dv_revs ON dv_revs.ID = dv_ctcs.revs 
             WHERE
                 dv_ctcs.ID = $contact_id
                 AND dv_ctcs.stid = $stid AND dv_ctcs.`status` = 1");

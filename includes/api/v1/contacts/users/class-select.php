@@ -76,17 +76,16 @@
             $contact_id = $_POST['ctc'];
 
             $result  = $wpdb->get_results("SELECT
-                ctc.ID,
-                ctc.types,
-                ctc.`status`,
-                revs.child_val as `type`
+                dv_ctcs.ID,
+                dv_ctcs.types,
+                dv_revs.child_val AS `value`,
+                dv_ctcs.date_created 
             FROM
-                $table_revs revs
-                INNER JOIN $table_contact ctc ON revs.parent_id = ctc.ID 
+                $table_contact dv_ctcs
+                INNER JOIN $table_revs dv_revs ON dv_revs.ID = dv_ctcs.revs 
             WHERE
-                ctc.ID = $contact_id
-                AND ctc.wpid = $owner_id 
-                AND ctc.`status` = 1");
+                dv_ctcs.ID = $contact_id
+                AND dv_ctcs.wpid = $owner_id AND dv_ctcs.`status` = 1");
 
 
             if (!$result) {
