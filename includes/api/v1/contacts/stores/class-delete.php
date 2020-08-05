@@ -16,7 +16,7 @@
         public static function listen(){
             
             global $wpdb;
-
+            // Check if user is verified
             if ( DV_Verification::is_verified() == false) {
                 return rest_ensure_response( 
                     array(
@@ -28,7 +28,7 @@
 
             // Listen `ID`  is either wpid or stid 
 
-            // Step1 : Sanitize all Request
+            //  Sanitize all Request
 			if (!isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['ctc']) ) {
 				return rest_ensure_response( 
 					array(
@@ -38,7 +38,8 @@
                 );
                 
             }
-            if (!is_numeric($_POST["id"]) || !is_numeric($_POST['ctc']) ||  !is_numeric($_POST['wpid']) ) {
+
+            if ( !is_numeric($_POST['ctc']) ||  !is_numeric($_POST['wpid']) ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "failed",
@@ -59,39 +60,38 @@
             }
 
           
-            // Step 3: Check if ID exists
-			
+            //  Check if ID exists
             $table_contact = DV_CONTACTS_TABLE;
             $table_revisions = DV_REVS_TABLE;
 
             $wpid = $_POST['wpid'];
-            $stid = $_POST['id'];
             $contact_id = $_POST['ctc'];
 
-            $get_contact = $wpdb->get_row("SELECT ID FROM tp_stores  WHERE ID = $stid ");
+            $get_contact = $wpdb->get_row("SELECT created_by FROM dv_contacts  WHERE ID = $contact_id ");
             
             //Check if wpid match the created_by value
              if ( !$get_contact ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "error",
-                        "message" => "An error occurred while submiting data to the server.",
+                        "message" => "An error occurred while fetching data to the server.",
                     )
                 );
             }
             
            //Check if wpid match the created_by value
-            if ($query1->created_by !== $wpid ) {
+            if ($get_contact->created_by !== $wpid ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "error",
-                        "message" => "An error occurred while submiting data to the server.",
+                        "message" => "An error occurred while fetching data to the server.",
                     )
                 );
             }
+            // Start Query
+            $result = $wpdb->query("UPDATE `$table_contact` SET `status` = '0' WHERE ID = $contact_id ");
 
-            $result = $wpdb->query("UPDATE `$table_contact` SET `status` = '0' WHERE ID = $contact_id AND created_by = $wpid ");
-
+            // return result
             if ($result < 0) {
                 return rest_ensure_response( 
                     array(
@@ -100,10 +100,11 @@
                     )
                 );
             }
+            
             return rest_ensure_response( 
                 array(
                     "status" => "success",
-                    "message" => " successfully deleted!"
+                    "message" => "Data has been deleted successfully."
                 )
             );
         }

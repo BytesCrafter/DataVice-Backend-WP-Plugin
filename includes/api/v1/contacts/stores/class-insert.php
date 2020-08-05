@@ -16,7 +16,7 @@
         public static function listen() {
             global $wpdb;
             
-            //Validate user
+            // Step1: Validate user
             if ( DV_Verification::is_verified() == false ) {
                 return rest_ensure_response( 
                     array(
@@ -26,7 +26,7 @@
                 );
             }
 
-            // Step1 : Sanitize all Request
+            // Step2 : Sanitize all Request
             if ( !isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['value']) || !isset($_POST['type']) || !isset($_POST['id'])) {
                 return rest_ensure_response( 
                     array(
@@ -36,7 +36,7 @@
                 );
             }
 
-            // Check if required fields are not empty
+            // Step3: Check if required fields are not empty
             if ( empty($_POST["wpid"]) || empty($_POST["snky"]) || empty($_POST['value']) || empty($_POST['type']) || empty($_POST['id']) ) {
                 return rest_ensure_response( 
                     array(
@@ -46,7 +46,7 @@
                 );
             }
 
-            // Check if value of type is valid
+            // Step4: Check if value of type is valid
             if (!($_POST['type'] === 'phone') && !($_POST['type'] === 'email') && !($_POST['type'] === 'emergency')) {
                 return rest_ensure_response( 
                     array(
@@ -56,7 +56,7 @@
                 );
             }
             
-            // Check if ID is in valid format (integer)
+            // Step5: Check if ID is in valid format (integer)
             if (!is_numeric($_POST["wpid"]) || !is_numeric($_POST["id"]) ) {
                 return rest_ensure_response( 
                     array(
@@ -67,12 +67,11 @@
                 
             }
 
-
+            // Step6: Check if wpid match the created_by value
             $stid = $_POST['stid'];
             $get_contact = $wpdb->get_row("SELECT ID FROM tp_stores  WHERE ID = $stid ");
             
-            //Check if wpid match the created_by value
-             if ( !$get_contact ) {
+            if ( !$get_contact ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "error",
@@ -81,7 +80,7 @@
                 );
             }
 
-            // Step 2: Check if id(owner) of this contact exists
+            // Step 7: Check if id(owner) of this contact exists
             if (!get_user_by("ID", $_POST['id'])) {
                 return rest_ensure_response( 
                     array(
@@ -105,7 +104,7 @@
 
 
 
-            //Check contact type if phone, email, or emergency
+            //Step8: Check contact type if phone, email, or emergency
             if ($_POST['type'] == 'phone') {
                 
                 $type = 'phone';
@@ -130,7 +129,7 @@
             
             }
 
-            //Step 3: Start mysql transaction
+            //Step9:: Start mysql transaction
             $wpdb->query("START TRANSACTION ");
 
                 $wpdb->query("INSERT INTO `$table_contact` (`status`, `types`, `revs`, `stid`, `created_by`, `date_created`) 
@@ -145,7 +144,7 @@
 
                 $wpdb->query("UPDATE `$table_contact` SET `revs` = $revs_id WHERE ID = $contact_id ");
 
-            //Check if any of the insert queries above failed
+            // Step10: Check if any of the insert queries above failed
             if ($contact_id < 1  || $revs_id < 1) {
                 //If failed, do mysql rollback (discard the insert queries(no inserted data))
                 $wpdb->query("ROLLBACK");

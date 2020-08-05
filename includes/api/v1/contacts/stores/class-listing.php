@@ -16,7 +16,7 @@
         public static function listen(){
 
             global $wpdb;
-
+            // Step1: Validate user
             if ( DV_Verification::is_verified() == false ) {
                 return rest_ensure_response( 
                     array(
@@ -27,7 +27,7 @@
             }
 
 
-            // Step1 : Sanitize all Request
+            // Step2 : Sanitize all Request
 			if (!isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['stid']) ) {
 				return rest_ensure_response( 
 					array(
@@ -38,7 +38,7 @@
                 
             }
             
-              // Step 2: Check if ID is in valid format (integer)
+              // Step 3: Check if ID is in valid format (integer)
 			if (!is_numeric($_POST["wpid"]) || !is_numeric($_POST['stid']) ) {
 				return rest_ensure_response( 
 					array(
@@ -49,7 +49,7 @@
                 
             }
             
-               // Step1 : Sanitize all Request
+            // Step3 : Sanitize all Request
 			if (empty($_POST["wpid"]) || empty($_POST["snky"]) || empty($_POST['stid']) ) {
 				return rest_ensure_response( 
 					array(
@@ -64,7 +64,7 @@
             $stid = $_POST['stid'];
             $get_contact = $wpdb->get_row("SELECT ID FROM tp_stores  WHERE ID = $stid ");
             
-            //Check if wpid match the created_by value
+            //Step4: Check if wpid match the created_by value
              if ( !$get_contact ) {
                 return rest_ensure_response( 
                     array(
@@ -74,7 +74,7 @@
                 );
             }
 
-			// Step 3: Check if ID exists
+			// Step 5: Check if ID exists
 			if (!get_user_by("ID", $_POST['wpid'])) {
 				return rest_ensure_response( 
 					array(
@@ -88,11 +88,9 @@
             
             $table_contact = DV_CONTACTS_TABLE;
             $table_revs = DV_REVS_TABLE;
-
-
             $created_by = $_POST['wpid'];
 
-
+			// Step 6: Start Query
             $result = $wpdb->get_results("SELECT
                     dv_cont.ID,
                     dv_cont.`status`,
@@ -106,6 +104,7 @@
                     INNER JOIN $table_revs dv_rev ON dv_rev.ID = dv_cont.revs
                 WHERE dv_cont.`status` = 1 AND dv_cont.stid = $stid ", OBJECT);
 
+			// Step 7: Return Output
             if (!$result) {
                 return rest_ensure_response( 
                     array(
