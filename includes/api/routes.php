@@ -43,8 +43,12 @@
     require plugin_dir_path(__FILE__) . '/v1/users/class-data.php';
     
     require plugin_dir_path(__FILE__) . '/v1/settings/class-avatar.php';
-    require plugin_dir_path(__FILE__) . '/v1/settings/class-fname.php';
-    require plugin_dir_path(__FILE__) . '/v1/settings/class-lname.php';
+    require plugin_dir_path(__FILE__) . '/v1/settings/class-update-fname.php';
+    require plugin_dir_path(__FILE__) . '/v1/settings/class-update-lname.php';
+    require plugin_dir_path(__FILE__) . '/v1/settings/class-update-bd.php';
+    require plugin_dir_path(__FILE__) . '/v1/settings/class-update-em.php';
+    require plugin_dir_path(__FILE__) . '/v1/settings/class-update-un.php';
+    require plugin_dir_path(__FILE__) . '/v1/settings/class-update-gd.php';
 
 
 	require plugin_dir_path(__FILE__) . '/v1/globals.php';
