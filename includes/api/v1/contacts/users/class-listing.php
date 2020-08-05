@@ -79,8 +79,7 @@
                     dv_cont.ID,
                     dv_cont.`status`,
                     dv_cont.types,
-                    dv_rev.child_val,
-                    dv_cont.stid,
+                    dv_rev.child_val as `value`,
                     dv_cont.created_by,
                     dv_cont.date_created 
                 FROM
