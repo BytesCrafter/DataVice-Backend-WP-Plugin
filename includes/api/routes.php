@@ -42,13 +42,13 @@
 	require plugin_dir_path(__FILE__) . '/v1/location/class-barangays.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-data.php';
     
-    require plugin_dir_path(__FILE__) . '/v1/settings/class-avatar.php';
-    require plugin_dir_path(__FILE__) . '/v1/settings/class-update-fname.php';
-    require plugin_dir_path(__FILE__) . '/v1/settings/class-update-lname.php';
-    require plugin_dir_path(__FILE__) . '/v1/settings/class-update-bd.php';
-    require plugin_dir_path(__FILE__) . '/v1/settings/class-update-em.php';
-    require plugin_dir_path(__FILE__) . '/v1/settings/class-update-un.php';
-    require plugin_dir_path(__FILE__) . '/v1/settings/class-update-gd.php';
+    // require plugin_dir_path(__FILE__) . '/v1/settings/class-avatar.php';
+    // require plugin_dir_path(__FILE__) . '/v1/settings/class-update-fname.php';
+    // require plugin_dir_path(__FILE__) . '/v1/settings/class-update-lname.php';
+    // require plugin_dir_path(__FILE__) . '/v1/settings/class-update-bd.php';
+    // require plugin_dir_path(__FILE__) . '/v1/settings/class-update-em.php';
+    // require plugin_dir_path(__FILE__) . '/v1/settings/class-update-un.php';
+    // require plugin_dir_path(__FILE__) . '/v1/settings/class-update-gd.php';
 
 
 	require plugin_dir_path(__FILE__) . '/v1/globals.php';
@@ -167,55 +167,58 @@
             ));
 
         /*
-         * START UNKNOWN
+         * LOCATION RESTAPI
         */
+            register_rest_route( 'datavice/v1/location', 'ctry', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Countries', 'listen'),
+            ));  
+            
+            register_rest_route( 'datavice/v1/location', 'prv', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Provinces', 'listen'),
+            ));
 
-       
-        register_rest_route( 'datavice/v1/feeds', 'profile', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Newsfeed', 'get_feeds'),
-        ));
+            register_rest_route( 'datavice/v1/location', 'cty', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Cities', 'listen'),
+            ));
 
-        register_rest_route( 'datavice/v1/feeds', 'p_feeds', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Newsfeed', 'get_additional_feeds'),
-        ));
+            register_rest_route( 'datavice/v1/location', 'brgy', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Barangays', 'listen'),
+            ));
 
-        register_rest_route( 'datavice/v1/feeds', 'home', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Newsfeed', 'home_feeds'),
-        ));
-
-        register_rest_route( 'datavice/v1/feeds', 'home_add_feeds', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Newsfeed', 'home_additional_feeds'),
-        ));
-
-        register_rest_route( 'datavice/v1/user', 'add_address', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Userdata', 'add_address'),
-        ));
-
-        //Lorz Route for Address REST
-        register_rest_route( 'datavice/v1/location', 'ctry', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Countries', 'listen'),
-        ));  
         
-        register_rest_route( 'datavice/v1/location', 'prv', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Provinces', 'listen'),
-        ));
+        /*
+         * Start unknown
+        */
+            register_rest_route( 'datavice/v1/feeds', 'profile', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Newsfeed', 'get_feeds'),
+            ));
 
-        register_rest_route( 'datavice/v1/location', 'cty', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Cities', 'listen'),
-        ));
+            register_rest_route( 'datavice/v1/feeds', 'p_feeds', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Newsfeed', 'get_additional_feeds'),
+            ));
 
-        register_rest_route( 'datavice/v1/location', 'brgy', array(
-            'methods' => 'POST',
-            'callback' => array('DV_Barangays', 'listen'),
-        ));
+            register_rest_route( 'datavice/v1/feeds', 'home', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Newsfeed', 'home_feeds'),
+            ));
+
+            register_rest_route( 'datavice/v1/feeds', 'home_add_feeds', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Newsfeed', 'home_additional_feeds'),
+            ));
+
+            register_rest_route( 'datavice/v1/user', 'add_address', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Userdata', 'add_address'),
+            ));
+
+        
 
         
         /*

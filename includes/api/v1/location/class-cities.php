@@ -19,9 +19,8 @@
 
         public static function get_cities(){
             
-
-            // Step 1 : Check if province code is passed.
-            if ( !isset($_POST["pc"]) ) {
+             //Step 1: Validate and sanitize request
+             if ( !isset($_POST["pc"]) || !isset($_POST["mk"]) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -30,32 +29,45 @@
 				);
 			}
 
-			// Step 2 : Check if province code is empty.
-            if ( empty($_POST['pc']) ) {
+			// Check if value passed is not null
+            if ( empty($_POST['pc']) || empty($_POST['mk'])  ) {
                 return rest_ensure_response( 
                     array(
                             "status" => "failed",
                             "message" => "Required fields cannot be empty.",
                     )
                 );
-			}
+            }
             
+            //Step 2: Master key validation
+            //Get master key from database
+            $master_key = DV_Library_Config::dv_get_config('master_key', 123);
+            
+            //Check if master key matches
+            if (!((int)$master_key === (int)$_POST['mk'])) {
+                return  array(
+                    "status" => "error",
+                    "message" => "Master keys does not match.",
+                );
+            }
+            // Step 3: Pass constants to variables and catch post values 
             $prov_code = $_POST["pc"];
+            $cty_table = DV_CITY_TABLE;
+            $cty_fields = DV_CITY_FIELDS; 
+            $where = DV_CITY_WHERE . "'$prov_code'";
 
-            //Table details creation
-            $cty_table = DV_CTY_TABLE;
-            $cty_fields = DV_CTY_FIELDS; 
-            $where = DV_CTY_WHERE . "'$prov_code'";
-
+            // Step 4: Start query
             $cities =  DV_Globals::retrieve($cty_table, $cty_fields, $where, 'ORDER BY name', 'ASC');
 
+            // Step 5: Check if no rows found
             if (!$cities) {
                     return array(
                         "status" => "error",
                         "message" => "An error occured while fetching data from the server",
                     );
             }
-           
+            
+            // Return a success message and complete object
             return array(
                 "status" => "success",
                 "data" => $cities

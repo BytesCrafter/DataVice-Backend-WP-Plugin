@@ -19,8 +19,8 @@
 
         public static function get_brgys(){
 
-            // Step 1 : Check if city code is passed.
-            if ( !isset($_POST["ctc"]) ) {
+            //Step 1: Validate and sanitize request
+            if ( !isset($_POST["ctc"]) || !isset($_POST["mk"]) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -29,32 +29,46 @@
 				);
 			}
 
-			// Step 2 : Check if city code is empty.
-            if ( empty($_POST['ctc']) ) {
+			// Check if value passed is not null
+            if ( empty($_POST['ctc']) || empty($_POST['mk'])  ) {
                 return rest_ensure_response( 
                     array(
                             "status" => "failed",
                             "message" => "Required fields cannot be empty.",
                     )
                 );
-			}
+            }
             
+            //Step 2: Master key validation
+            //Get master key from database
+            $master_key = DV_Library_Config::dv_get_config('master_key', 123);
+            
+            //Check if master key matches
+            if (!((int)$master_key === (int)$_POST['mk'])) {
+                return  array(
+                    "status" => "error",
+                    "message" => "Master keys does not match.",
+                );
+            }
+            
+            // Step 3: Pass constants to variables and catch post values 
             $city_code = $_POST["ctc"];
-
-            //Table details creation
             $brgy_table = DV_BRGY_TABLE;
             $brgy_fields = DV_BRGY_FIELDS; 
             $where = DV_BRGY_WHERE . "'$city_code'";
 
+            // Step 4: Start query
             $barangays =  DV_Globals::retrieve($brgy_table, $brgy_fields, $where, 'ORDER BY name', 'ASC');
 
+            // Step 5: Check if no rows found
             if (!$barangays) {
                     return array(
-                        "status" => "error",
-                        "message" => "An error occured while fetching data from the server",
+                        "status" => "failed",
+                        "message" => "No results found.",
                     );
             }
-           
+            
+            // Return a success message and complete object
             return array(
                 "status" => "success",
                 "data" => $barangays

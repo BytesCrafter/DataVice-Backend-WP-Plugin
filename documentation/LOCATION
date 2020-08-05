@@ -1,14 +1,14 @@
-#### GETTING COUNTRY LIST => /datavice/api/v1/user/ctry
+#### GETTING COUNTRY LIST => /datavice/api/v1/location/ctry
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=wpid (value=User ID), key=snky (value=Session Key)
+- Params: key=mk (value=Master key)
 
 RESPONSE:
-- code: 'failed' message: 'Please contact your administrator. Token Not Found!' data: null
-- code: 'failed' message: 'Please contact your administrator. Token Expired!' data: null
-- code: 'failed' message: 'Please contact your administrator. User Not Found!' data: null
-- code: 'error' message: 'An error occured while fetching data from the server!' data: null
+- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
+- code: 'failed' message: 'Required fields cannot be empty.' data: null
+- code: 'failed' message: 'No results found.' data: null
+- code: 'error' message: 'Master keys does not match.' data: null
 
 
 IF SUCCESS:
@@ -49,14 +49,14 @@ IF SUCCESS:
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=wpid (value=User ID), key=snky (value=Session Key)
+- Params: key=cc (value=Country code), key=mk (value=Master key)
 
 RESPONSE:
+RESPONSE:
 - code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
-- code: 'failed' message: 'Please contact your administrator. Token Not Found!' data: null
-- code: 'failed' message: 'Please contact your administrator. Token Expired!' data: null
-- code: 'failed' message: 'Please contact your administrator. User Not Found!' data: null
-- code: 'error' message: 'An error occured while fetching data from the server!' data: null
+- code: 'failed' message: 'Required fields cannot be empty.' data: null
+- code: 'failed' message: 'No results found.' data: null
+- code: 'error' message: 'Master keys does not match.' data: null
 
 
 IF SUCCESS:
@@ -88,19 +88,17 @@ IF SUCCESS:
     }
 ```
 
-#### GETTING CITIES => /datavice/api/v1/user/city
+#### GETTING CITIES => /datavice/api/v1/user/cty
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=PC (value=Province Code) 
+- Params: key=pc (value=Province Code), key=mk (value=Master key)
 
 RESPONSE:
 - code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
-- code: 'failed' message: 'Please contact your administrator. Token Not Found!' data: null
-- code: 'failed' message: 'Please contact your administrator. Token Expired!' data: null
-- code: 'failed' message: 'Please contact your administrator. User Not Found!' data: null
-- code: 'unknown' message: 'Please contact your administrator. Invalid province code!' data: null
-- code: 'error' message: 'An error occured while fetching data from the server!' data: null
+- code: 'failed' message: 'Required fields cannot be empty.' data: null
+- code: 'failed' message: 'No results found.' data: null
+- code: 'error' message: 'Master keys does not match.' data: null
 
 
 IF SUCCESS:
@@ -109,34 +107,8 @@ IF SUCCESS:
         "status": "success",
         "data": [
             {
-                "id": "1380",
-                "citymun_name": "Bangued (Capital)",
-                "prov_code": "1401",
-                "city_code": "140101"
-            },
-            {
-                "id": "1381",
-                "citymun_name": "Boliney",
-                "prov_code": "1401",
-                "city_code": "140102"
-            },
-            {
-                "id": "1382",
-                "citymun_name": "Bucay",
-                "prov_code": "1401",
-                "city_code": "140103"
-            },
-            {
-                "id": "1383",
-                "citymun_name": "Bucloc",
-                "prov_code": "1401",
-                "city_code": "140104"
-            },
-            {
-                "id": "1384",
-                "citymun_name": "Daguioman",
-                "prov_code": "1401",
-                "city_code": "140105"
+                "code": "043403",
+                "name": "City Of Biñan"
             }
         ]
     }
@@ -146,15 +118,13 @@ IF SUCCESS:
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=CC (value=City Code) 
+- Params: key=ctc (value=City Code), key=mk (value=Master key)
 
 RESPONSE:
 - code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
-- code: 'failed' message: 'Please contact your administrator. Token Not Found!' data: null
-- code: 'failed' message: 'Please contact your administrator. Token Expired!' data: null
-- code: 'failed' message: 'Please contact your administrator. User Not Found!' data: null
-- code: 'unknown' message: 'Please contact your administrator. Invalid city code!' data: null
-- code: 'error' message: 'An error occured while fetching data from the server!' data: null
+- code: 'failed' message: 'Required fields cannot be empty.' data: null
+- code: 'failed' message: 'No results found.' data: null
+- code: 'error' message: 'Master keys does not match.' data: null
 
 
 IF SUCCESS:
