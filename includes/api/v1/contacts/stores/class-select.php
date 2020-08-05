@@ -29,7 +29,7 @@
 
             // Step1 : Sanitize all Request
             //REVISE REVISE:contact id & store_id
-			if (!isset($_POST["wpid"]) || !isset($_POST["snky"])  || !isset($_POST['ctcid']) || !isset($_POST['stid'])) {
+			if (!isset($_POST["wpid"]) || !isset($_POST["snky"])  || !isset($_POST['ctc']) || !isset($_POST['stid'])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -39,7 +39,7 @@
                 
             }
             
-            if (empty($_POST["wpid"]) || empty($_POST["snky"])  || empty($_POST['ctcid']) || empty($_POST['stid'])) {
+            if (empty($_POST["wpid"]) || empty($_POST["snky"])  || empty($_POST['ctc']) || empty($_POST['stid'])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -93,7 +93,7 @@
 
             $created_by = $_POST['wpid'];
 
-            $contact_id = $_POST['ctcid'];
+            $contact_id = $_POST['ctc'];
 
 
             $result  = $wpdb->get_results("SELECT
