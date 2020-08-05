@@ -38,7 +38,7 @@
                 return rest_ensure_response( 
                     array(
                             "status" => "failed",
-                            "message" => "Required field cannot be empty.",
+                            "message" => "Required fields cannot be empty.",
                     )
                 );
             }
@@ -68,7 +68,7 @@
                 return rest_ensure_response( 
                     array(
                             "status" => "failed",
-                            "message" => "Invalid email address",
+                            "message" => "Invalid email address.",
                     )
                 );
             }
@@ -78,7 +78,7 @@
                 return rest_ensure_response( 
                     array(
                             "status" => "failed",
-                            "message" => "Invalid birthday format",
+                            "message" => "Invalid birthday format.",
                     )
                 );
             }
@@ -276,8 +276,8 @@
                    
                     return rest_ensure_response( 
                         array(
-                            "status" => "failed",
-                            "message" => "An error occured while submitting data to the server"
+                            "status" => "error",
+                            "message" => "An error occured while submitting data to the server."
                         )
                     );
                 }
@@ -300,7 +300,7 @@
                     return rest_ensure_response( 
                         array(
                             "status" => "failed",
-                            "message" => "An error occured while submitting data to the server"
+                            "message" => "An error occured while submitting data to the server."
                         )
                     );
                 }

@@ -16,7 +16,7 @@
         // REST API for creating new password
         public static function listen(){
             
-            // Step 1: Check if key and new password is passed
+            // Check if key and new password is passed
 			if (!isset($_POST["ak"]) || !isset($_POST["un"]) || !isset($_POST["pw"])) {
 				return rest_ensure_response( 
 					array(
@@ -26,12 +26,12 @@
 				);
             }
 
-            // Step 2 : Check if username or email is existing.
+            // Check if username or email is existing.
             if ( empty($_POST['ak']) || empty($_POST['un']) || empty($_POST['pw']) ) {
                 return rest_ensure_response( 
                     array(
                             "status" => "failed",
-                            "message" => "Required field cannot be empty.",
+                            "message" => "Required fields cannot be empty.",
                     )
                 );
             }
@@ -39,7 +39,39 @@
             // Initialize WP global variable
             global $wpdb;
 
-            // Step 2: Check if user input is email or username
+            // Check if email or password exists 
+            if (is_email($_POST['un'])) {
+
+                // Sanitize email
+                $email = sanitize_email($_POST['un']);
+
+                // If email, use email in where clause
+                $user = $wpdb->get_row("SELECT ID
+                    FROM {$wpdb->prefix}users 
+                    WHERE user_email = '$email'", OBJECT );
+
+            } else {
+
+                //Sanitize username
+                $uname = sanitize_user($_POST['un']);
+
+                // if username, use username in where clause
+                $user = $wpdb->get_row("SELECT ID
+                    FROM {$wpdb->prefix}users 
+                    WHERE user_login = '$uname'", OBJECT );
+            }
+
+            // Check for user. Return a message if null
+            if ( !$user ) {
+                return rest_ensure_response( 
+					array(
+						"status" => "failed",
+						"message" => "Username or email does not exists!",
+					)
+				);
+            }
+
+            // Check if user input is email or username
             if (is_email($_POST['un'])) {
 
                 // Sanitize email
@@ -63,12 +95,12 @@
                     AND `user_activation_key` = '{$_POST['ak']}'", OBJECT );
             }
             
-            // Step 3: Check for cur_user. Return a message if null
+            // Check for cur_user. Return a message if null
             if ( !$cur_user ) {
                 return rest_ensure_response( 
 					array(
 						"status" => "failed",
-						"message" => "Password reset key and username is invalid!",
+						"message" => "Password reset key and username/email is invalid!",
 					)
 				);
             }

@@ -44,7 +44,7 @@
             if ( empty($_POST['wpid']) || empty($_POST['snky']) ) {
                 return array(
                     "status" => "failed",
-                    "message" => "Required field cannot be empty.",
+                    "message" => "Required fields cannot be empty.",
                 );
 			}
 
