@@ -256,11 +256,6 @@
                 'methods' => 'POST',
                 'callback' => array('DV_Gender_Update', 'listen'),
             ));
-
-
-            
-
-
     
     }
     add_action( 'rest_api_init', 'datavice_route' );
