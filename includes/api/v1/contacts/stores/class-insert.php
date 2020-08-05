@@ -27,7 +27,7 @@
             }
 
             // Step2 : Sanitize all Request
-            if ( !isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['value']) || !isset($_POST['type']) || !isset($_POST['id'])) {
+            if ( !isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['value']) || !isset($_POST['type']) || !isset($_POST['stid'])) {
                 return rest_ensure_response( 
                     array(
                         "status" => "unknown",
@@ -37,7 +37,7 @@
             }
 
             // Step3: Check if required fields are not empty
-            if ( empty($_POST["wpid"]) || empty($_POST["snky"]) || empty($_POST['value']) || empty($_POST['type']) || empty($_POST['id']) ) {
+            if ( empty($_POST["wpid"]) || empty($_POST["snky"]) || empty($_POST['value']) || empty($_POST['type']) || empty($_POST['stid']) ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "failed",
@@ -57,7 +57,7 @@
             }
             
             // Step5: Check if ID is in valid format (integer)
-            if (!is_numeric($_POST["wpid"]) || !is_numeric($_POST["id"]) ) {
+            if (!is_numeric($_POST["wpid"]) || !is_numeric($_POST["stid"]) ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "failed",
@@ -81,11 +81,11 @@
             }
 
             // Step 7: Check if id(owner) of this contact exists
-            if (!get_user_by("ID", $_POST['id'])) {
+            if (!get_user_by("ID", $_POST['wpid'])) {
                 return rest_ensure_response( 
                     array(
                         "status" => "failed",
-                        "message" => "No results found",
+                        "message" => "User not found",
                     )
                 );
             }
@@ -163,7 +163,7 @@
             return rest_ensure_response( 
                 array(
                         "status" => "Success",
-                        "message" => "Contact added successfully!",
+                        "message" => "Data has been added successfully.",
                 )
             );
 
