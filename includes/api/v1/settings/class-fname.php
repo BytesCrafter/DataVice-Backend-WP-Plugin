@@ -85,7 +85,7 @@
                 );
             }
            
-            $result = update_user_meta( $_POST['wpid'], 'first_name', $fname,  $prev_value = $last_fname );
+            $result = update_user_meta( $_POST['wpid'], 'first_name', $fname);
 
             if ($result == false) {
                 return rest_ensure_response( 

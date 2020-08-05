@@ -20,6 +20,9 @@
         // image upload
         public static function initialize(WP_REST_Request $request) {
                 
+            return  $target_dir = wp_upload_dir();
+
+
             $files = $request->get_file_params();
 
             if ( !isset($files['img'])) {

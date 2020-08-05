@@ -38,6 +38,11 @@
 			}
 			
 			// Call any function to test here.
+
+
+				
+			// update_option( 'upload_path', untrailingslashit(ABSPATH) . '\wp-content\uploads\avatars' );
+			// update_option( 'upload_path_url', site_url( '/uploads/' ) );
 		}
 	}
 

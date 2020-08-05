@@ -223,17 +223,17 @@
             //     'callback' => array('DV_Avatar_update', 'listen'),
             // ));
 
-            register_rest_route( 'datavice/api/v1/settings', 'update_avatar', array(
+            register_rest_route( 'datavice/v1/settings', 'update_avatar', array(
                 'methods' => 'POST',
-                'callback' => array('DV_Avatar_update', 'listen'),
+                'callback' => array('DV_Avatar_update', 'initialize'),
             ));
 
-            register_rest_route( 'datavice/api/v1/settings', 'update_fname', array(
+            register_rest_route( 'datavice/v1/settings', 'update_fname', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Fname_update', 'listen'),
             ));
 
-            register_rest_route( 'datavice/api/v1/settings', 'update_lname', array(
+            register_rest_route( 'datavice/v1/settings', 'update_lname', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Lname_update', 'listen'),
             ));
