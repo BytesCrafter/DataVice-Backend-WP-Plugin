@@ -27,12 +27,14 @@
     require plugin_dir_path(__FILE__) . '/v1/contacts/users/class-update.php';
     require plugin_dir_path(__FILE__) . '/v1/contacts/users/class-select.php';
     require plugin_dir_path(__FILE__) . '/v1/contacts/users/class-delete.php';
+    require plugin_dir_path(__FILE__) . '/v1/contacts/users/class-select-type.php';
 
     require plugin_dir_path(__FILE__) . '/v1/contacts/stores/class-insert.php';
     require plugin_dir_path(__FILE__) . '/v1/contacts/stores/class-listing.php';
     require plugin_dir_path(__FILE__) . '/v1/contacts/stores/class-update.php';
     require plugin_dir_path(__FILE__) . '/v1/contacts/stores/class-select.php';
     require plugin_dir_path(__FILE__) . '/v1/contacts/stores/class-delete.php';
+    require plugin_dir_path(__FILE__) . '/v1/contacts/stores/class-select-type.php';
 
     require plugin_dir_path(__FILE__) . '/v1/location/class-countries.php';
     require plugin_dir_path(__FILE__) . '/v1/location/class-provinces.php';

@@ -17,4 +17,7 @@
 ?>
 <?php
     class DV_Contact_Stores_Type{
+        public static function listen(){
+            return "HAhahahaha";
+        }
     }
