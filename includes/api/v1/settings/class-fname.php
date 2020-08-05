@@ -98,7 +98,7 @@
                 return rest_ensure_response( 
 					array(
 						"status" => "success",
-						"message" => "First Name successfully Updated.",
+						"message" => "Data has been updated successfully",
 					)
                 );
             }
