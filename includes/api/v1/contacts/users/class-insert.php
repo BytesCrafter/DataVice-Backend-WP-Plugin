@@ -17,7 +17,7 @@
             
             global $wpdb;
 
-            //Validate user
+            //Step 1: Validate user
             if ( DV_Verification::is_verified() == false ) {
                 return rest_ensure_response( 
                     array(
@@ -27,7 +27,7 @@
                 );
             }
 
-            //  Sanitize all Request
+            //Step 2: Sanitize and validate all Request
 			if ( !isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['value']) || !isset($_POST['type']) || !isset($_POST['id'])) {
 				return rest_ensure_response( 
 					array(
@@ -78,33 +78,6 @@
                 );
             }
 
-            //Pass constants to variables
-            $table_contact = DV_CONTACTS_TABLE;
-            $table_revs = DV_REVS_TABLE;
-
-             //Catching post values
-             $wpid = $_POST['wpid'];
-             $snky = $_POST['snky'];
-             $id = $_POST['id'];
-             $value = $_POST['value'];
-             $revs_type = 'contacts';
-             $date_stamp = DV_Globals::date_stamp();
-
-
-            // Check if current logged user is the same as owner of the id
-             if ($_POST['wpid'] === $_POST['id']) {
-                 
-                //If the same, pass the value of wpid (user id) to id params
-                $id = $_POST['wpid'];
-            
-            } else {
-                
-                //If not, retain id value
-                $id = $_POST['id'];
-             
-            }
-
-
             //Check contact type if phone, email, or emergency
             if ($_POST['type'] == 'phone') {
                 
@@ -130,7 +103,33 @@
             
             }
 
-            // Start mysql transaction
+            //Step 3: Pass constants to variables and catching post values
+             $table_contact = DV_CONTACTS_TABLE;
+             $table_revs = DV_REVS_TABLE;
+             $wpid = $_POST['wpid'];
+             $snky = $_POST['snky'];
+             $id = $_POST['id'];
+             $value = $_POST['value'];
+             $revs_type = 'contacts';
+             $date_stamp = DV_Globals::date_stamp();
+
+
+            //Step 4: Check if current logged user is the same as owner of the id
+             if ($_POST['wpid'] === $_POST['id']) {
+                 
+                //If the same, pass the value of wpid (user id) to id params
+                $id = $_POST['wpid'];
+            
+            } else {
+                
+                //If not, retain id value
+                $id = $_POST['id'];
+             
+            }
+
+
+            
+            //Step 5: Start mysql transaction
             $wpdb->query("START TRANSACTION ");
 
                 $wpdb->query("INSERT INTO `$table_contact` (`status`, `types`, `revs`, `wpid`, `created_by`, `date_created`) 
@@ -145,7 +144,7 @@
 
                 $wpdb->query("UPDATE `$table_contact` SET `revs` = $revs_id WHERE ID = $contact_id ");
 
-            //Check if any of the insert queries above failed
+            //Step 6: Check if any of the insert queries above failed
             if ($contact_id < 1  || $revs_id < 1) {
                 //If failed, do mysql rollback (discard the insert queries(no inserted data))
                 $wpdb->query("ROLLBACK");
@@ -153,12 +152,12 @@
                 return rest_ensure_response( 
                     array(
                         "status" => "failed",
-                        "message" => "An error occured while submitting data to the server"
+                        "message" => "An error occured while submitting data to the server."
                     )
                 );
             }
 
-            //If no problems found in queries above, do mysql commit (do changes(insert rows))
+            //Step 7: If no problems found in queries above, do mysql commit (do changes(insert rows))
             $wpdb->query("COMMIT");
 
             return rest_ensure_response( 
@@ -167,8 +166,6 @@
                         "message" => "Data has been added successfully.",
                 )
             );
-
-
 
         }
 

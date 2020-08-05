@@ -16,7 +16,7 @@
         public static function listen() {
             global $wpdb;
             
-            // Step1: Validate user
+            // Step 1: Validate user
             if ( DV_Verification::is_verified() == false ) {
                 return rest_ensure_response( 
                     array(
@@ -26,7 +26,7 @@
                 );
             }
 
-            // Step2 : Sanitize all Request
+            // Step 2: Sanitize and validate all requests
             if ( !isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['value']) || !isset($_POST['type']) || !isset($_POST['stid'])) {
                 return rest_ensure_response( 
                     array(
@@ -36,7 +36,7 @@
                 );
             }
 
-            // Step3: Check if required fields are not empty
+            // Check if required fields are not empty
             if ( empty($_POST["wpid"]) || empty($_POST["snky"]) || empty($_POST['value']) || empty($_POST['type']) || empty($_POST['stid']) ) {
                 return rest_ensure_response( 
                     array(
@@ -46,7 +46,7 @@
                 );
             }
 
-            // Step4: Check if value of type is valid
+            // Check if value of type is valid
             if (!($_POST['type'] === 'phone') && !($_POST['type'] === 'email') && !($_POST['type'] === 'emergency')) {
                 return rest_ensure_response( 
                     array(
@@ -56,55 +56,18 @@
                 );
             }
             
-            // Step5: Check if ID is in valid format (integer)
+            // Check if ID is in valid format (integer)
             if (!is_numeric($_POST["wpid"]) || !is_numeric($_POST["stid"]) ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "failed",
-                        "message" => "Please contact your administrator. ID not in valid format!",
+                        "message" => "Please contact your administrator. Id not in valid format!",
                     )
                 );
                 
             }
 
-            // Step6: Check if wpid match the created_by value
-            $stid = $_POST['stid'];
-            $get_contact = $wpdb->get_row("SELECT ID FROM tp_stores  WHERE ID = $stid ");
-            
-            if ( !$get_contact ) {
-                return rest_ensure_response( 
-                    array(
-                        "status" => "error",
-                        "message" => "An error occurred while submiting data to the server.",
-                    )
-                );
-            }
-
-            // Step 7: Check if id(owner) of this contact exists
-            if (!get_user_by("ID", $_POST['wpid'])) {
-                return rest_ensure_response( 
-                    array(
-                        "status" => "failed",
-                        "message" => "User not found",
-                    )
-                );
-            }
-
-            //Pass constants to variables
-            $table_contact = DV_CONTACTS_TABLE;
-            $table_revs = DV_REVS_TABLE;
-
-            //Catching post values
-            $wpid = $_POST['wpid'];
-            $snky = $_POST['snky'];
-            $value = $_POST['value'];
-            $revs_type = 'contacts';
-            $date_stamp = DV_Globals::date_stamp();
-
-
-
-
-            //Step8: Check contact type if phone, email, or emergency
+            //Check contact type if phone, email, or emergency
             if ($_POST['type'] == 'phone') {
                 
                 $type = 'phone';
@@ -129,7 +92,40 @@
             
             }
 
-            //Step9:: Start mysql transaction
+            // Check if wpid match the created_by value
+            $stid = $_POST['stid'];
+            $get_contact = $wpdb->get_row("SELECT ID FROM tp_stores  WHERE ID = $stid ");
+            
+            if ( !$get_contact ) {
+                return rest_ensure_response( 
+                    array(
+                        "status" => "error",
+                        "message" => "An error occurred while submiting data to the server.",
+                    )
+                );
+            }
+
+            // Check if id(owner) of this contact exists
+            if (!get_user_by("ID", $_POST['wpid'])) {
+                return rest_ensure_response( 
+                    array(
+                        "status" => "failed",
+                        "message" => "User not found",
+                    )
+                );
+            }
+
+            // Step 3: Pass constants to variables and catch post values 
+            $table_contact = DV_CONTACTS_TABLE;
+            $table_revs = DV_REVS_TABLE;
+            $wpid = $_POST['wpid'];
+            $snky = $_POST['snky'];
+            $value = $_POST['value'];
+            $revs_type = 'contacts';
+            $date_stamp = DV_Globals::date_stamp();
+
+
+            // Step 4: Start query
             $wpdb->query("START TRANSACTION ");
 
                 $wpdb->query("INSERT INTO `$table_contact` (`status`, `types`, `revs`, `stid`, `created_by`, `date_created`) 
@@ -144,7 +140,7 @@
 
                 $wpdb->query("UPDATE `$table_contact` SET `revs` = $revs_id WHERE ID = $contact_id ");
 
-            // Step10: Check if any of the insert queries above failed
+            // Check if any of the insert queries above failed
             if ($contact_id < 1  || $revs_id < 1) {
                 //If failed, do mysql rollback (discard the insert queries(no inserted data))
                 $wpdb->query("ROLLBACK");
@@ -160,6 +156,7 @@
             //If no problems found in queries above, do mysql commit (do changes(insert rows))
             $wpdb->query("COMMIT");
 
+            // Step 5: Return a success message and complete object
             return rest_ensure_response( 
                 array(
                         "status" => "Success",

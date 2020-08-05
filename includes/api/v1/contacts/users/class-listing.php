@@ -17,6 +17,7 @@
 
             global $wpdb;
             
+            // Step 1: Validate user
             if ( DV_Verification::is_verified() == false ) {
                 return rest_ensure_response( 
                     array(
@@ -27,7 +28,7 @@
             }
 
 
-            // Step1 : Sanitize all Request
+            // Step 2: Sanitize and validate all requests
 			if (!isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['id']) ) {
 				return rest_ensure_response( 
 					array(
@@ -38,7 +39,7 @@
                 
             }
             
-              // Step 2: Check if ID is in valid format (integer)
+            //Check if id is valid
 			if (!is_numeric($_POST["wpid"]) || !is_numeric($_POST['id']) ) {
 				return rest_ensure_response( 
 					array(
@@ -49,7 +50,7 @@
                 
             }
             
-               // Step1 : Sanitize all Request
+            // Check if request passed is not null
 			if (empty($_POST["wpid"]) || empty($_POST["snky"]) || empty($_POST['id']) ) {
 				return rest_ensure_response( 
 					array(
@@ -60,7 +61,7 @@
                 
             }
 
-			// Step 3: Check if ID exists
+			// Check if this user exists
 			if (!get_user_by("ID", $_POST['id'])) {
 				return rest_ensure_response( 
 					array(
@@ -70,11 +71,12 @@
                 );
             }
 
+            // Step 3: Pass constants to variables and catch post values 
             $table_contact = DV_CONTACTS_TABLE;
             $table_revs = DV_REVS_TABLE;
-
             $id = $_POST['id'];
 
+            // Step 4: Select query
             $result = $wpdb->get_results("SELECT
                     dv_cont.ID,
                     dv_cont.`status`,
@@ -87,14 +89,15 @@
                     INNER JOIN $table_revs dv_rev ON dv_rev.ID = dv_cont.revs
                 WHERE dv_cont.`status` = 1 AND dv_cont.wpid = $id ", OBJECT);
 
+            // Step 5: Check if no rows found
             if (!$result) {
                 return rest_ensure_response( 
                     array(
-                        "status" => "failed",
-                        "message" => "An error occurred while submiting data to the server."
+                        "status" => "error",
+                        "message" => "An error occurred while submitting data to the server."
                     )
                 );
-
+           // return success message and complete object
             }else {
                 return rest_ensure_response( 
                     array(

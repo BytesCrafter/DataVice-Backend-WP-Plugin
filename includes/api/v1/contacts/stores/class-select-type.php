@@ -19,6 +19,7 @@
         public static function listen(){
             global $wpdb;
 
+            // Step 1: Validate user
             if ( DV_Verification::is_verified() == false) {
                 return rest_ensure_response( 
                     array(
@@ -28,7 +29,7 @@
                 );
             }
 
-            // Step1 : Sanitize all Request
+            // Step 2: Sanitize and validate all requests
 			if (!isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['type']) || !isset($_POST['stid']) ) {
 				return rest_ensure_response( 
 					array(
@@ -54,26 +55,27 @@
                 return rest_ensure_response( 
                     array(
                         "status" => "failed",
-                        "message" => "Please contact your administrator. ID not in valid format!",
+                        "message" => "Please contact your administrator. Id not in valid format!",
                     )
                 );
                 
             } 
 
+
             $stid = $_POST['stid'];
             $get_contact = $wpdb->get_row("SELECT ID FROM tp_stores  WHERE ID = $stid ");
             
-            //Check if wpid match the created_by value
+            //Check if this store id exists
              if ( !$get_contact ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "error",
-                        "message" => "An error occurred while submiting data to the server.",
+                        "message" => "An error occurred while fetching data to the server.",
                     )
                 );
             }
 
-            // Step 2: Check if id(owner) of this contact exists
+            // Check if user id exists
 			if (!get_user_by("ID", $_POST['wpid'] )) {
 				return rest_ensure_response( 
 					array(
@@ -83,14 +85,14 @@
                 );
             }
 
+            // Step 3: Pass constants to variables and catch post values 
             $table_contact = DV_CONTACTS_TABLE;
             
             $table_revs = DV_REVS_TABLE;
 
-            // $owner_id = $_POST['id'];
-
             $type = $_POST['type'];
 
+            // Step 4: Start query
             $result  = $wpdb->get_results("SELECT
                 ctc.ID,
                 ctc.types,
@@ -104,7 +106,7 @@
                 AND ctc.stid = $stid 
                 AND ctc.`status` = 1");
 
-
+            // Step 5: Check if no rows found
             if (!$result) {
                 return rest_ensure_response( 
 					array(
@@ -113,7 +115,8 @@
 					)
                 );
             }
-
+            
+            // Return a success message and complete objec
             return rest_ensure_response( 
                 array(
                     "status" => "success",

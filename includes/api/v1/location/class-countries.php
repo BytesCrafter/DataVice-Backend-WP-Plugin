@@ -18,7 +18,7 @@
         }
 
         public static function get_countries(){
-
+            
             //Table details creation
             $ctry_table = DV_COUNTRY_TABLE;
             $ctry_fields = DV_COUNTRY_FIELDS; 

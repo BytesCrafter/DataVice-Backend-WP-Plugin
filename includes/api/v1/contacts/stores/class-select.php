@@ -17,6 +17,7 @@
 
             global $wpdb;
 
+            // Step 1: Validate user
             if ( DV_Verification::is_verified() == false ) {
                 return rest_ensure_response( 
                     array(
@@ -27,8 +28,7 @@
             }
 
 
-            // Step1 : Sanitize all Request
-            //REVISE REVISE:contact id & store_id
+            // Step 2: Sanitize and validate all requests
 			if (!isset($_POST["wpid"]) || !isset($_POST["snky"])  || !isset($_POST['ctc']) || !isset($_POST['stid'])) {
 				return rest_ensure_response( 
 					array(
@@ -39,22 +39,23 @@
                 
             }
             
+            //Check if passed values are not null
             if (empty($_POST["wpid"]) || empty($_POST["snky"])  || empty($_POST['ctc']) || empty($_POST['stid'])) {
 				return rest_ensure_response( 
 					array(
-						"status" => "unknown",
-						"message" => "Please contact your administrator. Request unknown!",
+						"status" => "failed",
+						"message" => "Required fields cannot be empty.",
 					)
                 );
                 
             }
 
-              // Step 2: Check if ID is in valid format (integer)
+            //Check if ID is in valid format (integer)
 			if (!is_numeric($_POST["wpid"]) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
-						"message" => "Please contact your administrator. ID not in valid format!",
+						"message" => "Please contact your administrator. Id not in valid format!",
 					)
                 );
                 
@@ -64,17 +65,17 @@
             $stid = $_POST['stid'];
             $get_contact = $wpdb->get_row("SELECT ID FROM tp_stores  WHERE ID = $stid ");
             
-            //Check if wpid match the created_by value
+            //Check if this store id exists
              if ( !$get_contact ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "error",
-                        "message" => "An error occurred while submiting data to the server.",
+                        "message" => "An error occurred while fetching data to the server.",
                     )
                 );
             }
 
-			// Step 3: Check if ID exists
+			// Check if ID exists
 			if (!get_user_by("ID", $_POST['wpid'])) {
 				return rest_ensure_response( 
 					array(
@@ -85,17 +86,14 @@
                 
             }
 
-            
+            // Step 3: Pass constants to variables and catch post values
 
             $table_contact = DV_CONTACTS_TABLE;
             $table_revs = DV_REVS_TABLE;
-
-
             $created_by = $_POST['wpid'];
-
             $contact_id = $_POST['ctc'];
 
-
+            // Step 4: Start query
             $result  = $wpdb->get_results("SELECT
                 dv_ctcs.ID,
                 dv_ctcs.types,
@@ -108,16 +106,17 @@
                 dv_ctcs.ID = $contact_id
                 AND dv_ctcs.stid = $stid AND dv_ctcs.`status` = 1");
 
-
+            // Step 5: Check if no rows found
             if (!$result) {
                 return rest_ensure_response( 
 					array(
 						"status" => "failed",
-						"message" => "No contacts found!.",
+						"message" => "No results found.",
 					)
                 );
             }
 
+            // Return a success message and complete object
             return rest_ensure_response( 
                 array(
                     "status" => "success",

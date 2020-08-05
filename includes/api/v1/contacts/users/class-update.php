@@ -18,7 +18,7 @@
             global $wpdb;
 
              
-            //Validate user
+            // Step 1: Validate user
             if ( DV_Verification::is_verified() == false ) {
                 return rest_ensure_response( 
                     array(
@@ -28,7 +28,7 @@
                 );
             }
 
-            // Step1 : Sanitize all Request
+            // Step 2: Sanitize and validate all requests
             if ( !isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['value'])  || !isset($_POST['ctc']) || !isset($_POST['id'])) {
                 return rest_ensure_response( 
                     array(
@@ -48,22 +48,18 @@
                 );
             }
 
-      
-            
             // Check if ID is in valid format (integer)
             if (!is_numeric($_POST["wpid"]) || !is_numeric($_POST["ctc"]) || !is_numeric($_POST['id']) ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "failed",
-                        "message" => "Please contact your administrator. ID not in valid format!",
+                        "message" => "Please contact your administrator. Id not in valid format!",
                     )
                 );
                 
             }
 
-          
-
-            // Step 2: Check if user exists
+            // Check if user exists
             if (!get_user_by("ID", $_POST['wpid'])) {
                 return rest_ensure_response( 
                     array(
@@ -73,11 +69,9 @@
                 );
             }
 
-            //Pass constants to variables
+            // Step 3: Pass constants to variables and catch post values 
             $table_contact = DV_CONTACTS_TABLE;
             $table_revs = DV_REVS_TABLE;
-
-            //Catching post values
             $wpid = $_POST['wpid'];
             $snky = $_POST['snky'];
             $value = $_POST['value'];
@@ -86,7 +80,7 @@
             $contact_id = $_POST['ctc'];
             $date_stamp = DV_Globals::date_stamp();
 
-            //Step 3: Start mysql transaction
+            // Step 4: Start query
             $wpdb->query("START TRANSACTION ");
                 $update_contact = $wpdb->query("UPDATE `$table_contact` SET `status`= 0 WHERE `ID` = $contact_id AND `created_by` = $wpid  ");
                 
@@ -104,14 +98,14 @@
 
                 $wpdb->query("UPDATE `$table_contact` SET `revs` = $revs_id WHERE ID = $contact_id ");
 
-            //Check if any of the insert queries above failed
+            // Step 5: Check if no rows found
             if ($contact_id < 1  || $revs_id < 1 || $update_contact < 1) {
                 //If failed, do mysql rollback (discard the insert queries(no inserted data))
                 $wpdb->query("ROLLBACK");
                 
                 return rest_ensure_response( 
                     array(
-                        "status" => "failed",
+                        "status" => "error",
                         "message" => "An error occured while submitting data to the server"
                     )
                 );
@@ -120,6 +114,7 @@
             //If no problems found in queries above, do mysql commit (do changes(insert rows))
             $wpdb->query("COMMIT");
 
+            // Return a success message and complete object
             return rest_ensure_response( 
                 array(
                         "status" => "Success",

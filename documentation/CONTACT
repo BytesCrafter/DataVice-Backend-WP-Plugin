@@ -1,4 +1,6 @@
-#### INSERT USER CONTACTS => /datavice/v1/contact/users/insert
+#### USERS CONTACT REST API
+
+### INSERT USER CONTACTS => /datavice/v1/contact/users/insert
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
@@ -8,25 +10,25 @@ RESPONSE:
 - code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
 - code: 'failed' message: 'Required fields cannot be empty.' data: null
 - code: 'failed' message: 'Invalid value for type.' data: null
-- code: 'failed' message: 'Please contact your administrator. ID not in valid format!' data: null
-- code: 'failed' message: 'No results found!' data: null
+- code: 'failed' message: 'Please contact your administrator. Id not in valid format!' data: null
+- code: 'failed' message: 'User not found' data: null
 - code: 'failed' message: 'Email not in valid format.' data: null
-- code: 'failed' message: 'An error occured while submitting data to the server' data: null
+- code: 'error' message: 'An error occured while submitting data to the server' data: null
 
 
 IF SUCCESS:
 ```
     {
         "status": "success",
-        "message" : "Contact added successfully!"
+        "message" : "Data has been added successfully."
     }
 ```
 
-#### INSERT STORE CONTACTS => /datavice/v1/contact/stores/insert
+### LIST ALL USER CONTACTS => /datavice/v1/contact/users/list/all
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=type (value=type of contact), key=value (value= value of contact), key=id (value = id of owner of this contact) 
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=id (value=store id) 
 
 RESPONSE:
 - code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
@@ -34,65 +36,39 @@ RESPONSE:
 - code: 'failed' message: 'Invalid value for type.' data: null
 - code: 'failed' message: 'Please contact your administrator. ID not in valid format!' data: null
 - code: 'failed' message: 'No results found!' data: null
-- code: 'failed' message: 'An error occured while submitting data to the server' data: null
+- code: 'failed' message: 'User not found!' data: null
+- code: 'error' message: 'An error occured while submitting data to the server' data: null
 
 
 IF SUCCESS:
 ```
     {
         "status": "success",
-        "message" : "Contact added successfully!"
+        "data": {
+            "list": [
+                {
+                    "ID": "12",
+                    "status": "1",
+                    "types": "phone",
+                    "value": "09678901234",
+                    "created_by": "6",
+                    "date_created": "0000-00-00 00:00:00"
+                },
+                {
+                    "ID": "16",
+                    "status": "1",
+                    "types": "email",
+                    "value": "demoguy@bytescrafter.net",
+                    "created_by": "6",
+                    "date_created": "2020-07-23"
+                }
+
+            ]
+        }
     }
 ```
 
-#### DELETE USER CONTACTS => /datavice/v1/contact/users/delete
-REQUEST:
-- Method: POST
-- Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=ctc (value=contact id) 
-
-RESPONSE:
-- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
-- code: 'failed' message: 'Required fields cannot be empty.' data: null
-- code: 'failed' message: 'Invalid value for type.' data: null
-- code: 'failed' message: 'Please contact your administrator. ID not in valid format!' data: null
-- code: 'failed' message: 'No results found!' data: null
-- code: 'failed' message: 'An error occured while submitting data to the server' data: null
-
-
-IF SUCCESS:
-```
-    {
-        "status": "success",
-        "message" : "Contact successfully deleted!"
-    }
-```
-
-#### DELETE STORE CONTACTS => /datavice/v1/contact/stores/delete
-REQUEST:
-- Method: POST
-- Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=ctc (value=contact id) 
-
-RESPONSE:
-- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
-- code: 'failed' message: 'Required fields cannot be empty.' data: null
-- code: 'failed' message: 'Invalid value for type.' data: null
-- code: 'failed' message: 'Please contact your administrator. ID not in valid format!' data: null
-- code: 'failed' message: 'No results found!' data: null
-- code: 'failed' message: 'An error occured while submitting data to the server' data: null
-
-
-IF SUCCESS:
-```
-    {
-        "status": "success",
-        "message" : "Contact successfully deleted!"
-    }
-```
-
-
-#### CONTACT LIST TYPE BY OWNER ID (USERS) => /datavice/v1/contact/users/list/type
+### LIST ALL USER CONTACTS BY TYPE => /datavice/v1/contact/users/list/type
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
@@ -103,6 +79,46 @@ RESPONSE:
 - code: 'failed' message: 'Required fields cannot be empty.' data: null
 - code: 'failed' message: 'Invalid value for type.' data: null
 - code: 'failed' message: 'Please contact your administrator. ID not in valid format!' data: null
+- code: 'failed' message: 'User not found!' data: null
+- code: 'failed' message: 'No results found!' data: null
+
+
+IF SUCCESS:
+```
+    {
+        "status": "success",
+        "data": {
+            "list": [
+                {
+                    "ID": "10",
+                    "types": "email",
+                    "status": "1",
+                    "email": "demoguy@bytescrafter.net"
+                },
+                {
+                    "ID": "15",
+                    "types": "email",
+                    "status": "1",
+                    "email": "demoguy.support@bytescrafter.net"
+                },
+
+            ]
+        }
+    }
+```
+
+### SELECT USER CONTACT BY ID => /datavice/v1/contact/users/select
+REQUEST:
+- Method: POST
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=ctc (value = contact id) , key=id (value = owner id of this contact) 
+
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
+- code: 'failed' message: 'Required fields cannot be empty.' data: null
+- code: 'failed' message: 'Invalid value for type.' data: null
+- code: 'failed' message: 'Please contact your administrator. Id not in valid format!' data: null
+- code: 'failed' message: 'User not found!' data: null
 - code: 'failed' message: 'No results found!' data: null
 
 
@@ -123,38 +139,80 @@ IF SUCCESS:
     }
 ```
 
-#### CONTACT LIST TYPE BY OWNER ID (STORES) => /datavice/v1/contact/stores/list/type
+### DELETE USER CONTACTS BY ID => /datavice/v1/contact/users/delete
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=type (value=type of contact), key=id (value = id of owner of this contact) 
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=ctc (value=contact id) 
 
 RESPONSE:
 - code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
 - code: 'failed' message: 'Required fields cannot be empty.' data: null
 - code: 'failed' message: 'Invalid value for type.' data: null
-- code: 'failed' message: 'Please contact your administrator. ID not in valid format!' data: null
-- code: 'failed' message: 'No results found!' data: null
+- code: 'failed' message: 'Please contact your administrator. Id not in valid format!' data: null
+- code: 'failed' message: 'User not found!' data: null
+- code: 'error' message: 'An error occured while submitting data to the server.' data: null
+- code: 'error' message: 'An error occured while fetching data from the server.' data: null
+
 
 
 IF SUCCESS:
 ```
     {
         "status": "success",
-        "data": {
-            "list": [
-                {
-                    "ID": "10",
-                    "types": "email",
-                    "status": "1",
-                    "email": "demoguy@bytescrafter.net"
-                }
-            ]
-        }
+        "message" : "Data has been deleted successfully."
     }
 ```
 
-#### SELECT ALL STORE CONTACTS => /datavice/v1/contact/stores/list/all
+### UPDATE USER CONTACTS BY ID => /datavice/v1/contact/users/update
+REQUEST:
+- Method: POST
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=ctc (value=contact id) , key=id (value=owner id of this contact), key=value (value=update value)
+
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
+- code: 'failed' message: 'Required fields cannot be empty.' data: null
+- code: 'failed' message: 'Please contact your administrator. Id not in valid format!' data: null
+- code: 'failed' message: 'User not found!' data: null
+- code: 'error' message: 'An error occured while submitting data to the server' data: null
+
+IF SUCCESS:
+```
+    {
+        "status": "success",
+        "message" : "Data has been updated successfully."
+    }
+```
+
+
+#### STORES CONTACT REST API
+
+### INSERT STORE CONTACTS => /datavice/v1/contact/stores/insert
+REQUEST:
+- Method: POST
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=type (value=type of contact), key=value (value= value of contact), key=stid (value = store id of this contact) 
+
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
+- code: 'failed' message: 'Required fields cannot be empty.' data: null
+- code: 'failed' message: 'Invalid value for type.' data: null
+- code: 'failed' message: 'Please contact your administrator. Id not in valid format!' data: null
+- code: 'failed' message: 'User not found' data: null
+- code: 'error' message: 'An error occured while submitting data to the server' data: null
+- code: 'failed' message: 'Email not in valid format.' data: null
+
+
+IF SUCCESS:
+```
+    {
+        "status": "success",
+        "message" : "Data has been added successfully."
+    }
+```
+
+### LIST ALL STORE CONTACTS => /datavice/v1/contact/stores/list/all
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
@@ -177,24 +235,152 @@ IF SUCCESS:
         "data": {
             "list": [
                 {
-                    "ID": "6",
+                    "ID": "1",
                     "status": "1",
-                    "types": "phone",
-                    "child_val": "092921125341",
-                    "stid": "1",
+                    "types": "email",
+                    "value": "jollibee@yahoo.com",
+                    "store_id": "1",
                     "created_by": "1",
-                    "date_created": "2020-08-04 08:21:15"
+                    "date_created": "2020-07-24"
                 },
-                {
-                    "ID": "7",
+                 {
+                    "ID": "2",
                     "status": "1",
                     "types": "phone",
-                    "child_val": "092921125341",
-                    "stid": "1",
+                    "value": "09567891232",
+                    "store_id": "1",
                     "created_by": "1",
-                    "date_created": "2020-08-04 08:41:22"
+                    "date_created": "2020-07-26"
+                },
+                 {
+                    "ID": "3",
+                    "status": "1",
+                    "types": "phone",
+                    "value": "09567891232",
+                    "store_id": "1",
+                    "created_by": "1",
+                    "date_created": "2020-07-01"
                 }
             ]
         }
+    }
+```
+
+### LIST ALL STORE CONTACTS BY TYPE => /datavice/v1/contact/stores/list/type
+REQUEST:
+- Method: POST
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=type (value=type of contact), key=stid (value = store id of this contact) 
+
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
+- code: 'failed' message: 'Required fields cannot be empty.' data: null
+- code: 'failed' message: 'Invalid value for type.' data: null
+- code: 'failed' message: 'Please contact your administrator. ID not in valid format!' data: null
+- code: 'error' message: 'An error occured while fetching data from the server.' data: null
+- code: 'failed' message: 'User not found!' data: null
+- code: 'failed' message: 'No results found!' data: null
+
+
+IF SUCCESS:
+```
+    {
+        "status": "success",
+        "data": {
+            "list": [
+                {
+                    "ID": "10",
+                    "types": "email",
+                    "status": "1",
+                    "email": "demoguy@bytescrafter.net"
+                },
+                {
+                    "ID": "15",
+                    "types": "email",
+                    "status": "1",
+                    "email": "demoguy.support@bytescrafter.net"
+                },
+
+            ]
+        }
+    }
+```
+
+### SELECT STORE CONTACT BY ID => /datavice/v1/contact/stores/select
+REQUEST:
+- Method: POST
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=ctc (value = contact id) , key=stid (value = store id of this contact) 
+
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
+- code: 'failed' message: 'Required fields cannot be empty.' data: null
+- code: 'failed' message: 'Invalid value for type.' data: null
+- code: 'failed' message: 'Please contact your administrator. Id not in valid format!' data: null
+- code: 'failed' message: 'User not found!' data: null
+- code: 'failed' message: 'No results found.' data: null
+- code: 'error' message: 'An error occured while fetching data to the server.' data: null
+
+
+IF SUCCESS:
+```
+    {
+        "status": "success",
+        "data": {
+            "list": [
+                {
+                    "ID": "10",
+                    "types": "email",
+                    "status": "1",
+                    "email": "demoguy@bytescrafter.net"
+                }
+            ]
+        }
+    }
+```
+
+### DELETE STORE CONTACTS => /datavice/v1/contact/stores/delete
+REQUEST:
+- Method: POST
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=ctc (value=contact id) 
+
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
+- code: 'failed' message: 'Required fields cannot be empty.' data: null
+- code: 'failed' message: 'Invalid value for type.' data: null
+- code: 'failed' message: 'Please contact your administrator. ID not in valid format!' data: null
+- code: 'failed' message: 'User not found.' data: null
+- code: 'failed' message: 'An error occured while fetching data to the server' data: null
+- code: 'failed' message: 'An error occured while submitting data to the server' data: null
+
+
+IF SUCCESS:
+```
+    {
+        "status": "success",
+        "message" : "Data has been deleted successfully."
+    }
+```
+
+### UPDATE STORE CONTACTS BY ID => /datavice/v1/contact/stores/update
+REQUEST:
+- Method: POST
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=ctc (value=contact id) , key=stid (value=owner id of this contact), key=value (value=update value)
+
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
+- code: 'failed' message: 'Required fields cannot be empty.' data: null
+- code: 'failed' message: 'Please contact your administrator. Id not in valid format!' data: null
+- code: 'failed' message: 'User not found!' data: null
+- code: 'error' message: 'An error occured while fetching data to the server' data: null
+- code: 'error' message: 'An error occured while submitting data to the server' data: null
+
+IF SUCCESS:
+```
+    {
+        "status": "success",
+        "message" : "Data has been updated successfully."
     }
 ```
