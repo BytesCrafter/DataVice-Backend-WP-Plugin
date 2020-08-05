@@ -68,7 +68,7 @@
             $stid = $_POST['id'];
             $contact_id = $_POST['ctc'];
 
-            $get_contact = $wpdb->get_row("SELECT created_by FROM dv_contacts  WHERE ID = $contact_id");
+            $get_contact = $wpdb->get_row("SELECT ID FROM tp_stores  WHERE ID = $stid ");
             
             //Check if wpid match the created_by value
              if ( !$get_contact ) {

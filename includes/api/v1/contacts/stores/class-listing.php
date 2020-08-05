@@ -60,6 +60,20 @@
                 
             }
 
+
+            $stid = $_POST['stid'];
+            $get_contact = $wpdb->get_row("SELECT ID FROM tp_stores  WHERE ID = $stid ");
+            
+            //Check if wpid match the created_by value
+             if ( !$get_contact ) {
+                return rest_ensure_response( 
+                    array(
+                        "status" => "error",
+                        "message" => "An error occurred while submiting data to the server.",
+                    )
+                );
+            }
+
 			// Step 3: Check if ID exists
 			if (!get_user_by("ID", $_POST['wpid'])) {
 				return rest_ensure_response( 
@@ -78,7 +92,6 @@
 
             $created_by = $_POST['wpid'];
 
-            $stid = $_POST['stid'];
 
             $result = $wpdb->get_results("SELECT
                     dv_cont.ID,
