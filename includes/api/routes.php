@@ -50,6 +50,12 @@
     // require plugin_dir_path(__FILE__) . '/v1/settings/class-update-un.php';
     // require plugin_dir_path(__FILE__) . '/v1/settings/class-update-gd.php';
 
+    require plugin_dir_path(__FILE__) . '/v1/address/store/class-insert.php';
+    require plugin_dir_path(__FILE__) . '/v1/address/store/class-update.php';
+
+    require plugin_dir_path(__FILE__) . '/v1/address/user/class-insert.php';
+    require plugin_dir_path(__FILE__) . '/v1/address/user/class-update.php';
+
 
 	require plugin_dir_path(__FILE__) . '/v1/globals.php';
 	
@@ -258,6 +264,35 @@
             register_rest_route( 'datavice/v1/settings', 'update_gd', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Gender_Update', 'listen'),
+            ));
+
+         /*
+         * ADDRESS RESTAPI
+        */
+            // Store Folder 
+
+            register_rest_route( 'datavice/v1/address/store', 'insert', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Insert_Store_Address', 'listen'),
+            ));
+
+            
+            register_rest_route( 'datavice/v1/address/store', 'update', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Update_Store_Address', 'listen'),
+            ));
+
+
+            // User Folder
+
+            register_rest_route( 'datavice/v1/address/user', 'insert', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Insert_User_Address', 'listen'),
+            ));
+
+            register_rest_route( 'datavice/v1/address/user', 'update', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Update_User_Address', 'listen'),
             ));
     
     }
