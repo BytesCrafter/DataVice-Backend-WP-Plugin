@@ -29,7 +29,7 @@
             }
 
             // Step1 : Sanitize all Request
-            if ( !isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['value']) || !isset($_POST['type']) || !isset($_POST['ctcid']) || !isset($_POST['stid'])) {
+            if ( !isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['value'])  || !isset($_POST['ctcid']) || !isset($_POST['stid'])) {
                 return rest_ensure_response( 
                     array(
                         "status" => "unknown",
@@ -39,7 +39,7 @@
             }
 
             // Check if required fields are not empty
-            if ( empty($_POST["wpid"]) || empty($_POST["snky"]) || empty($_POST['value']) || empty($_POST['type']) || empty($_POST['ctcid']) || empty($_POST['stid']) ) {
+            if ( empty($_POST["wpid"]) || empty($_POST["snky"]) || empty($_POST['value']) ||  empty($_POST['ctcid']) || empty($_POST['stid']) ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "failed",
@@ -48,15 +48,7 @@
                 );
             }
 
-            // Check if value of type is valid
-            if (!($_POST['type'] === 'phone') && !($_POST['type'] === 'email') && !($_POST['type'] === 'emergency')) {
-                return rest_ensure_response( 
-                    array(
-                            "status" => "failed",
-                            "message" => "Invalid value for type.",
-                    )
-                );
-            }
+      
             
             // Check if ID is in valid format (integer)
             if (!is_numeric($_POST["wpid"]) || !is_numeric($_POST["ctcid"]) || !is_numeric($_POST['stid']) ) {
@@ -107,35 +99,11 @@
 
 
 
-            //Check contact type if phone, email, or emergency
-            if ($_POST['type'] == 'phone') {
-                
-                $type = 'phone';
-
-            } else if ($_POST['type'] == 'email') {
-                
-                $type = 'email';
-                
-                //if type is email, make sure to sanitize if its a valid email format
-                if (!is_email($_POST['value'])) {
-                    return rest_ensure_response( 
-                        array(
-                            "status" => "failed",
-                            "message" => "Email not in valid format."
-                        )
-                    );
-                }
-            
-            } else {
-
-                $type = 'emergency';
-            
-            }
-
             //Step 3: Start mysql transaction
             $wpdb->query("START TRANSACTION ");
                 $update_contact = $wpdb->query("UPDATE `$table_contact` SET `status`= 0 WHERE `ID` = $contact_id AND `created_by` = $wpid  ");
-                    
+                
+                $type = $wpdb->get_row("SELECT `types` FROM `$table_contact`  WHERE ID = $contact_id ");
 
                 $wpdb->query("INSERT INTO `$table_contact` (`status`, `types`, `revs`, `stid`, `created_by`, `date_created`) 
                                     VALUES ('1', '$type', '0', $stid, $wpid, '$date_stamp');");
