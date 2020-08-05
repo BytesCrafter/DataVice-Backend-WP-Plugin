@@ -29,7 +29,7 @@
             }
 
             // Step1 : Sanitize all Request
-            if ( !isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['value'])  || !isset($_POST['ctcid']) || !isset($_POST['stid'])) {
+            if ( !isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['value'])  || !isset($_POST['ctc']) || !isset($_POST['stid'])) {
                 return rest_ensure_response( 
                     array(
                         "status" => "unknown",
@@ -39,7 +39,7 @@
             }
 
             // Check if required fields are not empty
-            if ( empty($_POST["wpid"]) || empty($_POST["snky"]) || empty($_POST['value']) ||  empty($_POST['ctcid']) || empty($_POST['stid']) ) {
+            if ( empty($_POST["wpid"]) || empty($_POST["snky"]) || empty($_POST['value']) ||  empty($_POST['ctc']) || empty($_POST['stid']) ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "failed",
@@ -51,7 +51,7 @@
       
             
             // Check if ID is in valid format (integer)
-            if (!is_numeric($_POST["wpid"]) || !is_numeric($_POST["ctcid"]) || !is_numeric($_POST['stid']) ) {
+            if (!is_numeric($_POST["wpid"]) || !is_numeric($_POST["ctc"]) || !is_numeric($_POST['stid']) ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "failed",
@@ -64,17 +64,17 @@
             $stid = $_POST['stid'];
             $get_contact = $wpdb->get_row("SELECT ID FROM tp_stores  WHERE ID = $stid ");
             
-            //Check if wpid match the created_by value
+            //Check if store id exists
              if ( !$get_contact ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "error",
-                        "message" => "An error occurred while submiting data to the server.",
+                        "message" => "An error occurred while fetching data to the server.",
                     )
                 );
             }
 
-            // Step 2: Check if id(owner) of this contact exists
+            // Step 2: Check if user exists
             if (!get_user_by("ID", $_POST['wpid'])) {
                 return rest_ensure_response( 
                     array(
@@ -93,25 +93,22 @@
             $snky = $_POST['snky'];
             $value = $_POST['value'];
             $revs_type = 'contacts';
-            $contact_id = $_POST['ctcid'];
+            $contact_id = $_POST['ctc'];
             $date_stamp = DV_Globals::date_stamp();
-
-
-
 
             //Step 3: Start mysql transaction
             $wpdb->query("START TRANSACTION ");
                 $update_contact = $wpdb->query("UPDATE `$table_contact` SET `status`= 0 WHERE `ID` = $contact_id AND `created_by` = $wpid  ");
                 
                 $type = $wpdb->get_row("SELECT `types` FROM `$table_contact`  WHERE ID = $contact_id ");
-
+                $val = $type->types;
                 $wpdb->query("INSERT INTO `$table_contact` (`status`, `types`, `revs`, `stid`, `created_by`, `date_created`) 
-                                    VALUES ('1', '$type', '0', $stid, $wpid, '$date_stamp');");
+                                    VALUES ('1', '$val', '0', $stid, $wpid, '$date_stamp');");
                 
                 $contact_id = $wpdb->insert_id;
 
                 $wpdb->query("INSERT INTO `$table_revs` (revs_type, parent_id, child_key, child_val, created_by, date_created) 
-                                    VALUES ( '$revs_type', $contact_id, '$type', '$value', $wpid, '$date_stamp'  )");
+                                    VALUES ( '$revs_type', $contact_id, '$val', '$value', $wpid, '$date_stamp'  )");
                 
                 $revs_id = $wpdb->insert_id;
 
@@ -136,7 +133,7 @@
             return rest_ensure_response( 
                 array(
                         "status" => "Success",
-                        "message" => "Contact added successfully!",
+                        "message" => "Data has been updated successfully",
                 )
             );
 
