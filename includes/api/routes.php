@@ -52,6 +52,9 @@
     
     //Update Profile
     require plugin_dir_path(__FILE__) . '/v1/settings/class-update-profile.php';
+    require plugin_dir_path(__FILE__) . '/v1/settings/class-notif.php';
+    require plugin_dir_path(__FILE__) . '/v1/settings/class-email-notif.php';
+
     // require plugin_dir_path(__FILE__) . '/v1/settings/class-avatar.php';
  
 
@@ -265,6 +268,16 @@
             register_rest_route( 'datavice/v1/settings', 'update', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Update_Profile', 'listen'),
+            ));
+            // Notification
+            register_rest_route( 'datavice/v1/settings', 'notif', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Notification', 'listen'),
+            ));
+
+            register_rest_route( 'datavice/v1/settings', 'email_notif', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Notification_email', 'listen'),
             ));
 
         /*
