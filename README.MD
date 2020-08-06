@@ -4,37 +4,10 @@ The DataVice for WordPress is a user management for your application or game use
 
 ### REST API Implementation
 
-[USER RESTAPI DOCS](https://github.com/BytesCrafter/DataVice-WP-Plugin/documentation/USER)
-[CONTACT RESTAPI DOCS](https://github.com/BytesCrafter/DataVice-WP-Plugin/documentation/CONTACT)
-[LOCATION RESTAPI DOCS](https://github.com/BytesCrafter/DataVice-WP-Plugin/documentation/LOCATION)
-[SETTINGS RESTAPI DOCS](https://github.com/BytesCrafter/DataVice-WP-Plugin/documentation/SETTINGS)
-
-REQUEST:
-- Method: POST
-- Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=fn (value=First Name) 
-
-RESPONSE:
-- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
-- code: 'failed' message: 'Required fields cannot be empty.' data: null
-- code: 'failed' message: 'Invalid value for type.' data: null
-- code: 'failed' message: 'Please contact your administrator. ID not in valid format!' data: null
-- code: 'failed' message: 'No results found!' data: null
-- code: 'failed' message: 'User not found!' data: null
-- code: 'failed' message: 'This name is already exist' data: null
-- code: 'unknown' message: 'Please contact your administrator. Update of First name Failed' data: null
-
-
-IF SUCCESS:
-```
-    {
-        "status": "success",
-        "message": "Data has been updated successfully"
-    }
-```
-
-
-
+- [USER RESTAPI DOCS](https://github.com/BytesCrafter/DataVice-WP-Plugin/documentation/USER)
+- [CONTACT RESTAPI DOCS](https://github.com/BytesCrafter/DataVice-WP-Plugin/documentation/CONTACT)
+- [LOCATION RESTAPI DOCS](https://github.com/BytesCrafter/DataVice-WP-Plugin/documentation/LOCATION)
+- [SETTINGS RESTAPI DOCS](https://github.com/BytesCrafter/DataVice-WP-Plugin/documentation/SETTINGS)
 
 ## Contributing
 
