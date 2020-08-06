@@ -56,19 +56,12 @@
     require plugin_dir_path(__FILE__) . '/v1/settings/class-email-notif.php';
     require plugin_dir_path(__FILE__) . '/v1/settings/class-avatar.php';
  
-    ///Store Address Classes
-    require plugin_dir_path(__FILE__) . '/v1/address/store/class-insert.php';
-    require plugin_dir_path(__FILE__) . '/v1/address/store/class-update.php';
-    require plugin_dir_path(__FILE__) . '/v1/address/store/class-select.php';
-    require plugin_dir_path(__FILE__) . '/v1/address/store/class-select-type.php';
-    require plugin_dir_path(__FILE__) . '/v1/address/store/class-listing.php';
-
     ///Users Address Classes
-    require plugin_dir_path(__FILE__) . '/v1/address/user/class-insert.php';
-    require plugin_dir_path(__FILE__) . '/v1/address/user/class-update.php';
-    require plugin_dir_path(__FILE__) . '/v1/address/user/class-select.php';
-    // require plugin_dir_path(__FILE__) . '/v1/address/user/class-select-type.php';
-    // require plugin_dir_path(__FILE__) . '/v1/address/user/class-listing.php';
+    require plugin_dir_path(__FILE__) . '/v1/address/class-insert.php';
+    require plugin_dir_path(__FILE__) . '/v1/address/class-update.php';
+    require plugin_dir_path(__FILE__) . '/v1/address/class-select.php';
+    require plugin_dir_path(__FILE__) . '/v1/address/class-select-type.php';
+    require plugin_dir_path(__FILE__) . '/v1/address/class-listing.php';
 
 	require plugin_dir_path(__FILE__) . '/v1/globals.php';
 	
@@ -283,61 +276,34 @@
         /*
          * ADDRESS RESTAPI
         */
-            // Store Folder 
-
-            register_rest_route( 'datavice/v1/address/store', 'insert', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Insert_Store_Address', 'listen'),
-            ));
-
-            register_rest_route( 'datavice/v1/address/store', 'update', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Update_Store_Address', 'listen'),
-            ));
-            
-            register_rest_route( 'datavice/v1/address/store', 'select', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Select_Store_Address', 'listen'),
-            ));
-
-            register_rest_route( 'datavice/v1/address/store', 'list/type', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Select_type_Store_Address', 'listen'),
-            ));
-
-            register_rest_route( 'datavice/v1/address/store', 'list/all', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Select_All_Store_Address', 'listen'),
-            ));
-
-
+   
 
             // User Folder
 
-            register_rest_route( 'datavice/v1/address/user', 'insert', array(
+            register_rest_route( 'datavice/v1/address', 'insert', array(
                 'methods' => 'POST',
-                'callback' => array('DV_Insert_User_Address', 'listen'),
+                'callback' => array('DV_Insert_Address', 'listen'),
             ));
 
-            register_rest_route( 'datavice/v1/address/user', 'update', array(
+            register_rest_route( 'datavice/v1/address/', 'update', array(
                 'methods' => 'POST',
-                'callback' => array('DV_Update_User_Address', 'listen'),
+                'callback' => array('DV_Update_Address', 'listen'),
             ));
             
-            register_rest_route( 'datavice/v1/address/user', 'select', array(
+            register_rest_route( 'datavice/v1/address/', 'select', array(
                 'methods' => 'POST',
-                'callback' => array('DV_Select_User_Address', 'listen'),
+                'callback' => array('DV_Select_Address', 'listen'),
             ));
 
-            // register_rest_route( 'datavice/v1/address/user', 'list/type', array(
-            //     'methods' => 'POST',
-            //     'callback' => array('DV_Select_type_User_Address', 'listen'),
-            // ));
+            register_rest_route( 'datavice/v1/address/', 'list/type', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Select_type_Address', 'listen'),
+            ));
 
-            // register_rest_route( 'datavice/v1/address/user', 'list/all', array(
-            //     'methods' => 'POST',
-            //     'callback' => array('DV_Select_All_User_Address', 'listen'),
-            // ));
+            register_rest_route( 'datavice/v1/address/', 'list/all', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Select_All_Address', 'listen'),
+            ));
     
     }
     add_action( 'rest_api_init', 'datavice_route' );

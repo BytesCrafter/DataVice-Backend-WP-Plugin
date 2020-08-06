@@ -11,12 +11,12 @@
 	*/
 ?>
 <?php
-    class DV_Update_Store_Address{
+    class DV_Insert_Address{
         public static function listen(){
             global $wpdb;
 
-               // Step1: Validate user
-               if ( DV_Verification::is_verified() == false ) {
+             // Step1: Validate user
+             if ( DV_Verification::is_verified() == false ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "unknown",
@@ -26,8 +26,7 @@
             }
 
             // Step 1 : Check if the fields are passed
-            if( !isset($_POST['stid']) || !isset($_POST['wpid']) 
-                    || !isset($_POST['add']) || !isset($_POST['st']) 
+            if(  !isset($_POST['wpid']) || !isset($_POST['owner']) || !isset($_POST['type']) || !isset($_POST['st']) 
                     || !isset($_POST['co']) || !isset($_POST['pv']) 
                     || !isset($_POST['ct']) || !isset($_POST['bg']) ){
                 return rest_ensure_response( 
@@ -39,8 +38,7 @@
             }
 
              // Step 1 : Check if the fields are passed
-             if( empty($_POST['stid']) || empty($_POST['wpid']) 
-                    || empty($_POST['add']) || empty($_POST['st'])
+             if( empty($_POST['owner']) ||  empty($_POST['wpid']) || empty($_POST['type']) || empty($_POST['st'])
                     || empty($_POST['co']) || empty($_POST['pv']) 
                     || empty($_POST['ct']) || empty($_POST['bg']) ){
                 return rest_ensure_response( 
@@ -52,8 +50,7 @@
             }
 
             // Step5: Check if ID is in valid format (integer)
-            if(  !is_numeric($_POST['add']) || !is_numeric($_POST['stid']) || !is_numeric($_POST['wpid'])  
-                || !is_numeric($_POST['co']) || !is_numeric($_POST['pv']) 
+            if(  !is_numeric($_POST['wpid']) || !is_numeric($_POST['co']) || !is_numeric($_POST['pv']) 
                 || !is_numeric($_POST['ct']) || !is_numeric($_POST['bg']) ){
                 return rest_ensure_response( 
                     array(
@@ -62,7 +59,6 @@
                     )
                 );
             }
-            
 
             // Step 7: Check if id(owner) of this contact exists
             if (!get_user_by("ID", $_POST['wpid'])) {
@@ -73,6 +69,7 @@
                     )
                 );
             }
+
 
             //Country input validation
                 // Step 2 : Check if country passed is in integer format.
@@ -205,28 +202,34 @@
                     );
                 }
             // end of barangay validation
-            $user = DV_Update_Store_Address::catch_post();
-            $created_id = $user['created_by'];
             
-            $table_address = DV_ADDRESS_TABLE;
-            $dv_rev_table = DV_REVS_TABLE;
+            // Type input validation
+                // Step 2 : Check if type value is either 'home','office','business'.
+                if (!($_POST['type'] === 'home')  && !($_POST['type'] === 'office') && !($_POST['type'] === 'business')) {
+                    return rest_ensure_response( 
+                        array(
+                                "status" => "failed",
+                                "message" => "Invalid value for address type.",
+                        )
+                    );
+                }
+            // end if input validation
 
-            // Select last address information using address ID  
-            $last_add_data =  $wpdb->get_row("SELECT * FROM $table_address WHERE id = {$user["add_id"]} AND stid = {$user["store_id"]} ", OBJECT);
+            
 
-            if (!$last_add_data ) {
-                return rest_ensure_response( 
-                    array(
-                        "status" => "error",
-                        "message" => "An error while validating addres."
-                    )
-                );
+            // Get user object.
+            $user = DV_Insert_Address::catch_post();
+            $created_id = $user['created_by'];
+
+            $stid = 0 ;
+            $owner = 0;
+
+            if($user['owner'] != 'store' ){
+                return $owner = $user['id'];
             }
 
-            $update = $wpdb->query("UPDATE $dv_rev_table SET `child_val` = '0' WHERE ID = '{$last_add_data->status}' ");
-            
-            
-             //Start for mysql transaction.
+
+            //Start for mysql transaction.
             //This is crucial in inserting data with connection with each other
             $wpdb->query("START TRANSACTION");
                 
@@ -236,32 +239,32 @@
 
             $rev_fields = DV_INSERT_REV_FIELDS;
 
-            $wpdb->query("INSERT INTO $dv_rev_table (parent_id, $rev_fields) VALUES ('{$user["add_id"]}', 'address', 'status', '1', $created_id, '$date');");
+            $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'status', '1', $created_id, '$date');");
                 
-            $status = $wpdb->insert_id;
+            $revtype = $wpdb->insert_id;
 
-            $wpdb->query("INSERT INTO $dv_rev_table (parent_id, $rev_fields) VALUES ('{$user["add_id"]}', 'address', 'street', '{$user["street"]}', $created_id, '$date');");
+            $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'street', '{$user["street"]}', $created_id, '$date');");
                 
             $street = $wpdb->insert_id;
 
-            $wpdb->query("INSERT INTO $dv_rev_table (parent_id, $rev_fields) VALUES ('{$user["add_id"]}', 'address', 'brgy', {$user["brgy"]}, $created_id, '$date');");
+            $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'brgy', {$user["brgy"]}, $created_id, '$date');");
                 
             $brgy = $wpdb->insert_id;
 
-            $wpdb->query("INSERT INTO $dv_rev_table (parent_id, $rev_fields) VALUES ('{$user["add_id"]}', 'address', 'city', {$user["city"]}, $created_id, '$date');");
+            $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'city', {$user["city"]}, $created_id, '$date');");
                 
             $city = $wpdb->insert_id;
                 
-            $wpdb->query("INSERT INTO $dv_rev_table (parent_id, $rev_fields) VALUES ('{$user["add_id"]}', 'address', 'province', {$user["province"]}, $created_id, '$date');");
+            $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'province', {$user["province"]}, $created_id, '$date');");
                 
             $province = $wpdb->insert_id;
 
-            $wpdb->query("INSERT INTO $dv_rev_table (parent_id, $rev_fields) VALUES ('{$user["add_id"]}', 'address', 'country', {$user["country"]}, $created_id, '$date');");
+            $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'country', {$user["country"]}, $created_id, '$date');");
                 
             $country = $wpdb->insert_id;
                 
                 //Check if any of the insert queries above failed
-            if ($status < 1 || $street < 1 || $brgy < 1 ||
+            if ($revtype < 1 || $street < 1 || $brgy < 1 ||
                $province < 1 || $city < 1 || $country < 1 ) {
 
                 //If failed, do mysql rollback (discard the insert queries(no inserted data))
@@ -278,12 +281,29 @@
             //If no problems found in queries above, do mysql commit (do changes(insert rows))
             $wpdb->query("COMMIT");
 
+            $table_address = DV_ADDRESS_TABLE;
 
             $address_fields = DV_INSERT_ADDRESS_FIELDS;
 
             //Save the address in the parent table
-            $result = $wpdb->query("UPDATE $table_address  SET  `status` = $status,  `street` = $street, `brgy` = $brgy,  `city` = $city, `province` = $province,  `country` = $country WHERE ID = '{$user["add_id"]}' ");
+            $wpdb->query("INSERT INTO $table_address ($address_fields) VALUES ('$revtype', '{$user["created_by"]}', '0', '{$user["type"]}', $street, $brgy, $city, $province, $country, '$date')");
 
+            $address_id = $wpdb->insert_id;
+
+
+            //Check if insert success, if not, return error message
+            if ($address_id < 1) {
+                return rest_ensure_response( 
+                    array(
+                        "status" => "failed",
+                        "message" => "An error occured while submitting data to the server."
+                    )
+                );
+            }
+
+            //Update revision table for saving the parent_id(address_id)
+            $result =  $wpdb->query("UPDATE $dv_rev_table SET `parent_id` = {$address_id} WHERE ID IN ($revtype, $street, $brgy, $city, $province, $country)");
+                
             if ($result < 1) {
                 return rest_ensure_response( 
                     array(
@@ -295,26 +315,28 @@
                 return rest_ensure_response( 
                     array(
                         "status" => "success",
-                        "message" => "Address has been updated successfully."
+                        "message" => "Address added successfully."
                     )
                 );
             }
-        }
 
-        // Return of Update store address object from POST.
+            
+        } // End of listen function
+
+        // Return of Insert user address object from POST.
         public static function catch_post()
         {
             $cur_user = array();
 
-            $cur_user['created_by']  = $_POST['wpid'];
-            $cur_user['store_id']    = $_POST['stid'];
-            $cur_user['add_id']      = $_POST['add'];
+            $cur_user['created_by'] = $_POST['wpid'];
+            $cur_user['owner'] = $_POST['owner'];
 
-            $cur_user['street']      = $_POST['st'];
-            $cur_user['country']     = $_POST['co'];
-            $cur_user['province']    = $_POST['pv'];
-            $cur_user['city']        = $_POST['ct'];
-            $cur_user['brgy']        = $_POST['bg'];
+            $cur_user['type'] = $_POST['type'];
+            $cur_user['street'] = $_POST['st'];
+            $cur_user['country'] = $_POST['co'];
+            $cur_user['province'] = $_POST['pv'];
+            $cur_user['city'] = $_POST['ct'];
+            $cur_user['brgy'] = $_POST['bg'];
 
             return  $cur_user;
         }
