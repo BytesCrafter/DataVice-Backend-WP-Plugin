@@ -285,22 +285,22 @@
                 'callback' => array('DV_Insert_Address', 'listen'),
             ));
 
-            register_rest_route( 'datavice/v1/address/', 'update', array(
+            register_rest_route( 'datavice/v1/address', 'update', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Update_Address', 'listen'),
             ));
             
-            register_rest_route( 'datavice/v1/address/', 'select', array(
+            register_rest_route( 'datavice/v1/address', 'select', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Select_Address', 'listen'),
             ));
 
-            register_rest_route( 'datavice/v1/address/', 'list/type', array(
+            register_rest_route( 'datavice/v1/address', 'list/type', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Select_type_Address', 'listen'),
             ));
 
-            register_rest_route( 'datavice/v1/address/', 'list/all', array(
+            register_rest_route( 'datavice/v1/address', 'list/all', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Select_All_Address', 'listen'),
             ));

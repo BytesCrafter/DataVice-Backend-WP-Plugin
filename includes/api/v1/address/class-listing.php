@@ -11,7 +11,7 @@
 	*/
 ?>
 <?php
-    class DV_Select_All_User_Address{
+    class DV_Select_All_Address{
         public static function listen(){
 			global $wpdb;
 			
@@ -27,7 +27,7 @@
 
 
             // Step 2: Sanitize and validate all requests
-			if (!isset($_POST["wpid"]) || !isset($_POST["snky"]) ) {
+			if (!isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST["id"]) || !isset($_POST["own"]) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -38,7 +38,7 @@
             }
             
             //Check if passed values are not null
-            if (empty($_POST["wpid"]) || empty($_POST["snky"]) ) {
+            if (empty($_POST["wpid"]) || empty($_POST["snky"]) || !empty($_POST["id"]) || !empty($_POST["own"]) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
@@ -49,7 +49,7 @@
             }
 
             //Check if ID is in valid format (integer)
-			if (!is_numeric($_POST["wpid"]) ) {
+			if (!is_numeric($_POST["wpid"])  || !is_numeric($_POST["id"]) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
@@ -72,7 +72,39 @@
 			$dv_rev_table = DV_REVS_TABLE;
 			$table_address = DV_ADDRESS_TABLE;
 
-            $user = DV_Select_All_User_Address::catch_post();
+            $user = DV_Select_All_Address::catch_post();
+
+			$type = '';
+
+			if($user['owner'] !== "store" ){
+                $type = 'wpid';
+
+                // Step 7: Check if id(owner) of this contact exists
+                if (!get_user_by("ID", $_POST['wpid']) || !get_user_by("ID", $_POST['id'])) {
+                    return rest_ensure_response( 
+                        array(
+                            "status" => "failed",
+                            "message" => "User not found",
+                        )
+                    );
+                }
+
+            }else{
+                $type = 'stid';
+
+                $get_store = $wpdb->get_row("SELECT ID FROM tp_stores  WHERE ID = '{$user["id"]}' ");
+                
+                //Check if this store id exists
+                 if ( !$get_store ) {
+                    return rest_ensure_response( 
+                        array(
+                            "status" => "error",
+                            "message" => "An error occurred while fetching data to the server.",
+                        )
+                    );
+                }
+                
+            }
 
             $result  = $wpdb->get_results("SELECT
 					dv_add.ID,
@@ -88,9 +120,8 @@
 					$table_address dv_add
 				INNER JOIN $dv_rev_table dv_rev 
 					ON dv_rev.ID = dv_add.status
-				WHERE dv_add.wpid = '{$user["created_by"]}' 
-					AND dv_rev.child_val = 1"
-			);
+				WHERE dv_add.$type = '{$user["owner"]}' 
+					AND dv_rev.child_val = 1");
 
 			if (!$result) {
                 return rest_ensure_response( 
@@ -120,6 +151,8 @@
 			$cur_user = array();
 			
 			$cur_user['created_by']  = $_POST['wpid'];
+			$cur_user['id']  = $_POST['id'];
+			$cur_user['owner']  = $_POST['own'];
 
 
             return  $cur_user;

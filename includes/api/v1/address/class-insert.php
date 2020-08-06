@@ -20,15 +20,14 @@
                 return rest_ensure_response( 
                     array(
                         "status" => "unknown",
-                        "message" => "Please contact your administrator. Request Unknown!",
+                        "message" => "Please contact your administrator. awdwadwaRequest Unknown!",
                     )
                 );
             }
 
             // Step 1 : Check if the fields are passed
             if(  !isset($_POST['wpid']) || !isset($_POST['owner']) || !isset($_POST['type']) || !isset($_POST['st']) 
-                    || !isset($_POST['co']) || !isset($_POST['pv']) 
-                    || !isset($_POST['ct']) || !isset($_POST['bg']) ){
+                    || !isset($_POST['co']) || !isset($_POST['pv']) || !isset($_POST['ct']) || !isset($_POST['bg']) || !isset($_POST['id'])   ){
                 return rest_ensure_response( 
                     array(
                             "status" => "unknown",
@@ -39,8 +38,7 @@
 
              // Step 1 : Check if the fields are passed
              if( empty($_POST['owner']) ||  empty($_POST['wpid']) || empty($_POST['type']) || empty($_POST['st'])
-                    || empty($_POST['co']) || empty($_POST['pv']) 
-                    || empty($_POST['ct']) || empty($_POST['bg']) ){
+                    || empty($_POST['co']) || empty($_POST['pv']) || empty($_POST['ct']) || empty($_POST['bg']) || empty($_POST['id']) ){
                 return rest_ensure_response( 
                     array(
                             "status" => "unknown",
@@ -51,7 +49,7 @@
 
             // Step5: Check if ID is in valid format (integer)
             if(  !is_numeric($_POST['wpid']) || !is_numeric($_POST['co']) || !is_numeric($_POST['pv']) 
-                || !is_numeric($_POST['ct']) || !is_numeric($_POST['bg']) ){
+                || !is_numeric($_POST['ct']) || !is_numeric($_POST['bg'])  || !is_numeric($_POST['id']) ){
                 return rest_ensure_response( 
                     array(
                             "status" => "unknown",
@@ -60,15 +58,6 @@
                 );
             }
 
-            // Step 7: Check if id(owner) of this contact exists
-            if (!get_user_by("ID", $_POST['wpid'])) {
-                return rest_ensure_response( 
-                    array(
-                        "status" => "failed",
-                        "message" => "User not found",
-                    )
-                );
-            }
 
 
             //Country input validation
@@ -224,8 +213,34 @@
             $stid = 0 ;
             $owner = 0;
 
-            if($user['owner'] != 'store' ){
-                return $owner = $user['id'];
+            if($user['owner'] !== 'store' ){
+                $owner = $user['id'];
+
+                // Step 7: Check if id(owner) of this contact exists
+                if (!get_user_by("ID", $_POST['wpid'])) {
+                    return rest_ensure_response( 
+                        array(
+                            "status" => "failed",
+                            "message" => "User not found",
+                        )
+                    );
+                }
+
+            }else{
+                $stid = $user['id'];
+
+                $get_store = $wpdb->get_row("SELECT ID FROM tp_stores  WHERE ID = $stid ");
+                
+                //Check if this store id exists
+                 if ( !$get_store ) {
+                    return rest_ensure_response( 
+                        array(
+                            "status" => "error",
+                            "message" => "An error occurred while fetching data to the server.",
+                        )
+                    );
+                }
+
             }
 
 
@@ -286,7 +301,7 @@
             $address_fields = DV_INSERT_ADDRESS_FIELDS;
 
             //Save the address in the parent table
-            $wpdb->query("INSERT INTO $table_address ($address_fields) VALUES ('$revtype', '{$user["created_by"]}', '0', '{$user["type"]}', $street, $brgy, $city, $province, $country, '$date')");
+            $wpdb->query("INSERT INTO $table_address ($address_fields) VALUES ('$revtype', '$owner', '$stid', '{$user["type"]}', $street, $brgy, $city, $province, $country, '$date')");
 
             $address_id = $wpdb->insert_id;
 
@@ -329,7 +344,8 @@
             $cur_user = array();
 
             $cur_user['created_by'] = $_POST['wpid'];
-            $cur_user['owner'] = $_POST['owner'];
+            $cur_user['id'] = $_POST['id'];
+            $cur_user['owner'] = $_POST['own'];
 
             $cur_user['type'] = $_POST['type'];
             $cur_user['street'] = $_POST['st'];

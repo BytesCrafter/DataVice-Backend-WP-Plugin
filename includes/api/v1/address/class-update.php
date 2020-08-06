@@ -11,7 +11,7 @@
 	*/
 ?>
 <?php
-    class DV_Update_User_Address{
+    class DV_Update_Address{
         public static function listen(){
             global $wpdb;
 
@@ -205,14 +205,48 @@
                     );
                 }
             // end of barangay validation
-            $user = DV_Update_Store_Address::catch_post();
+            $user = DV_Update_Address::catch_post();
             $created_id = $user['created_by'];
             
             $table_address = DV_ADDRESS_TABLE;
             $dv_rev_table = DV_REVS_TABLE;
 
+            $type = '';
+
+			if($user['owner'] !== "store" ){
+                $type = 'wpid';
+
+                // Step 7: Check if id(owner) of this contact exists
+                if (!get_user_by("ID", $_POST['wpid']) || !get_user_by("ID", $_POST['id'])) {
+                    return rest_ensure_response( 
+                        array(
+                            "status" => "failed",
+                            "message" => "User not found",
+                        )
+                    );
+                }
+
+            }else{
+                $type = 'stid';
+
+                $get_store = $wpdb->get_row("SELECT ID FROM tp_stores  WHERE ID = '{$user["id"]}' ");
+                
+                //Check if this store id exists
+                 if ( !$get_store ) {
+                    return rest_ensure_response( 
+                        array(
+                            "status" => "error",
+                            "message" => "An error occurred while fetching data to the server.",
+                        )
+                    );
+                }
+                
+            }
+
+
+
             // Select last address information using address ID  
-            $last_add_data =  $wpdb->get_row("SELECT * FROM $table_address WHERE id = {$user["add_id"]} AND wpid = {$user["created_by"]} ", OBJECT);
+            $last_add_data =  $wpdb->get_row("SELECT * FROM $table_address WHERE id = {$user["add_id"]} AND $type = {$user["id"]} ", OBJECT);
 
             if (!$last_add_data ) {
                 return rest_ensure_response( 
@@ -308,6 +342,8 @@
 
             $cur_user['created_by']  = $_POST['wpid'];
             $cur_user['add_id']      = $_POST['add'];
+            $cur_user['id']          = $_POST['id'];
+            $cur_user['owner']       = $_POST['own'];
 
             $cur_user['street']      = $_POST['st'];
             $cur_user['country']     = $_POST['co'];
