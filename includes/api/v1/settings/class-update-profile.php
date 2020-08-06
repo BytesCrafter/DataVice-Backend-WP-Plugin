@@ -90,10 +90,10 @@
            
             $profile_data = array();
 
-            $profile_data['first_name'] = $_POST['fn'];
-            $profile_data['last_name'] = $_POST['ln'];
+            $profile_data['first_name'] = trim($_POST['fn']);
+            $profile_data['last_name'] = trim($_POST['ln']);
             $profile_data['gender'] = $_POST['gd']; //Male, Female
-            $profile_data['birthday'] = $_POST['bd']; //Y-m-d
+            $profile_data['birthday'] = trim($_POST['bd']); //Y-m-d
 
             return $profile_data;
         }

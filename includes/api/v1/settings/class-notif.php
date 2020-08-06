@@ -12,8 +12,16 @@
 ?>
 <?php
     class DV_Notification{
-        public static function listen(){
 
+        public static function listen() {
+			return rest_ensure_response( 
+				DV_Notification::switch_notif()
+			);
+        }
+        
+        public static function switch_notif(){
+
+            // Step 1: validate user
             if ( DV_Verification::is_verified() == false ) {
                 return rest_ensure_response( 
                     array(
@@ -23,41 +31,43 @@
                 );
             }
             
-              // Check if ID is in valid format (integer)
-			if (!is_numeric($_POST["wpid"]) || !is_numeric($_POST["notif"])  ) {
+            // Step 2: Sanitize and validate all requests
+			if (!is_numeric($_POST["wpid"]) || !is_numeric($_POST["nf"])  ) {
 				return array(
 						"status" => "failed",
-						"message" => "Please contact your administrator. ID not in valid format!",
+						"message" => "Please contact your administrator. Request Unknown!",
                 );
                 
             }
             
-            if (!isset($_POST['notif'])) {
+            //Check if parameter is passed
+            if (!isset($_POST['nf'])) {
                 return array(
                     "status" => "failed",
-                    "message" => "Please contact your administrator. ID not in valid format!",
+                    "message" => "Please contact your administrator. Request Unknown!",
                 );
             }
             
-            if (is_null($_POST['notif'])) {
+             //Check if parameter has value
+            if (is_null($_POST['nf'])) {
                 return array(
                     "status" => "failed",
-                    "message" => "Please contact your administrator. ID not in valid format!",
+                    "message" => "Parameters not found",
                 );
             }
 
+            //Store in variable
             $wpid = $_POST['wpid'];
-            $notif = $_POST['notif'];
+            $notif = $_POST['nf'];
             
+            //Update user meta based on the request value
             $result = update_user_meta( $wpid, 'notification', $notif);
-            
-            if ($result == false) {
-                return false;
 
-            }else{
-
-                return true;
+            //return a success message
+            return array(
+                "status" => "success",
+                "message" => "Data has been updated successfully.",
+            );
             
-            }
         }
     }

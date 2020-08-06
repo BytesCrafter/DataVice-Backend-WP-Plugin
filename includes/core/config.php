@@ -33,7 +33,7 @@
 	// Config CONSTANT
 	define('DV_CONFIG_TABLE', DV_PREFIX.'configs');
 	define("DV_CONFIG_DATA", $dv_config_list);
-	define("DV_CONFIG_FIELD", "(title, info, config_key, config_value)");
+	define("DV_CONFIG_FIELD", "(title, info, config_key, config_val)");
 
 	// Country CONSTANT
 	define('DV_COUNTRY_FIELDS', 'country_code as code, country_name as name');

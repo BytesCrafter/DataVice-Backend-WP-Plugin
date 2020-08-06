@@ -12,19 +12,24 @@
 ?>
 <?php
     class DV_Avatar_update{
-
-        public static function listen(){
-            global $wpdb;
-            return get_avatar_url( 1,  $args = null );
-        }
+       
         // image upload
         public static function initialize(WP_REST_Request $request) {
-                
-            return  $target_dir = wp_upload_dir();
 
+            // Step 1: validate user
+            if ( DV_Verification::is_verified() == false ) {
+                return rest_ensure_response( 
+                    array(
+                        "status" => "unknown",
+                        "message" => "Please contact your administrator. Request Unknown!",
+                    )
+                );
+            }
 
+            $wpid = $_POST['wpid'];
+           
             $files = $request->get_file_params();
-
+            
             if ( !isset($files['img'])) {
 				return rest_ensure_response( 
 					array(
@@ -37,7 +42,7 @@
             if ( $files['img']['name'] == NULL  || $files['img']['type'] == NULL) {
 				return rest_ensure_response( 
 					array(
-						"status" => "unknown",
+						"status" => "failed",
 						"message" => "Please select an image!",
 					)
 				);
@@ -49,13 +54,11 @@
             //Get the file extension of the uploaded image
             $file_type = strtolower(pathinfo($target_dir['path'] . '/' . basename($files['img']['name']),PATHINFO_EXTENSION));
 
-
-            if (!isset($_POST['IN'])) {
+            if (!isset($_POST['in'])) {
                 $img_name = $files['img']['name'];
             } else {
-                $img_name = sanitize_file_name($_POST['IN']);
+                $img_name = sanitize_file_name($_POST['in']);
             }
-
 
             $completed_file_name = $img_name.'.'.$file_type;
 
@@ -65,46 +68,79 @@
             
             $check = getimagesize($files['img']['tmp_name']);
             
-            
-            
             if($check !== false) {
-                return  "File is an image - " . $check["mime"] . ".";
                 $uploadOk = 1;
             } else {
-                echo "File is not an image.";
                 $uploadOk = 0;
+                return rest_ensure_response( 
+					array(
+						"status" => "failed",
+						"message" => "Invalid file type. Only image are allowed.",
+					)
+				);
             }
             // Check if file already exists
             if (file_exists($target_file)) {
-                return "Sorry, file already exists.";
                 $uploadOk = 0;
+                return rest_ensure_response( 
+					array(
+						"status" => "failed",
+						"message" => "A file with this name already exists",
+					)
+				);
             }
             // Check file size
             if ($files['img']['size'] > 500000) {
-                return "Sorry, your file is too large.";
                 $uploadOk = 0;
+                return rest_ensure_response( 
+					array(
+						"status" => "errfailedor",
+						"message" => "Your image file size was too big.",
+					)
+				);
             }
             // Allow certain file formats
             if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != 
                 "jpeg"
             && $imageFileType != "gif" ) {
-                return "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
                 $uploadOk = 0;
+                return rest_ensure_response( 
+					array(
+						"status" => "failed",
+						"message" => "Invalid image file type. JPG, PNG, JPEG and GIF types are only accepted",
+					)
+				);
             }
             // Check if $uploadOk is set to 0 by an error
             if ($uploadOk == 0) {
-                return "Sorry, your file was not uploaded.";
-                // if everything is ok, try to upload file
+                return rest_ensure_response( 
+					array(
+						"status" => "error",
+						"message" => "An error occured while submitting data to the server.",
+					)
+				);
             } else {
                 $var = $target_dir['path'];
                 if (move_uploaded_file($files['img']['tmp_name'], $target_file)) {
-                    return "The file ". basename( $files['img']['name']). " has been 
-                        uploaded.  ".$var;
-                        
-                        // add_user_meta( '1', 'avatar', basename( $files['img']['name']), $unique = false );
-                        // add_user_meta( '1', 'filepath', $target_dir['path'], $unique = false );
+              
+                    $avatar_name = trailingslashit($target_dir['subdir']).$completed_file_name;
+                
+                    update_user_meta( $wpid, 'avatar', $avatar_name);
+
+                    return rest_ensure_response( 
+                        array(
+                            "status" => "success",
+                            "message" => "Data has been updated successfully.",
+                        )
+                    );  
+               
                 } else {
-                    return "Sorry, there was an error uploading your file.";
+                    return rest_ensure_response( 
+                        array(
+                            "status" => "error",
+                            "message" => "An error occured while submitting data to the server.",
+                        )
+                    );
                 }
             }
 
