@@ -277,7 +277,7 @@
             $address_fields = DV_INSERT_ADDRESS_FIELDS;
 
             //Save the address in the parent table
-            $wpdb->query("INSERT INTO $table_address ($address_fields) VALUES ('1', '{$user["created_by"]}', '0', '{$user["type"]}', $street, $brgy, $city, $province, $country, '$date')");
+            $wpdb->query("INSERT INTO $table_address ($address_fields) VALUES ('$revtype', '{$user["created_by"]}', '0', '{$user["type"]}', $street, $brgy, $city, $province, $country, '$date')");
 
             $address_id = $wpdb->insert_id;
 
