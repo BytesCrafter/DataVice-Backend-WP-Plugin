@@ -22,6 +22,7 @@
     require plugin_dir_path(__FILE__) . '/v1/users/class-auth.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-verify.php';
 
+    //User Contacts
     require plugin_dir_path(__FILE__) . '/v1/contacts/users/class-insert.php';
     require plugin_dir_path(__FILE__) . '/v1/contacts/users/class-listing.php';
     require plugin_dir_path(__FILE__) . '/v1/contacts/users/class-update.php';
@@ -29,6 +30,7 @@
     require plugin_dir_path(__FILE__) . '/v1/contacts/users/class-delete.php';
     require plugin_dir_path(__FILE__) . '/v1/contacts/users/class-select-type.php';
 
+    //Store Contacts
     require plugin_dir_path(__FILE__) . '/v1/contacts/stores/class-insert.php';
     require plugin_dir_path(__FILE__) . '/v1/contacts/stores/class-listing.php';
     require plugin_dir_path(__FILE__) . '/v1/contacts/stores/class-update.php';
@@ -36,6 +38,7 @@
     require plugin_dir_path(__FILE__) . '/v1/contacts/stores/class-delete.php';
     require plugin_dir_path(__FILE__) . '/v1/contacts/stores/class-select-type.php';
 
+    //Locations
     require plugin_dir_path(__FILE__) . '/v1/location/class-countries.php';
     require plugin_dir_path(__FILE__) . '/v1/location/class-provinces.php';
     require plugin_dir_path(__FILE__) . '/v1/location/class-cities.php';
@@ -47,13 +50,10 @@
     
     // require plugin_dir_path(__FILE__) . '/v1/users/class-data.php';
     
+    //Update Profile
+    require plugin_dir_path(__FILE__) . '/v1/settings/class-update-profile.php';
     // require plugin_dir_path(__FILE__) . '/v1/settings/class-avatar.php';
-    // require plugin_dir_path(__FILE__) . '/v1/settings/class-update-fname.php';
-    // require plugin_dir_path(__FILE__) . '/v1/settings/class-update-lname.php';
-    // require plugin_dir_path(__FILE__) . '/v1/settings/class-update-bd.php';
-    // require plugin_dir_path(__FILE__) . '/v1/settings/class-update-em.php';
-    // require plugin_dir_path(__FILE__) . '/v1/settings/class-update-un.php';
-    // require plugin_dir_path(__FILE__) . '/v1/settings/class-update-gd.php';
+ 
 
     require plugin_dir_path(__FILE__) . '/v1/address/store/class-insert.php';
     require plugin_dir_path(__FILE__) . '/v1/address/store/class-update.php';
@@ -257,42 +257,17 @@
          * SETTING RESTAPI
         */
             
-            // register_rest_route( 'datavice/api/v1/settings', 'update_avatar', array(
-            //     'methods' => 'POST',
-            //     'callback' => array('DV_Avatar_update', 'listen'),
-            // ));
-
             register_rest_route( 'datavice/v1/settings', 'update_avatar', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Avatar_update', 'initialize'),
             ));
 
-            register_rest_route( 'datavice/v1/settings', 'update_fname', array(
+            register_rest_route( 'datavice/v1/settings', 'update', array(
                 'methods' => 'POST',
-                'callback' => array('DV_Fname_update', 'listen'),
+                'callback' => array('DV_Update_Profile', 'listen'),
             ));
 
-            register_rest_route( 'datavice/v1/settings', 'update_lname', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Lname_update', 'listen'),
-            ));
-            
-            register_rest_route( 'datavice/v1/settings', 'update_bd', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Brithdate_update', 'listen'),
-            ));
-            
-            register_rest_route( 'datavice/v1/settings', 'update_em', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Email_Update', 'listen'),
-            ));
-
-            register_rest_route( 'datavice/v1/settings', 'update_gd', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Gender_Update', 'listen'),
-            ));
-
-           /*
+        /*
          * ADDRESS RESTAPI
         */
             // Store Folder 
