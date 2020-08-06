@@ -1,4 +1,4 @@
-#### CREDENTIAL AUTHENTICATE => /datavice/api/v1/user/auth
+#### CREDENTIAL AUTHENTICATE => /datavice/v1/user/auth
 
 REQUEST:
 - Method: POST
@@ -21,7 +21,7 @@ IF SUCCESS:
     }
 ```
 
-#### Verification => /datavice/api/v1/user/verify
+#### Verification => /datavice/v1/user/verify
 
 REQUEST:
 - Method: POST
@@ -43,7 +43,7 @@ IF SUCCESS:
     }
 ```
 
-#### FORGOTTEN OR LOST PASSWORD => /datavice/api/v1/user/forgot
+#### FORGOTTEN OR LOST PASSWORD => /datavice/v1/user/forgot
 
 REQUEST:
 - Method: POST
@@ -66,7 +66,7 @@ IF SUCCESS:
     }
 ```
 
-#### CHANGE PASSWORD => /datavice/api/v1/user/reset
+#### CHANGE PASSWORD => /datavice/v1/user/reset
 
 REQUEST:
 - Method: POST
@@ -90,7 +90,7 @@ IF SUCCESS:
     }
 ```
 
-#### SIGN UP => /datavice/api/v1/user/signup
+#### SIGN UP => /datavice/v1/user/signup
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
@@ -124,3 +124,53 @@ IF SUCCESS:
     }
 ```
 
+#### PROFILE => /datavice/v1/user/profile
+REQUEST:
+- Method: POST
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=wpid (value=User ID), key=snky (value=Session Key)
+
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
+- code: 'failed' message: 'Please contact your administrator. Token Not Found!' data: null
+- code: 'failed' message: 'Please contact your administrator. Token Expired!' data: null
+- code: 'failed' message: 'Please contact your administrator. User Not Found!' data: null
+
+IF SUCCESS:
+```
+    {
+        "status": "success",
+        "uname": "Username",
+        "fname": "First Name",
+        "fname": "Last Name",
+        "dname": "Display Name",
+        "email": "Email Address",
+        "avatar": "Avatar URL",
+        "banner": "Banner URL"
+    }
+```
+
+#### PROFILE => /datavice/v1/user/stats
+REQUEST:
+- Method: POST
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=wpid (value=User ID), key=snky (value=Session Key)
+
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
+- code: 'failed' message: 'Please contact your administrator. Token Not Found!' data: null
+- code: 'failed' message: 'Please contact your administrator. Token Expired!' data: null
+- code: 'failed' message: 'Please contact your administrator. User Not Found!' data: null
+
+IF SUCCESS:
+```
+    {
+        "status": "success",
+        "posts": "Username",
+        "transacts": "First Name",
+        "reviews": {
+            "total": 123,
+            "ratings": 4.5
+        }
+    }
+```
