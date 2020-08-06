@@ -1,0 +1,21 @@
+#### USER PROFILE UPDATE => /datavice/api/v1/settings/update
+
+REQUEST:
+- Method: POST
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=wpid (value=User Id), key=snky (value=Session Key), key=ln (value=Last Name), key=fn (value=First Name), key=gd (value=Gender), key=bd (value=Birthday)
+
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
+- code: 'failed' message: 'Required fields cannot be empty.' data: null
+- code: 'failed' message: 'Invalid value for gender.' data: null
+- code: 'failed' message: 'Invalid value for birthday.' data: null
+
+ 
+IF SUCCESS:
+```
+    {
+        "status": "success",
+        "message": "Data has been updated successfully"
+    }
+```
