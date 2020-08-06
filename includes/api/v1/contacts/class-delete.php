@@ -28,7 +28,7 @@
             }
 
             // Step 2 : Sanitize and validate all Request
-			if (!isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['ctc']) ) {
+			if (!isset($_POST['ctc']) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -39,7 +39,7 @@
             }
 
             //Check if params passed has values
-            if (empty($_POST["wpid"]) || empty($_POST["snky"]) || empty($_POST['ctc']) ) {
+            if (empty($_POST['ctc']) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
@@ -49,27 +49,6 @@
                 
             }
 
-            //Check if contact id and user id is valid
-            if (!is_numeric($_POST['ctc']) ||  !is_numeric($_POST['wpid']) ) {
-                return rest_ensure_response( 
-                    array(
-                        "status" => "failed",
-                        "message" => "Please contact your administrator. ID not in valid format!",
-                    )
-                );
-                
-            }  
-
-            //Check if user exists
-            if (!get_user_by("ID", $_POST['wpid'])) {
-				return rest_ensure_response( 
-					array(
-						"status" => "failed",
-						"message" => "User not found!",
-					)
-                );
-            }
-            
             // Step 3: Catching post values and passing global constants
             $table_contact = DV_CONTACTS_TABLE;
             $table_revisions = DV_REVS_TABLE;
@@ -83,8 +62,8 @@
             if ( !$get_contact ) {
                 return rest_ensure_response( 
                     array(
-                        "status" => "error",
-                        "message" => "An error occurred while submitting data to the server.",
+                        "status" => "failed",
+                        "message" => "This contact id does not exists",
                     )
                 );
             }
@@ -94,7 +73,7 @@
                 return rest_ensure_response( 
                     array(
                         "status" => "error",
-                        "message" => "An error occurred while submitting data to the server.",
+                        "message" => "Current user does not match the contact creator",
                     )
                 );
             }

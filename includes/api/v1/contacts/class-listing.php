@@ -27,7 +27,6 @@
                 );
             }
 
-
             // Step 2: Sanitize and validate all requests
 			if (!isset($_POST["id"]) || !isset($_POST["own"]) ) {
 				return rest_ensure_response( 
@@ -38,7 +37,7 @@
                 );
                 
             }
-            
+
             // Check if passed values are not null
             if (empty($_POST["id"]) || empty($_POST["own"]) ) {
 				return rest_ensure_response( 
@@ -54,13 +53,21 @@
                 return rest_ensure_response( 
                     array(
 						"status" => "unknown",
-						"message" => "Please contact your administrator. Request unknown!",
+						"message" => "Invalid owner type",
 					)
                 );
             }
 
+            // Step 3: Pass constants to variables and catch post values 
+            $table_contact = DV_CONTACTS_TABLE;
+            $table_revs = DV_REVS_TABLE;
+            $id = $_POST['id'];
+
+            
+            // Step 4: Check if either contact owner is user or store
+            // Do a query for each type of owner
             if ($_POST['own'] == 'user') {
-                if ( !get_user_by("ID", $_POST['id']) ) {
+                if ( !get_user_by("ID", $id) ) {
                     return rest_ensure_response( 
                         array(
                             "status" => "failed",
@@ -68,12 +75,23 @@
                         )
                     );
                 }
-                $where_clause = "dc.wpid =";
+                $result = $wpdb->get_results("SELECT
+                    dc.ID,
+                    dc.`status`,
+                    dc.types,
+                    dr.child_val as `value`,
+                    dc.created_by,
+                    dc.date_created 
+                FROM
+                    $table_contact dc
+                    INNER JOIN $table_revs dr ON dr.ID = dc.revs
+                WHERE dc.`status` = 1 AND dc.wpid = $id ", OBJECT);
+                
             }
 
             if ($_POST['own'] == 'store') {
 
-                $get_store = $wpdb->get_row("SELECT ID FROM tp_stores  WHERE ID = '{$_POST["id"]}' ");
+                $get_store = $wpdb->get_row("SELECT `ID` FROM `tp_stores` WHERE ID = '{$_POST["id"]}' ");
                 
                 //Check if this store id exists
                  if ( !$get_store ) {
@@ -85,18 +103,7 @@
                     );
                 }
 
-                $where_clause = "dc.stid =";
-            
-            }
-
-
-            // Step 3: Pass constants to variables and catch post values 
-            $table_contact = DV_CONTACTS_TABLE;
-            $table_revs = DV_REVS_TABLE;
-            $id = $_POST['id'];
-
-            // Step 4: Select query
-            $result = $wpdb->get_results("SELECT
+                $result = $wpdb->get_results("SELECT
                     dc.ID,
                     dc.`status`,
                     dc.types,
@@ -106,16 +113,19 @@
                 FROM
                     $table_contact dc
                     INNER JOIN $table_revs dr ON dr.ID = dc.revs
-                WHERE dc.`status` = 1 AND $where_clause $id ", OBJECT);
+                WHERE dc.`status` = 1 AND dc.stid = $id ", OBJECT);
+            }
 
-            // Step 5: Check if no rows found
+            
+            // Check for results
             if (!$result) {
                 return rest_ensure_response( 
                     array(
                         "status" => "error",
-                        "message" => "An error occurred while submitting data to the server."
+                        "message" => "No contacts found."
                     )
                 );
+
            // return success message and complete object
             }else {
                 return rest_ensure_response( 

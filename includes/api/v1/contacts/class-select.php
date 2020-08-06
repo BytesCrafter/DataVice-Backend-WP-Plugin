@@ -14,10 +14,11 @@
     class DV_Contact_Select{
 
         public static function listen(){
+            
             global $wpdb;
-           
+            
             // Step 1: Validate user
-            if ( DV_Verification::is_verified() == false) {
+            if ( DV_Verification::is_verified() == false ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "unknown",
@@ -27,89 +28,67 @@
             }
 
             // Step 2: Sanitize and validate all requests
-			if (!isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['ctc']) || !isset($_POST['id']) ) {
+			if (!isset($_POST["ctc"])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
 						"message" => "Please contact your administrator. Request unknown!",
 					)
                 );
-            }
-
-            //Check if params passed has values
-            if (empty($_POST["wpid"]) || empty($_POST["snky"]) || empty($_POST['ctc']) || empty($_POST['id']) ) {
-				return rest_ensure_response( 
-					array(
-						"status" => "failed",
-						"message" => "Required fields cannot be empty",
-					)
-                );
                 
             }
 
-            //Check if contact id and user id is valid
-            if ( !is_numeric($_POST['id']) ||  !is_numeric($_POST['ctc']) || !is_numeric($_POST['wpid']) ) {
-                return rest_ensure_response( 
-                    array(
-                        "status" => "failed",
-                        "message" => "Please contact your administrator. Id not in valid format!",
-                    )
-                );
-                
-            } 
-
-            // Check if id(owner) of this contact exists
-			if ( !get_user_by("ID", $_POST['id']) ) {
+            // Check if passed values are not null
+            if (empty($_POST["ctc"])) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
-						"message" => "User not found.",
+						"message" => "Required fields cannot be empty.",
 					)
                 );
             }
 
             // Step 3: Pass constants to variables and catch post values 
             $table_contact = DV_CONTACTS_TABLE;
-            
             $table_revs = DV_REVS_TABLE;
+            $ctc = $_POST['ctc'];
+            
+            // Step 4: Check for results using passed contact id
+                $result = $wpdb->get_results("SELECT
+                    dc.ID,
+                    dc.`status`,
+                    dc.types,
+                    dr.child_val as `value`,
+                    dc.created_by,
+                    dc.date_created 
+                FROM
+                    $table_contact dc
+                    INNER JOIN $table_revs dr ON dr.ID = dc.revs
+                WHERE dc.`status` = 1 AND dc.ID = $ctc", OBJECT);
 
-            $owner_id = $_POST['id'];
-
-            $contact_id = $_POST['ctc'];
-
-            // Step 4: Start query
-            $result  = $wpdb->get_results("SELECT
-                dv_ctcs.ID,
-                dv_ctcs.types,
-                dv_revs.child_val AS `value`,
-                dv_ctcs.date_created 
-            FROM
-                $table_contact dv_ctcs
-                INNER JOIN $table_revs dv_revs ON dv_revs.ID = dv_ctcs.revs 
-            WHERE
-                dv_ctcs.ID = $contact_id
-                AND dv_ctcs.wpid = $owner_id AND dv_ctcs.`status` = 1");
-
-            // Step 5: Check if no rows found
+            
+            // Check for results
             if (!$result) {
                 return rest_ensure_response( 
-					array(
-						"status" => "failed",
-						"message" => "No results found.",
-					)
-                );
-            }
-
-            // Return a success message and complete object
-            return rest_ensure_response( 
-                array(
-                    "status" => "success",
-                    "data" => array(
-                        'list' => $result, 
-                    
+                    array(
+                        "status" => "error",
+                        "message" => "No contacts found."
                     )
-                )
-            );
+                );
+
+           // return success message and complete object
+            }else {
+                return rest_ensure_response( 
+                    array(
+                        "status" => "success",
+                        "data" => array(
+                            'list' => $result, 
+                        
+                        )
+                    )
+                );
+
+            }
             
         }
     }

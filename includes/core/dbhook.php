@@ -69,6 +69,8 @@
 			$sql = "CREATE TABLE `".$tbl_contacts."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
 				$sql .= "`status` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Live/Hiden', ";
+				$sql .= "`wpid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID, 0 if Null', ";
+				$sql .= "`stid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Store ID, 0 if Null', ";
 				$sql .= "`types` enum('none','phone','email','emergency') NOT NULL DEFAULT 'none' COMMENT 'Group', ";
 				$sql .= "`revs` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Revision ID', ";
 				$sql .= "`created_by` bigint(20) NOT NULL, ";

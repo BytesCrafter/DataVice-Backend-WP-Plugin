@@ -17,7 +17,6 @@
 
             global $wpdb;
 
-             
             // Step 1: Validate user
             if ( DV_Verification::is_verified() == false ) {
                 return rest_ensure_response( 
@@ -29,7 +28,7 @@
             }
 
             // Step 2: Sanitize and validate all requests
-            if ( !isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['value'])  || !isset($_POST['ctc']) || !isset($_POST['id'])) {
+            if ( !isset($_POST['value'])  || !isset($_POST['ctc']) ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "unknown",
@@ -39,32 +38,11 @@
             }
 
             // Check if required fields are not empty
-            if ( empty($_POST["wpid"]) || empty($_POST["snky"]) || empty($_POST['value']) ||  empty($_POST['ctc']) || empty($_POST['id']) ) {
+            if ( empty($_POST['value']) ||  empty($_POST['ctc']) ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "failed",
                         "message" => "Required fields cannot be empty.",
-                    )
-                );
-            }
-
-            // Check if ID is in valid format (integer)
-            if (!is_numeric($_POST["wpid"]) || !is_numeric($_POST["ctc"]) || !is_numeric($_POST['id']) ) {
-                return rest_ensure_response( 
-                    array(
-                        "status" => "failed",
-                        "message" => "Please contact your administrator. Id not in valid format!",
-                    )
-                );
-                
-            }
-
-            // Check if user exists
-            if (!get_user_by("ID", $_POST['wpid'])) {
-                return rest_ensure_response( 
-                    array(
-                        "status" => "failed",
-                        "message" => "User not found",
                     )
                 );
             }
@@ -76,30 +54,55 @@
             $snky = $_POST['snky'];
             $value = $_POST['value'];
             $revs_type = 'contacts';
-            $owner_id = $_POST['id'];
             $contact_id = $_POST['ctc'];
             $date_stamp = DV_Globals::date_stamp();
 
-            // Step 4: Start query
+            // Step 4: Check if this contact exists
+            $get_contact = $wpdb->get_row("SELECT * FROM `dv_contacts`  WHERE `ID` = $contact_id");
+            
+            //if not found, return error
+            if ( !$get_contact ) {
+                return rest_ensure_response( 
+                    array(
+                        "status" => "failed",
+                        "message" => "This contact id does not exists",
+                    )
+                );
+            }
+            
+            //Step 5: Check if wpid matches the created_by value
+            if ($get_contact->created_by !== $wpid ) {
+                return rest_ensure_response( 
+                    array(
+                        "status" => "error",
+                        "message" => "Current user does not match the contact creator",
+                    )
+                );
+            }
+
+            $types = $get_contact->types;
+            $prev_wpid = $get_contact->wpid;
+            $prev_stid = $get_contact->stid;
+
+            // Step 6: Start query
             $wpdb->query("START TRANSACTION ");
-                $update_contact = $wpdb->query("UPDATE `$table_contact` SET `status`= 0 WHERE `ID` = $contact_id AND `created_by` = $wpid  ");
-                
-                $type = $wpdb->get_row("SELECT `types` FROM `$table_contact`  WHERE ID = $contact_id ");
-                $val = $type->types;
-                $wpdb->query("INSERT INTO `$table_contact` (`status`, `types`, `revs`, `wpid`, `created_by`, `date_created`) 
-                                    VALUES ('1', '$val', '0', $owner_id, $wpid, '$date_stamp');");
+
+                $wpdb->query("UPDATE `$table_contact` SET `status`= 0 WHERE `ID` = $contact_id");
+
+                $wpdb->query("INSERT INTO `$table_contact` (`status`, `types`, `revs`, `wpid`, `stid`, `created_by`, `date_created`) 
+                                    VALUES ('1', '$types', '0', $prev_wpid, $prev_stid, $wpid, '$date_stamp');");
                 
                 $contact_id = $wpdb->insert_id;
 
                 $wpdb->query("INSERT INTO `$table_revs` (revs_type, parent_id, child_key, child_val, created_by, date_created) 
-                                    VALUES ( '$revs_type', $contact_id, '$val', '$value', $wpid, '$date_stamp'  )");
+                                    VALUES ( '$revs_type', $contact_id, '$types', '$value', $wpid, '$date_stamp'  )");
                 
                 $revs_id = $wpdb->insert_id;
 
                 $wpdb->query("UPDATE `$table_contact` SET `revs` = $revs_id WHERE ID = $contact_id ");
 
-            // Step 5: Check if no rows found
-            if ($contact_id < 1  || $revs_id < 1 || $update_contact < 1) {
+            // Step 7: Check if no rows found
+            if ($contact_id < 1  || $revs_id < 1) {
                 //If failed, do mysql rollback (discard the insert queries(no inserted data))
                 $wpdb->query("ROLLBACK");
                 

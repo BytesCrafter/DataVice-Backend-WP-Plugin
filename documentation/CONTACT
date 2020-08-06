@@ -1,19 +1,18 @@
-#### USERS CONTACT REST API
+#### CONTACT REST API
 
-### LIST ALL USER CONTACTS => /datavice/v1/contact/list/all
+### LIST ALL CONTACTS => /datavice/v1/contact/list/all
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=id (value=store id) 
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=own (value=user or store) , key=id (value=owner id) 
 
 RESPONSE:
 - code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
 - code: 'failed' message: 'Required fields cannot be empty.' data: null
-- code: 'failed' message: 'Invalid value for type.' data: null
-- code: 'failed' message: 'Please contact your administrator. ID not in valid format!' data: null
-- code: 'failed' message: 'No results found!' data: null
-- code: 'failed' message: 'User not found!' data: null
-- code: 'error' message: 'An error occured while submitting data to the server' data: null
+- code: 'failed' message: 'Invalid owner type.' data: null
+- code: 'failed' message: 'User not found.' data: null
+- code: 'failed' message: 'Store not found.' data: null
+- code: 'failed' message: 'No contacts found' data: null
 
 
 IF SUCCESS:
@@ -44,11 +43,11 @@ IF SUCCESS:
     }
 ```
 
-### LIST ALL USER CONTACTS BY TYPE => /datavice/v1/contact/list/type
+### LIST ALL CONTACTS BY TYPE => /datavice/v1/contact/list/type
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=type (value=type of contact), key=id (value = id of owner of this contact) 
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=type (value=type of contact), key=own (value=user or store), key=id (value = owner id of this contact) 
 
 RESPONSE:
 - code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
@@ -83,35 +82,11 @@ IF SUCCESS:
     }
 ```
 
-### INSERT USER CONTACTS => /datavice/v1/contact/insert
+### SELECT CONTACT BY ID => /datavice/v1/contact/select
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=type (value=type of contact), key=value (value= value of contact), key=id (value = id of owner of this contact) 
-
-RESPONSE:
-- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
-- code: 'failed' message: 'Required fields cannot be empty.' data: null
-- code: 'failed' message: 'Invalid value for type.' data: null
-- code: 'failed' message: 'Please contact your administrator. Id not in valid format!' data: null
-- code: 'failed' message: 'User not found' data: null
-- code: 'failed' message: 'Email not in valid format.' data: null
-- code: 'error' message: 'An error occured while submitting data to the server' data: null
-
-
-IF SUCCESS:
-```
-    {
-        "status": "success",
-        "message" : "Data has been added successfully."
-    }
-```
-
-### SELECT USER CONTACT BY ID => /datavice/v1/contact/select
-REQUEST:
-- Method: POST
-- Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=ctc (value = contact id) , key=id (value = owner id of this contact) 
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=ctc (value = contact id)
 
 RESPONSE:
 - code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
@@ -139,6 +114,28 @@ IF SUCCESS:
     }
 ```
 
+### INSERT NEW CONTACT => /datavice/v1/contact/insert
+REQUEST:
+- Method: POST
+- Header: key=Content-Type, value=application/x-www-form-urlencoded
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=type (value=type of contact), key=value (value= value of contact), key=own (value= user or store), key=id (value = owner id of this contact) 
+
+RESPONSE:
+- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
+- code: 'failed' message: 'Required fields cannot be empty.' data: null
+- code: 'failed' message: 'Invalid contact type.' data: null
+- code: 'failed' message: 'Invalid owner type.' data: null
+- code: 'failed' message: 'Email not in valid format.' data: null
+- code: 'error' message: 'An error occured while submitting data to the server' data: null
+
+IF SUCCESS:
+```
+    {
+        "status": "success",
+        "message" : "Data has been added successfully."
+    }
+```
+
 ### DELETE USER CONTACTS BY ID => /datavice/v1/contact/delete
 REQUEST:
 - Method: POST
@@ -148,13 +145,9 @@ REQUEST:
 RESPONSE:
 - code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
 - code: 'failed' message: 'Required fields cannot be empty.' data: null
-- code: 'failed' message: 'Invalid value for type.' data: null
-- code: 'failed' message: 'Please contact your administrator. Id not in valid format!' data: null
-- code: 'failed' message: 'User not found!' data: null
+- code: 'failed' message: 'This contact id does not exists.' data: null
+- code: 'error' message: 'Current user does not match the contact creator.' data: null
 - code: 'error' message: 'An error occured while submitting data to the server.' data: null
-- code: 'error' message: 'An error occured while fetching data from the server.' data: null
-
-
 
 IF SUCCESS:
 ```
@@ -164,17 +157,17 @@ IF SUCCESS:
     }
 ```
 
-### UPDATE USER CONTACTS BY ID => /datavice/v1/contact/update
+### UPDATE CONTACTS BY ID => /datavice/v1/contact/update
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=ctc (value=contact id) , key=id (value=owner id of this contact), key=value (value=update value)
+- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=ctc (value=contact id), key=value (value=update value)
 
 RESPONSE:
 - code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
 - code: 'failed' message: 'Required fields cannot be empty.' data: null
-- code: 'failed' message: 'Please contact your administrator. Id not in valid format!' data: null
-- code: 'failed' message: 'User not found!' data: null
+- code: 'failed' message: 'This contact id does not exists' data: null
+- code: 'error' message: 'Current user does not match the contact creator' data: null
 - code: 'error' message: 'An error occured while submitting data to the server' data: null
 
 IF SUCCESS:
@@ -182,32 +175,5 @@ IF SUCCESS:
     {
         "status": "success",
         "message" : "Data has been updated successfully."
-    }
-```
-
-
-#### STORES CONTACT REST API
-
-### INSERT STORE CONTACTS => /datavice/v1/contact/insert
-REQUEST:
-- Method: POST
-- Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=wpid (value=User ID), key=snky (value=Session Key), key=type (value=type of contact), key=value (value= value of contact), key=stid (value = store id of this contact) 
-
-RESPONSE:
-- code: 'unknown' message: 'Please contact your administrator. Request Unknown!' data: null
-- code: 'failed' message: 'Required fields cannot be empty.' data: null
-- code: 'failed' message: 'Invalid value for type.' data: null
-- code: 'failed' message: 'Please contact your administrator. Id not in valid format!' data: null
-- code: 'failed' message: 'User not found' data: null
-- code: 'error' message: 'An error occured while submitting data to the server' data: null
-- code: 'failed' message: 'Email not in valid format.' data: null
-
-
-IF SUCCESS:
-```
-    {
-        "status": "success",
-        "message" : "Data has been added successfully."
     }
 ```
