@@ -11,7 +11,7 @@
 	*/
 ?>
 <?php
-    class DV_Select_type_User_Address{
+    class DV_Select_type_Address{
         public static function listen(){
 			global $wpdb;
 			
@@ -72,7 +72,40 @@
 			$dv_rev_table = DV_REVS_TABLE;
 			$table_address = DV_ADDRESS_TABLE;
 
-            $user = DV_Select_type_User_Address::catch_post();
+			$user = DV_Select_type_Address::catch_post();
+			
+
+			$type = '';
+
+			if($user['owner'] !== "store" ){
+                $type = 'wpid';
+
+                // Step 7: Check if id(owner) of this contact exists
+                if (!get_user_by("ID", $_POST['wpid']) || !get_user_by("ID", $_POST['id'])) {
+                    return rest_ensure_response( 
+                        array(
+                            "status" => "failed",
+                            "message" => "User not found",
+                        )
+                    );
+                }
+
+            }else{
+                $type = 'stid';
+
+                $get_store = $wpdb->get_row("SELECT ID FROM tp_stores  WHERE ID = '{$user["id"]}' ");
+                
+                //Check if this store id exists
+                 if ( !$get_store ) {
+                    return rest_ensure_response( 
+                        array(
+                            "status" => "error",
+                            "message" => "An error occurred while fetching data to the server.",
+                        )
+                    );
+                }
+                
+            }
 
             $result  = $wpdb->get_results("SELECT
 					dv_add.ID,
@@ -88,7 +121,7 @@
 					$table_address dv_add
 				INNER JOIN $dv_rev_table dv_rev 
 					ON dv_rev.ID = dv_add.status
-				WHERE  dv_add.wpid = '{$user["created_by"]}' 
+				WHERE  dv_add.$type = '{$user["id"]}' 
 					AND dv_rev.child_val = 1 AND dv_add.types = '{$user["type"]}'   "
 			);
 
@@ -121,6 +154,8 @@
 			
 			$cur_user['created_by']  = $_POST['wpid'];
             $cur_user['type']      = $_POST['type'];
+            $cur_user['id']      = $_POST['id'];
+            $cur_user['owner']      = $_POST['own'];
 
 
             return  $cur_user;
