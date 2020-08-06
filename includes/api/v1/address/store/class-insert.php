@@ -234,7 +234,7 @@
 
             $rev_fields = DV_INSERT_REV_FIELDS;
 
-            $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'status', 'active', $created_id, '$date');");
+            $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'status', '1', $created_id, '$date');");
                 
             $revtype = $wpdb->insert_id;
 
