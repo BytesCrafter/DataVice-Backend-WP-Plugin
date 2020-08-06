@@ -14,7 +14,7 @@
     class DV_Contact_Listing{
 
         public static function listen(){
-
+            
             global $wpdb;
             
             // Step 1: Validate user
@@ -29,7 +29,7 @@
 
 
             // Step 2: Sanitize and validate all requests
-			if (!isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST['id']) ) {
+			if (!isset($_POST["id"]) || !isset($_POST["own"]) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -39,37 +39,56 @@
                 
             }
             
-            //Check if id is valid
-			if (!is_numeric($_POST["wpid"]) || !is_numeric($_POST['id']) ) {
+            // Check if passed values are not null
+            if (empty($_POST["id"]) || empty($_POST["own"]) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
-						"message" => "Please contact your administrator. ID not in valid format!",
+						"message" => "Required fields cannot be empty.",
 					)
                 );
-                
-            }
-            
-            // Check if request passed is not null
-			if (empty($_POST["wpid"]) || empty($_POST["snky"]) || empty($_POST['id']) ) {
-				return rest_ensure_response( 
-					array(
-						"status" => "failed",
-						"message" => "Required Fileds cannot be empty",
-					)
-                );
-                
             }
 
-			// Check if this user exists
-			if (!get_user_by("ID", $_POST['id'])) {
-				return rest_ensure_response( 
-					array(
-						"status" => "failed",
-						"message" => "User not found!",
+            // Check if owner type is either user or store only.
+            if (!($_POST['own'] === 'user') && !($_POST['own'] === 'store')) {
+                return rest_ensure_response( 
+                    array(
+						"status" => "unknown",
+						"message" => "Please contact your administrator. Request unknown!",
 					)
                 );
             }
+
+            if ($_POST['own'] == 'user') {
+                if ( !get_user_by("ID", $_POST['id']) ) {
+                    return rest_ensure_response( 
+                        array(
+                            "status" => "failed",
+                            "message" => "User not found.",
+                        )
+                    );
+                }
+                $where_clause = "dc.wpid =";
+            }
+
+            if ($_POST['own'] == 'store') {
+
+                $get_store = $wpdb->get_row("SELECT ID FROM tp_stores  WHERE ID = '{$_POST["id"]}' ");
+                
+                //Check if this store id exists
+                 if ( !$get_store ) {
+                    return rest_ensure_response( 
+                        array(
+                            "status" => "failed",
+                            "message" => "Store not found.",
+                        )
+                    );
+                }
+
+                $where_clause = "dc.stid =";
+            
+            }
+
 
             // Step 3: Pass constants to variables and catch post values 
             $table_contact = DV_CONTACTS_TABLE;
@@ -78,16 +97,16 @@
 
             // Step 4: Select query
             $result = $wpdb->get_results("SELECT
-                    dv_cont.ID,
-                    dv_cont.`status`,
-                    dv_cont.types,
-                    dv_rev.child_val as `value`,
-                    dv_cont.created_by,
-                    dv_cont.date_created 
+                    dc.ID,
+                    dc.`status`,
+                    dc.types,
+                    dr.child_val as `value`,
+                    dc.created_by,
+                    dc.date_created 
                 FROM
-                    $table_contact dv_cont
-                    INNER JOIN $table_revs dv_rev ON dv_rev.ID = dv_cont.revs
-                WHERE dv_cont.`status` = 1 AND dv_cont.wpid = $id ", OBJECT);
+                    $table_contact dc
+                    INNER JOIN $table_revs dr ON dr.ID = dc.revs
+                WHERE dc.`status` = 1 AND $where_clause $id ", OBJECT);
 
             // Step 5: Check if no rows found
             if (!$result) {

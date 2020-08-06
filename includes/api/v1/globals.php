@@ -49,12 +49,12 @@
         * @param2 = {id key}
 		* @param3 = {optional. additional where clause}
 	    */
-        public static function check_availability($table_name, $id, $where = NULL){
+        public static function check_availability($table_name, $where){
             global $wpdb;
 
             $table = $table_name;
 
-            $result = $wpdb->get_row("SELECT id, status FROM $table WHERE id = $id $where");
+            $result = $wpdb->get_row("SELECT id, status FROM $table $where");
             
             if (!$result) {
                 return false;

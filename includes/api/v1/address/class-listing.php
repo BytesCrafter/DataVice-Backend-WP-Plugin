@@ -25,9 +25,8 @@
                 );
             }
 
-
             // Step 2: Sanitize and validate all requests
-			if (!isset($_POST["wpid"]) || !isset($_POST["snky"]) || !isset($_POST["id"]) || !isset($_POST["own"]) ) {
+			if ( !isset($_POST["id"]) || !isset($_POST["own"]) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -38,7 +37,7 @@
             }
             
             //Check if passed values are not null
-            if (empty($_POST["wpid"]) || empty($_POST["snky"]) || !empty($_POST["id"]) || !empty($_POST["own"]) ) {
+            if ( !empty($_POST["id"]) || !empty($_POST["own"]) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "failed",
@@ -48,27 +47,6 @@
                 
             }
 
-            //Check if ID is in valid format (integer)
-			if (!is_numeric($_POST["wpid"])  || !is_numeric($_POST["id"]) ) {
-				return rest_ensure_response( 
-					array(
-						"status" => "failed",
-						"message" => "Please contact your administrator. Id not in valid format!",
-					)
-                );
-                
-            }
-            
-			// Check if ID exists
-			if (!get_user_by("ID", $_POST['wpid'])) {
-				return rest_ensure_response( 
-					array(
-						"status" => "failed",
-						"message" => "User not found!",
-					)
-                );
-                
-			}
 			$dv_rev_table = DV_REVS_TABLE;
 			$table_address = DV_ADDRESS_TABLE;
 
@@ -80,16 +58,17 @@
                 $type = 'wpid';
 
                 // Step 7: Check if id(owner) of this contact exists
-                if (!get_user_by("ID", $_POST['wpid']) || !get_user_by("ID", $_POST['id'])) {
+                if ( !get_user_by("ID", $_POST['id']) ) {
                     return rest_ensure_response( 
                         array(
                             "status" => "failed",
-                            "message" => "User not found",
+                            "message" => "User not found.",
                         )
                     );
                 }
 
             }else{
+
                 $type = 'stid';
 
                 $get_store = $wpdb->get_row("SELECT ID FROM tp_stores  WHERE ID = '{$user["id"]}' ");
@@ -98,8 +77,8 @@
                  if ( !$get_store ) {
                     return rest_ensure_response( 
                         array(
-                            "status" => "error",
-                            "message" => "An error occurred while fetching data to the server.",
+                            "status" => "failed",
+                            "message" => "This id does not exists.",
                         )
                     );
                 }

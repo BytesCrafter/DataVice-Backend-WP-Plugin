@@ -95,7 +95,8 @@
                 }
 
                 // Step 2 : Check if country_id is in database. 
-                $co_status = DV_Globals:: check_availability(DV_COUNTRY_TABLE, $_POST['co']);
+                $country_id= $_POST['co']; 
+                $co_status = DV_Globals:: check_availability(DV_COUNTRY_TABLE, "WHERE id = $country_id");
                 
                 if ( $co_status == false ) {
                     return rest_ensure_response( 
@@ -128,7 +129,8 @@
                 }
 
                 // Step 2 : Check if province is in database. 
-                $pv_status = DV_Globals:: check_availability(DV_PROVINCE_TABLE, $_POST['pv']);
+                $prov_code =  $_POST['pv'];
+                $pv_status = DV_Globals:: check_availability(DV_PROVINCE_TABLE, "WHERE prov_code = $prov_code");
                 
                 if ( $pv_status == false ) {
                     return rest_ensure_response( 
@@ -161,7 +163,8 @@
                 }
 
                 // Step 2 : Check if city is in database. 
-                $ct_status = DV_Globals:: check_availability(DV_CITY_TABLE, $_POST['ct']);
+                $city_code = $_POST['ct'];
+                $ct_status = DV_Globals:: check_availability(DV_CITY_TABLE, "WHERE city_code = $city_code");
                 
                 if ( $ct_status == false ) {
                     return rest_ensure_response( 
@@ -194,7 +197,8 @@
                 }
 
                 // Step 2 : Check if barangay is in database. 
-                $bg_status = DV_Globals:: check_availability(DV_BRGY_TABLE, $_POST['bg']);
+                $brgy_id = $_POST['bg'];
+                $bg_status = DV_Globals:: check_availability(DV_BRGY_TABLE, "WHERE id = $brgy_id");
                 
                 if ( $bg_status == false ) {
                     return rest_ensure_response( 
@@ -268,8 +272,7 @@
                 $country = $wpdb->insert_id;
                 
                 //Check if any of the insert queries above failed
-                if ($revtype < 1 || $street < 1 || $brgy < 1 ||
-                   $province < 1 || $city < 1 || $country < 1 ) {
+                if ( $revtype < 1 || $street < 1 || $brgy < 1 || $province < 1 || $city < 1 || $country < 1 ) {
 
                     //If failed, do mysql rollback (discard the insert queries(no inserted data))
                     $wpdb->query("ROLLBACK");
