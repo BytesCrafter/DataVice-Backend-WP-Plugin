@@ -2,6 +2,10 @@
 
 The DataVice for WordPress is a user management for your application or game users. This is an alternative to firebase which you can host your own.
 
+### Prerequisites
+
+Due to large file size, some data cannot be imported to the database thus requiring this command: `SET GLOBAL max_allowed_packet=1073741824` to be executed in the mysql database first.
+
 ### REST API Implementation
 
 - [USER RESTAPI DOCS](https://github.com/BytesCrafter/DataVice-WP-Plugin/documentation/USER)

@@ -28,7 +28,7 @@
             }
 
             // Step 2: Sanitize and validate all requests
-            if ( !isset($_POST['value'])  || !isset($_POST['ctc']) ) {
+            if ( !isset($_POST['value'])  || !isset($_POST['ctc']) || !isset($_POST['type'])) {
                 return rest_ensure_response( 
                     array(
                         "status" => "unknown",
@@ -38,7 +38,7 @@
             }
 
             // Check if required fields are not empty
-            if ( empty($_POST['value']) ||  empty($_POST['ctc']) ) {
+            if ( empty($_POST['value']) ||  empty($_POST['ctc']) || empty($_POST['ctc']) ) {
                 return rest_ensure_response( 
                     array(
                         "status" => "failed",
@@ -47,12 +47,23 @@
                 );
             }
 
+            if ( !($_POST['type'] === 'phone') && !($_POST['type'] === 'email') && !($_POST['type'] === 'emergency') ) {
+                return rest_ensure_response( 
+                    array(
+						"status" => "unknown",
+						"message" => "Invalid contact type",
+                    )
+                );
+            }
+              
+
             // Step 3: Pass constants to variables and catch post values 
             $table_contact = DV_CONTACTS_TABLE;
             $table_revs = DV_REVS_TABLE;
             $wpid = $_POST['wpid'];
             $snky = $_POST['snky'];
             $value = $_POST['value'];
+            $types = $_POST['type'];
             $revs_type = 'contacts';
             $contact_id = $_POST['ctc'];
             $date_stamp = DV_Globals::date_stamp();
@@ -80,7 +91,6 @@
                 );
             }
 
-            $types = $get_contact->types;
             $prev_wpid = $get_contact->wpid;
             $prev_stid = $get_contact->stid;
 
