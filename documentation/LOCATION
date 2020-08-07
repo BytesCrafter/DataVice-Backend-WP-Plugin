@@ -134,11 +134,11 @@ IF SUCCESS:
     }
 ```
 
-#### GETTING TIMEZONE BY COUTNRY ID => /datavice/v1/location/timezone
+#### GETTING TIMEZONE BY COUTNRY CODE => /datavice/v1/location/timezone
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=ci (value=Country id), key=mk (value=Master key)
+- Params: key=cc (value=Country code), key=mk (value=Master key)
 
 RESPONSE:
 RESPONSE:
@@ -160,11 +160,11 @@ IF SUCCESS:
     }
 ```
 
-#### GETTING UTC OFFSET BY COUTNRY ID => /datavice/v1/location/timezone/offset
+#### GETTING UTC OFFSET BY COUTNRY CODE => /datavice/v1/location/timezone/offset
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=ci (value=Country id), key=mk (value=Master key)
+- Params: key=cc (value=Country id), key=mk (value=Master key)
 
 RESPONSE:
 RESPONSE:
@@ -186,11 +186,11 @@ IF SUCCESS:
     }
 ```
 
-#### GETTING DST OFFSET BY COUTNRY ID => /datavice/v1/location/timezone/daylight
+#### GETTING DST OFFSET BY COUTNRY CODE => /datavice/v1/location/timezone/daylight
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
-- Params: key=ci (value=Country id), key=mk (value=Master key)
+- Params: key=cc (value=Country id), key=mk (value=Master key)
 
 RESPONSE:
 RESPONSE:

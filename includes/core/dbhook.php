@@ -104,7 +104,6 @@
 				$sql .= "`status` bigint(20) NOT NULL DEFAULT 0, ";
 				$sql .= "`country_code` varchar(2) NOT NULL DEFAULT '', ";
 				$sql .= "`country_name` varchar(100) NOT NULL DEFAULT '', ";
-				$sql .= "`timezone` bigint(20) NOT NULL DEFAULT 0, ";
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; ";
 			$result = $wpdb->get_results($sql);
@@ -188,9 +187,10 @@
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_timezone'" ) != $tbl_timezone) {
 			$sql = "CREATE TABLE `".$tbl_timezone."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`country_code` varchar(2) NOT NULL, ";
 				$sql .= "`tzone_name` varchar(50) NOT NULL, ";
-				$sql .= "`utc_offset` varchar(10) NOT NULL, ";
-				$sql .= "`utc_dst_offset` varchar(10) NOT NULL, ";
+				$sql .= "`utc_offset` varchar(10) NULL, ";
+				$sql .= "`utc_dst_offset` varchar(10) NULL, ";
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; ";
 			$result = $wpdb->get_results($sql);

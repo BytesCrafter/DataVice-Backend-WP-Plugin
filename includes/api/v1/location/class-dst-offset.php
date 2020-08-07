@@ -22,7 +22,7 @@
             global $wpdb;
             
              //Step 1: Validate and sanitize request
-            if ( !isset($_POST["ci"]) || !isset($_POST["mk"]) ) {
+            if ( !isset($_POST["cc"]) || !isset($_POST["mk"]) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -32,7 +32,7 @@
 			}
 
 			// Check if value passed is not null
-            if ( empty($_POST['ci']) || empty($_POST['mk'])  ) {
+            if ( empty($_POST['cc']) || empty($_POST['mk'])  ) {
                 return rest_ensure_response( 
                     array(
                             "status" => "failed",
@@ -53,18 +53,18 @@
                 );
             }
             
-            $country_id = $_POST["ci"];
+            $country_code = $_POST["cc"];
 
            // Step 3: Pass constants to variables and catch post values 
             $tz_table = DV_TZ_TABLE;
             $ctry_table = DV_COUNTRY_TABLE;
 
             // Step 4: Start query
-            $dst =  $wpdb->get_row("SELECT c.country_code as code, c.country_name as name, t.utc_dst_offset as dst_offset
+            $dst =  $wpdb->get_row("SELECT c.country_code as code, c.country_name as name, t.utc_dst_offset as dst
                 FROM $ctry_table c
-                LEFT JOIN dv_geo_timezone t ON t.id = c.timezone
+                LEFT JOIN dv_geo_timezone t ON t.country_code = c.country_code
                 WHERE c.status = 1
-                AND c.id = $country_id
+                AND c.country_code = '$country_code'
             ");
             // Step 5: Check if no rows found
             if (!$dst) {

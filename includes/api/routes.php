@@ -166,18 +166,18 @@
                 'callback' => array('DV_Barangays', 'listen'),
             ));
 
-            register_rest_route( 'datavice/v1/location', 'tzone', array(
+            register_rest_route( 'datavice/v1/location', 'timezone', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Timezone', 'listen'),
             ));
 
-            register_rest_route( 'datavice/v1/location', 'dst', array(
+            register_rest_route( 'datavice/v1/location', 'daylight', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Dst', 'listen'),
             ));
 
 
-            register_rest_route( 'datavice/v1/location', 'off', array(
+            register_rest_route( 'datavice/v1/location', 'offset', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Offset', 'listen'),
             ));

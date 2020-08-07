@@ -65,7 +65,7 @@
 
 	//Timezone CONSTANTS
 	define('DV_TZ_TABLE', DV_PREFIX.'geo_timezone');
-	define("DV_TZ_FIELD", "(tzone_name, utc_offset, utc_dst_offset)");
+	define("DV_TZ_FIELD", "(country_code, tzone_name, utc_offset, utc_dst_offset)");
 	define("DV_TZ_DATA", $dv_tz_list);
 
 
