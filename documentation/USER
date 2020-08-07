@@ -140,17 +140,22 @@ IF SUCCESS:
 ```
     {
         "status": "success",
-        "uname": "Username",
-        "fname": "First Name",
-        "fname": "Last Name",
-        "dname": "Display Name",
-        "email": "Email Address",
-        "avatar": "Avatar URL",
-        "banner": "Banner URL"
+        "data": {
+            "uname": "demoguy",
+            "dname": "Demo Goodguy",
+            "email": "devops@pasabuy.app",
+            "roles": [
+                "administrator"
+            ],
+            "fname": "Demo",
+            "lname": "Good Guy",
+            "avatar": "/2020/08/demo-avatar.jpg",
+            "banner": "/2020/08/demo-banner.jpg"
+        }
     }
 ```
 
-#### PROFILE => /datavice/v1/user/stats
+#### Stats => /datavice/v1/user/stats
 REQUEST:
 - Method: POST
 - Header: key=Content-Type, value=application/x-www-form-urlencoded
@@ -166,11 +171,13 @@ IF SUCCESS:
 ```
     {
         "status": "success",
-        "posts": "Username",
-        "transacts": "First Name",
-        "reviews": {
-            "total": 123,
-            "ratings": 4.5
+        "data": {
+            "posts": 56,
+            "transacts": 15,
+            "reviews": {
+                "total": 123,
+                "ratings": 4.6
+            }
         }
     }
 ```

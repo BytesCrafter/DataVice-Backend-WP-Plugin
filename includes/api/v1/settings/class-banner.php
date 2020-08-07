@@ -11,11 +11,11 @@
 	*/
 ?>
 <?php
-    class DV_Avatar_update{
+    class DV_Banner_update{
        
         // image upload
         public static function listen(WP_REST_Request $request) {
-
+    
             // Step 1: validate user
             if ( DV_Verification::is_verified() == false ) {
                 return rest_ensure_response( 
@@ -123,9 +123,9 @@
                 $var = $target_dir['path'];
                 if (move_uploaded_file($files['img']['tmp_name'], $target_file)) {
               
-                    $avatar_name = trailingslashit($target_dir['subdir']).$completed_file_name;
+                    $banner_name = trailingslashit($target_dir['subdir']).$completed_file_name;
                 
-                    update_user_meta( $wpid, 'avatar', $avatar_name);
+                    update_user_meta( $wpid, 'banner', $banner_name);
 
                     return rest_ensure_response( 
                         array(

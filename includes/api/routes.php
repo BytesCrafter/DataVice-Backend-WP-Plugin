@@ -14,11 +14,15 @@
     require plugin_dir_path(__FILE__) . '/test/demoguy.php';
 
     //Require the USocketNet class which have the core function of this plguin. 
+
+    //Users Classes
     require plugin_dir_path(__FILE__) . '/v1/users/class-signup.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-reset.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-forgot.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-auth.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-verify.php';
+    require plugin_dir_path(__FILE__) . '/v1/users/class-profile.php';
+    require plugin_dir_path(__FILE__) . '/v1/users/class-stats.php';
 
     // Contacts Classes
     require plugin_dir_path(__FILE__) . '/v1/contacts/class-insert.php';
@@ -42,6 +46,7 @@
     require plugin_dir_path(__FILE__) . '/v1/settings/class-notif.php';
     require plugin_dir_path(__FILE__) . '/v1/settings/class-email-notif.php';
     require plugin_dir_path(__FILE__) . '/v1/settings/class-avatar.php';
+    require plugin_dir_path(__FILE__) . '/v1/settings/class-banner.php';
  
     ///Users Address Classes
     require plugin_dir_path(__FILE__) . '/v1/address/class-insert.php';
@@ -94,9 +99,14 @@
                 
             ));
 
-            register_rest_route( 'datavice/v1/user', 'data', array(
+            register_rest_route( 'datavice/v1/user', 'profile', array(
                 'methods' => 'POST',
-                'callback' => array('DV_Userdata', 'listen'),
+                'callback' => array('DV_Userprofile', 'listen'),
+            ));
+
+            register_rest_route( 'datavice/v1/user', 'stats', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Stats', 'listen'),
             ));
 
         /*
@@ -178,7 +188,12 @@
             
             register_rest_route( 'datavice/v1/settings', 'update_dp', array(
                 'methods' => 'POST',
-                'callback' => array('DV_Avatar_update', 'initialize'),
+                'callback' => array('DV_Avatar_update', 'listen'),
+            ));
+
+            register_rest_route( 'datavice/v1/settings', 'banner', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Banner_update', 'listen'),
             ));
 
             register_rest_route( 'datavice/v1/settings', 'update', array(
