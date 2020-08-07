@@ -146,17 +146,17 @@
         /*
          * LOCATION RESTAPI
         */
-            register_rest_route( 'datavice/v1/location', 'ctry', array(
+            register_rest_route( 'datavice/v1/location', 'country', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Countries', 'listen'),
             ));  
             
-            register_rest_route( 'datavice/v1/location', 'prv', array(
+            register_rest_route( 'datavice/v1/location', 'province', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Provinces', 'listen'),
             ));
 
-            register_rest_route( 'datavice/v1/location', 'cty', array(
+            register_rest_route( 'datavice/v1/location', 'city', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Cities', 'listen'),
             ));
