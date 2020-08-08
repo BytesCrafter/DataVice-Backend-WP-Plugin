@@ -69,7 +69,7 @@
             $date_stamp = DV_Globals::date_stamp();
 
             // Step 4: Check if this contact exists
-            $get_contact = $wpdb->get_row("SELECT * FROM `dv_contacts`  WHERE `ID` = $contact_id");
+            $get_contact = $wpdb->get_row("SELECT `created_by`, `stid`, `wpid` FROM `dv_contacts`  WHERE `ID` = $contact_id AND `status` = 1");
             
             //if not found, return error
             if ( !$get_contact ) {
@@ -89,6 +89,49 @@
                         "message" => "Current user does not match the contact creator",
                     )
                 );
+            }
+
+            //This means that the contact found is store contact
+            if ($get_contact->stid !== 0) { 
+                
+                $store_id = $get_contact->stid;
+
+                //Check if personnel is part of the store
+                $personnels = $wpdb->get_row("SELECT `wpid`, `roid`
+                    FROM `tp_personnels` 
+                    WHERE `stid` = $store_id
+                    AND `wpid` = $wpid");
+
+                //Check if current user is one of the personnels or one of our staff
+                if (!$personnels || (DV_Globals::check_roles('contributor') == false  && DV_Globals::check_roles('administrator') == false) ) {
+                    return rest_ensure_response( 
+                        array(
+                            "status" => "failed",
+                            "message" => "User not associated with this store",
+                        )
+                    );
+                }
+
+                $role_id = $personnels->roid;
+
+                //Get all access from that role_id 
+                $get_access = $wpdb->get_results("SELECT rm.access
+                    FROM `tp_roles` r 
+                        LEFT JOIN tp_roles_meta rm ON rm.roid = r.ID
+                    WHERE r.id = $role_id");
+                
+                $access = array_column($get_access, 'access');
+
+                //Check if user has role access of `can_delete_contact` or one of our staff
+                if ( !in_array('can_delete_contact' , $access, true) && (DV_Globals::check_roles('contributor') == false  && DV_Globals::check_roles('administrator') == false) ) {
+                    return rest_ensure_response( 
+                        array(
+                            "status" => "failed",
+                            "message" => "Current user has no access in updating contacts",
+                        )
+                    );
+                }
+
             }
 
             $prev_wpid = $get_contact->wpid;

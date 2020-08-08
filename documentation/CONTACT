@@ -126,7 +126,10 @@ RESPONSE:
 - code: 'failed' message: 'Invalid contact type.' data: null
 - code: 'failed' message: 'Invalid owner type.' data: null
 - code: 'failed' message: 'Email not in valid format.' data: null
+- code: 'failed' message: 'User not associated with this store.' data: null
+- code: 'failed' message: 'Current user has no access in inserting contacts.' data: null
 - code: 'error' message: 'An error occured while submitting data to the server' data: null
+
 
 IF SUCCESS:
 ```
@@ -147,6 +150,8 @@ RESPONSE:
 - code: 'failed' message: 'Required fields cannot be empty.' data: null
 - code: 'failed' message: 'This contact id does not exists.' data: null
 - code: 'error' message: 'Current user does not match the contact creator.' data: null
+- code: 'failed' message: 'User not associated with this store.' data: null
+- code: 'failed' message: 'Current user has no access in inserting contacts.' data: null
 - code: 'error' message: 'An error occured while submitting data to the server.' data: null
 
 IF SUCCESS:
@@ -168,6 +173,8 @@ RESPONSE:
 - code: 'failed' message: 'Required fields cannot be empty.' data: null
 - code: 'failed' message: 'This contact id does not exists' data: null
 - code: 'error' message: 'Current user does not match the contact creator' data: null
+- code: 'failed' message: 'User not associated with this store.' data: null
+- code: 'failed' message: 'Current user has no access in inserting contacts.' data: null
 - code: 'error' message: 'An error occured while submitting data to the server' data: null
 
 IF SUCCESS:

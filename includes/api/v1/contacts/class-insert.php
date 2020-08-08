@@ -96,7 +96,9 @@
              $owner_type = $_POST['own'];
              $date_stamp = DV_Globals::date_stamp();
 
-             //Step 5: Start mysql transaction
+             
+
+             //Step 4: Start mysql transaction
             if ($owner_type == 'user') {
                 
                 $wpdb->query("START TRANSACTION ");
@@ -115,10 +117,48 @@
                 
             } else {
 
+                $store_id = $id;
+
+                //Check if personnel is part of the store
+                $personnels = $wpdb->get_row("SELECT `wpid`, `roid`
+                    FROM `tp_personnels` 
+                    WHERE `stid` = $store_id
+                    AND `wpid` = $wpid");
+                
+                //Check if current user is one of the personnels or one of our staff
+                if (!$personnels || (DV_Globals::check_roles('contributor') == false  && DV_Globals::check_roles('administrator') == false) ) {
+                    return rest_ensure_response( 
+                        array(
+                            "status" => "failed",
+                            "message" => "User not associated with this store",
+                        )
+                    );
+                }
+
+                $role_id = $personnels->roid;
+
+                //Get all access from that role_id 
+                $get_access = $wpdb->get_results("SELECT rm.access
+                    FROM `tp_roles` r 
+                        LEFT JOIN tp_roles_meta rm ON rm.roid = r.ID
+                    WHERE r.id = $role_id");
+                
+                $access = array_column($get_access, 'access');
+
+                //Check if user has role access of `can_delete_contact` or one of our staff
+                if ( !in_array('can_insert_contact' , $access, true) && (DV_Globals::check_roles('contributor') == false  && DV_Globals::check_roles('administrator') == false) ) {
+                    return rest_ensure_response( 
+                        array(
+                            "status" => "failed",
+                            "message" => "Current user has no access in inserting contacts",
+                        )
+                    );
+                }
+
                 $wpdb->query("START TRANSACTION ");
 
                 $wpdb->query("INSERT INTO `$table_contact` (`status`, `types`, `revs`, `stid`, `created_by`, `date_created`) 
-                                VALUES ('1', '$type', '0', $id, $wpid, '$date_stamp');");
+                                VALUES ('1', '$type', '0', $store_id, $wpid, '$date_stamp');");
                 
                 $contact_id = $wpdb->insert_id;
 
@@ -130,7 +170,7 @@
                 $wpdb->query("UPDATE `$table_contact` SET `revs` = $revs_id WHERE ID = $contact_id ");
 
             }
-
+           
             //Step 6: Check if any of the insert queries above failed
             if ($contact_id < 1  || $revs_id < 1) {
                 //If failed, do mysql rollback (discard the insert queries(no inserted data))

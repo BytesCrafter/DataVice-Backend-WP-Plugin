@@ -65,6 +65,20 @@
             }
         }
 
+        public static function check_roles($role){
+            
+            $wp_user = get_userdata($_POST['wpid']);
+            
+            if ( in_array($role , $wp_user->roles, true) ) {
+                return true;
+            }
+
+            return false;
+        }
+
+
+        
+
 
     } // end of class
 ?>
