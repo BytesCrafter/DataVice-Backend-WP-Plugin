@@ -1,4 +1,4 @@
-#### USER PROFILE UPDATE => /datavice/api/v1/settings/update
+#### USER PROFILE UPDATE => /datavice/api/v1/settings/user
 
 REQUEST:
 - Method: POST
@@ -20,7 +20,7 @@ IF SUCCESS:
     }
 ```
 
-#### SWITCHING NOTIFICATIONS ON OR OFF => /datavice/api/v1/settings/notif
+#### SWITCHING NOTIFICATIONS ON OR OFF => /datavice/api/v1/settings/notif/native
 
 REQUEST:
 - Method: POST
@@ -40,7 +40,7 @@ IF SUCCESS:
     }
 ```
 
-#### SWITCHING EMAIL NOTIFICATIONS ON OR OFF => /datavice/api/v1/settings/e_notif
+#### SWITCHING EMAIL NOTIFICATIONS ON OR OFF => /datavice/api/v1/settings/notif/email
 
 REQUEST:
 - Method: POST
@@ -59,7 +59,7 @@ IF SUCCESS:
         "message": "Data has been updated successfully"
     }
 ```
-#### ADD or UPDATE AVATAR => /datavice/api/v1/settings/update_dp
+#### ADD or UPDATE AVATAR => /datavice/api/v1/settings/avatar
 
 REQUEST:
 - Method: POST
