@@ -22,73 +22,68 @@
                 return rest_ensure_response( 
                     array(
                         "status" => "unknown",
-                        "message" => "Please contact your administrator. Request Unknown!",
+                        "message" => "Please contact your administrator. Verification Issue!",
                     )
                 );
             }
 
             // Step 2: Sanitize and validate all requests
-			if (!isset($_POST["ctc"])) {
-				return rest_ensure_response( 
-					array(
-						"status" => "unknown",
-						"message" => "Please contact your administrator. Request unknown!",
-					)
+            if ( !isset($_POST['cid']) ) {
+                return rest_ensure_response( 
+                    array(
+                        "status" => "unknown",
+                        "message" => "Please contact your administrator. Request unknown!",
+                    )
                 );
-                
             }
 
-            // Check if passed values are not null
-            if (empty($_POST["ctc"])) {
-				return rest_ensure_response( 
-					array(
-						"status" => "failed",
-						"message" => "Required fields cannot be empty.",
-					)
+            // Check if required fields are not empty
+            if ( empty($_POST['cid']) ) {
+                return rest_ensure_response( 
+                    array(
+                        "status" => "failed",
+                        "message" => "Please contact your administrator. Request Empty!",
+                    )
                 );
             }
 
             // Step 3: Pass constants to variables and catch post values 
             $table_contact = DV_CONTACTS_TABLE;
             $table_revs = DV_REVS_TABLE;
-            $ctc = $_POST['ctc'];
+            $wpid = $_POST['wpid'];
+            $cid = $_POST['cid'];
             
             // Step 4: Check for results using passed contact id
-                $result = $wpdb->get_results("SELECT
+            $result = $wpdb->get_results("SELECT
                     dc.ID,
-                    dc.`status`,
                     dc.types,
                     dr.child_val as `value`,
-                    dc.created_by,
                     dc.date_created 
                 FROM
                     $table_contact dc
                     INNER JOIN $table_revs dr ON dr.ID = dc.revs
-                WHERE dc.`status` = 1 AND dc.ID = $ctc", OBJECT);
+                WHERE dc.`status` = 1 AND dc.ID = $cid AND dc.wpid = $wpid", OBJECT);
 
-            
             // Check for results
             if (!$result) {
                 return rest_ensure_response( 
                     array(
                         "status" => "error",
-                        "message" => "No contacts found."
+                        "message" => "Please contact your administrator. Contact not Found!"
                     )
                 );
-
-           // return success message and complete object
-            }else {
-                return rest_ensure_response( 
-                    array(
-                        "status" => "success",
-                        "data" => array(
-                            'list' => $result, 
-                        
-                        )
-                    )
-                );
-
             }
+
+            // return success message and complete object
+            return rest_ensure_response( 
+                array(
+                    "status" => "success",
+                    "data" => array(
+                        'list' => $result, 
+                    
+                    )
+                )
+            );
             
         }
     }

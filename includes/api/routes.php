@@ -113,7 +113,7 @@
          * CONTACT RESTAPI
         */
      
-            register_rest_route( 'datavice/v1/contact', 'insert', array(
+            register_rest_route( 'datavice/v1/contact/user', 'insert', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Contact_Insert','listen'),
             ));

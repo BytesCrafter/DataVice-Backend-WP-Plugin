@@ -69,16 +69,16 @@
             
             $wp_user = get_userdata($_POST['wpid']);
             
+            if ( in_array('administrator' , $wp_user->roles, true) ) {
+                return true;
+            }
+
             if ( in_array($role , $wp_user->roles, true) ) {
                 return true;
             }
 
             return false;
         }
-
-
-        
-
 
     } // end of class
 ?>
