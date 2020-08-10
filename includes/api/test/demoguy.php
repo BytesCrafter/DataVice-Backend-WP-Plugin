@@ -44,6 +44,26 @@
 			// update_option( 'upload_path', untrailingslashit(ABSPATH) . '\wp-content\uploads\avatars' );
 			// update_option( 'upload_path_url', site_url( '/uploads/' ) );
 		}
+		
+		// Rest Api routing.
+		public static function upld_image(WP_REST_Request $request) {
+			
+			// call upload image function in global
+			$result = DV_Globals::upload_image( $request);
+
+			if ($result == false) {
+				return rest_ensure_response( 
+                    array(
+                        "status" => "failed",
+                        "message" => "Please contact your administrator. Uploading Image failed",
+                    )
+                );
+			}else{
+				// returning file path
+				return $result;
+			}
+			
+		}
 	}
 
 ?>
