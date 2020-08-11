@@ -22,29 +22,27 @@
             global $wpdb;
             
             //Step 1: Validate and sanitize request
-            if ( !isset($_POST["mk"]) ) {
+            if ( !isset($_POST["mkey"]) ) {
 				return array(
-						"status" => "unknown",
-						"message" => "Please contact your administrator. Request Unknown!",
+					"status" => "unknown",
+					"message" => "Please contact your administrator. Request Unknown!",
                 );
-				
 			}
 
 			// Check if value passed is not null
-            if ( empty($_POST['mk']) ) {
+            if ( empty($_POST['mkey']) ) {
                 return  array(
-                        "status" => "failed",
-                        "message" => "Required fields cannot be empty.",
+                    "status" => "failed",
+                    "message" => "Please contact your administrator. Request Empty!",
                 );
                 
 			}
 
             //Step 2: Master key validation
-            //Get master key from database
             $master_key = DV_Library_Config::dv_get_config('master_key', 123);
             
             //Check if master key matches
-            if (!((int)$master_key === (int)$_POST['mk'])) {
+            if (!((int)$master_key === (int)$_POST['mkey'])) {
                 return  array(
                     "status" => "error",
                     "message" => "Master keys does not match.",
@@ -53,21 +51,19 @@
 
             // Step 3: Pass constants to variables and catch post values 
             $ctry_table = DV_COUNTRY_TABLE;
+            $tzone_table = DV_TZ_TABLE;
             $ctry_fields = DV_COUNTRY_FIELDS; 
             $where = DV_COUNTRY_WHERE;
 
             // Step 4: Start query
-            $countries =  $wpdb->get_results("SELECT c.id, c.country_code as code, c.country_name as name, t.tzone_name as timezone
-                FROM $ctry_table c
-                LEFT JOIN dv_geo_timezone t ON t.id = c.timezone
-                where c.status = 1
-            ");
+            $countries =  $wpdb->get_results("SELECT $ctry_table.ID, $ctry_table.country_code as code, $ctry_table.country_name as name, $tzone_table.tzone_name as tzone
+                FROM $ctry_table INNER JOIN $tzone_table ON $tzone_table.country_code = $ctry_table.country_code where $ctry_table.status = 1");
 
             // Step 5: Check if no rows found
             if (!$countries) {
                     return array(
                         "status" => "error",
-                        "message" => "No results found.",
+                        "message" => "No results found."
                     );
             }
             
@@ -78,6 +74,5 @@
             );
             
         }
-    
     
     }//end of class

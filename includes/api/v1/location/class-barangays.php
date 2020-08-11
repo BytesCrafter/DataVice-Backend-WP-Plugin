@@ -20,7 +20,7 @@
         public static function get_brgys(){
 
             //Step 1: Validate and sanitize request
-            if ( !isset($_POST["ctc"]) || !isset($_POST["mk"]) ) {
+            if ( !isset($_POST["city_code"]) || !isset($_POST["mkey"]) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -30,7 +30,7 @@
 			}
 
 			// Check if value passed is not null
-            if ( empty($_POST['ctc']) || empty($_POST['mk'])  ) {
+            if ( empty($_POST['city_code']) || empty($_POST['mkey'])  ) {
                 return rest_ensure_response( 
                     array(
                             "status" => "failed",
@@ -44,7 +44,7 @@
             $master_key = DV_Library_Config::dv_get_config('master_key', 123);
             
             //Check if master key matches
-            if (!((int)$master_key === (int)$_POST['mk'])) {
+            if (!((int)$master_key === (int)$_POST['mkey'])) {
                 return  array(
                     "status" => "error",
                     "message" => "Master keys does not match.",
@@ -52,7 +52,7 @@
             }
             
             // Step 3: Pass constants to variables and catch post values 
-            $city_code = $_POST["ctc"];
+            $city_code = $_POST["city_code"];
             $brgy_table = DV_BRGY_TABLE;
             $brgy_fields = DV_BRGY_FIELDS; 
             $where = DV_BRGY_WHERE . "'$city_code'";
