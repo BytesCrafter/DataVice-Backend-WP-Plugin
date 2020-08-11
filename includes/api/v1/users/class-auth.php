@@ -28,7 +28,7 @@
 			$token_expiry = DV_Library_Config::dv_get_config('token_expiry_span', 3600);
 			
 			//Create a session entry unto the session tokens of user with X expiry.
-			$expiration = time() + apply_filters('auth_cookie_expiration', (int)$token_expiry, $user_id, true);
+			$expiration = time() + apply_filters('auth_cookie_expiration', (int)$token_expiry * DAY_IN_SECONDS, $user_id, true);
 
 			// TODO: PENDING! Consider not inserting new session on database. For example, we must check if
 			// there is a session with the same device id as we currently use then reused that session.
