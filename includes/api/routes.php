@@ -38,13 +38,6 @@
     require plugin_dir_path(__FILE__) . '/v1/location/class-cities.php';
     require plugin_dir_path(__FILE__) . '/v1/location/class-barangays.php';
     require plugin_dir_path(__FILE__) . '/v1/location/class-timezone.php';
-    
-    //Settings Classes
-    require plugin_dir_path(__FILE__) . '/v1/settings/class-update-profile.php';
-    require plugin_dir_path(__FILE__) . '/v1/settings/class-notif.php';
-    require plugin_dir_path(__FILE__) . '/v1/settings/class-email-notif.php';
-    require plugin_dir_path(__FILE__) . '/v1/settings/class-avatar.php';
-    require plugin_dir_path(__FILE__) . '/v1/settings/class-banner.php';
  
     ///Users Address Classes
     require plugin_dir_path(__FILE__) . '/v1/address/class-insert.php';
@@ -169,36 +162,6 @@
                 'methods' => 'POST',
                 'callback' => array('DV_Timezone', 'listen'),
             ));
-
-        /*
-         * SETTING RESTAPI
-        */
-            
-            register_rest_route( 'datavice/v1/settings', 'update_dp', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Avatar_update', 'listen'),
-            ));
-
-            register_rest_route( 'datavice/v1/settings', 'banner', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Banner_update', 'listen'),
-            ));
-
-            register_rest_route( 'datavice/v1/settings', 'update', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Update_Profile', 'listen'),
-            ));
-            // Notification
-            register_rest_route( 'datavice/v1/settings', 'notif', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Notification', 'listen'),
-            ));
-
-            register_rest_route( 'datavice/v1/settings', 'e_notif', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Notification_email', 'listen'),
-            ));
-
         /*
          * ADDRESS RESTAPI
         */
