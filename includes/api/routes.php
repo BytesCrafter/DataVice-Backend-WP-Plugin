@@ -38,8 +38,6 @@
     require plugin_dir_path(__FILE__) . '/v1/location/class-cities.php';
     require plugin_dir_path(__FILE__) . '/v1/location/class-barangays.php';
     require plugin_dir_path(__FILE__) . '/v1/location/class-timezone.php';
-	require plugin_dir_path(__FILE__) . '/v1/location/class-dst-offset.php';
-	require plugin_dir_path(__FILE__) . '/v1/location/class-offset.php';
     
     //Settings Classes
     require plugin_dir_path(__FILE__) . '/v1/settings/class-update-profile.php';
@@ -113,7 +111,7 @@
          * CONTACT RESTAPI
         */
      
-            register_rest_route( 'datavice/v1/contact', 'insert', array(
+            register_rest_route( 'datavice/v1/contact/user', 'insert', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Contact_Insert','listen'),
             ));
@@ -146,22 +144,22 @@
         /*
          * LOCATION RESTAPI
         */
-            register_rest_route( 'datavice/v1/location', 'country', array(
+            register_rest_route( 'datavice/v1/location/country', 'active', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Countries', 'listen'),
             ));  
             
-            register_rest_route( 'datavice/v1/location', 'province', array(
+            register_rest_route( 'datavice/v1/location/province', 'active', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Provinces', 'listen'),
             ));
 
-            register_rest_route( 'datavice/v1/location', 'city', array(
+            register_rest_route( 'datavice/v1/location/city', 'active', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Cities', 'listen'),
             ));
 
-            register_rest_route( 'datavice/v1/location', 'brgy', array(
+            register_rest_route( 'datavice/v1/location/brgy', 'active', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Barangays', 'listen'),
             ));
@@ -169,17 +167,6 @@
             register_rest_route( 'datavice/v1/location', 'timezone', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Timezone', 'listen'),
-            ));
-
-            register_rest_route( 'datavice/v1/location', 'daylight', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Dst', 'listen'),
-            ));
-
-
-            register_rest_route( 'datavice/v1/location', 'offset', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Offset', 'listen'),
             ));
 
         /*

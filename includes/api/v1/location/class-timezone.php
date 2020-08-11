@@ -22,7 +22,7 @@
             global $wpdb;
             
              //Step 1: Validate and sanitize request
-            if ( !isset($_POST["cc"]) || !isset($_POST["mk"]) ) {
+            if ( !isset($_POST["country_code"]) || !isset($_POST["mkey"]) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -32,7 +32,7 @@
 			}
 
 			// Check if value passed is not null
-            if ( empty($_POST['cc']) || empty($_POST['mk'])  ) {
+            if ( empty($_POST['country_code']) || empty($_POST['mkey'])  ) {
                 return rest_ensure_response( 
                     array(
                             "status" => "failed",
@@ -46,21 +46,21 @@
             $master_key = DV_Library_Config::dv_get_config('master_key', 123);
             
             //Check if master key matches
-            if (!((int)$master_key === (int)$_POST['mk'])) {
+            if (!((int)$master_key === (int)$_POST['mkey'])) {
                 return  array(
                     "status" => "error",
                     "message" => "Master keys does not match.",
                 );
             }
             
-            $country_code = $_POST["cc"];
+            $country_code = $_POST["country_code"];
 
            // Step 3: Pass constants to variables and catch post values 
             $tz_table = DV_TZ_TABLE;
             $ctry_table = DV_COUNTRY_TABLE;
 
             // Step 4: Start query
-            $timezone =  $wpdb->get_row("SELECT c.country_code as code, c.country_name as name, t.tzone_name as timezone
+            $timezone =  $wpdb->get_row("SELECT t.tzone_name as timezone, t.utc_offset as offset, t.utc_dst_offset as daylight
                 FROM $ctry_table c
                 LEFT JOIN dv_geo_timezone t ON t.country_code = c.country_code
                 WHERE c.status = 1

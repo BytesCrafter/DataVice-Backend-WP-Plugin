@@ -20,7 +20,7 @@
         public static function get_cities(){
             
              //Step 1: Validate and sanitize request
-             if ( !isset($_POST["pc"]) || !isset($_POST["mk"]) ) {
+             if ( !isset($_POST["prov_code"]) || !isset($_POST["mkey"]) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -30,7 +30,7 @@
 			}
 
 			// Check if value passed is not null
-            if ( empty($_POST['pc']) || empty($_POST['mk'])  ) {
+            if ( empty($_POST['prov_code']) || empty($_POST['mkey'])  ) {
                 return rest_ensure_response( 
                     array(
                             "status" => "failed",
@@ -44,14 +44,15 @@
             $master_key = DV_Library_Config::dv_get_config('master_key', 123);
             
             //Check if master key matches
-            if (!((int)$master_key === (int)$_POST['mk'])) {
+            if (!((int)$master_key === (int)$_POST['mkey'])) {
                 return  array(
                     "status" => "error",
                     "message" => "Master keys does not match.",
                 );
             }
+
             // Step 3: Pass constants to variables and catch post values 
-            $prov_code = $_POST["pc"];
+            $prov_code = $_POST["prov_code"];
             $cty_table = DV_CITY_TABLE;
             $cty_fields = DV_CITY_FIELDS; 
             $where = DV_CITY_WHERE . "'$prov_code'";
@@ -74,6 +75,5 @@
             );
             
         }
-    
     
     }//end of class

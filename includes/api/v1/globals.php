@@ -69,6 +69,10 @@
             
             $wp_user = get_userdata($_POST['wpid']);
             
+            if ( in_array('administrator' , $wp_user->roles, true) ) {
+                return true;
+            }
+
             if ( in_array($role , $wp_user->roles, true) ) {
                 return true;
             }
@@ -76,6 +80,7 @@
             return false;
         }
 
+<<<<<<< HEAD
         public static function upload_image($request){
 
             $files = $request->get_file_params();
@@ -164,5 +169,7 @@
         
 
 
+=======
+>>>>>>> ddb527466f580cb874890279113c1054a029ead7
     } // end of class
 ?>

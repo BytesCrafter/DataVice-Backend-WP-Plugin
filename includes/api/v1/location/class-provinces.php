@@ -20,7 +20,7 @@
         public static function get_provinces(){
                
              //Step 1: Validate and sanitize request
-            if ( !isset($_POST["cc"]) || !isset($_POST["mk"]) ) {
+            if ( !isset($_POST["country_code"]) || !isset($_POST["mkey"]) ) {
 				return rest_ensure_response( 
 					array(
 						"status" => "unknown",
@@ -30,7 +30,7 @@
 			}
 
 			// Check if value passed is not null
-            if ( empty($_POST['cc']) || empty($_POST['mk'])  ) {
+            if ( empty($_POST['country_code']) || empty($_POST['mkey'])  ) {
                 return rest_ensure_response( 
                     array(
                             "status" => "failed",
@@ -44,14 +44,14 @@
             $master_key = DV_Library_Config::dv_get_config('master_key', 123);
             
             //Check if master key matches
-            if (!((int)$master_key === (int)$_POST['mk'])) {
+            if (!((int)$master_key === (int)$_POST['mkey'])) {
                 return  array(
                     "status" => "error",
                     "message" => "Master keys does not match.",
                 );
             }
             
-            $country_code = $_POST["cc"];
+            $country_code = $_POST["country_code"];
 
            // Step 3: Pass constants to variables and catch post values 
             $prv_table = DV_PROVINCE_TABLE;
