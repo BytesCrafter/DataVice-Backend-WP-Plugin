@@ -46,7 +46,7 @@
 		}
 		
 		// Rest Api routing.
-		public static function upld_image(WP_REST_Request $request) {
+		public static function upload_image(WP_REST_Request $request) {
 			
 			// call upload image function in global
 			$result = DV_Globals::upload_image( $request);
