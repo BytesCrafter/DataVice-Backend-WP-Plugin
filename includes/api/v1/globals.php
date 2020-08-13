@@ -71,7 +71,7 @@
                 }
             }
         }
-
+        
         public static function check_roles($role){
             
             $wp_user = get_userdata($_POST['wpid']);
@@ -86,6 +86,91 @@
 
             return false;
         }
+
+        public static function upload_image($request){
+
+
+            $files = $request->get_file_params();
+
+            if ( !isset($files['img'])) {
+				return false;
+            }
+
+            if ( $files['img']['name'] == NULL  || $files['img']['type'] == NULL) {
+				return false;
+            }
+            
+            //Get the directory of uploading folder
+             $target_dir = wp_upload_dir();
+
+            //Get the file extension of the uploaded image
+            $file_type = strtolower(pathinfo($target_dir['path'] . '/' . basename($files['img']['name']),PATHINFO_EXTENSION));
+
+
+            if (!isset($_POST['IN'])) {
+                $img_name = $files['img']['name'];
+            } else {
+                $img_name = sanitize_file_name($_POST['IN']);
+            }
+
+
+            $completed_file_name = $img_name;
+
+            $target_file = $target_dir['path'] . '/' . basename($completed_file_name);
+            $uploadOk = 1;
+            $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+            
+            $check = getimagesize($files['img']['tmp_name']);
+            
+            
+            
+            if($check !== false) {
+                $uploadOk = 1;
+            } else {
+                $uploadOk = 0;
+                return false;
+            }
+            // Check if file already exists
+            if (file_exists($target_file)) {
+                //  file already exists
+                $uploadOk = 0;
+                return false;
+            }
+
+            // Check file size
+            if ($files['img']['size'] > 500000) {
+                // file is too large
+                $uploadOk = 0;
+                return false;
+            }
+            // Allow certain file formats
+            if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != 
+                "jpeg"
+                && $imageFileType != "gif" ) {
+                //only JPG, JPEG, PNG & GIF files are allowed
+                $uploadOk = 0;
+                return false;
+            }
+            // Check if $uploadOk is set to 0 by an error
+            if ($uploadOk == 0) {
+               // file was not uploaded.
+                // if everything is ok, try to upload file
+                return false;
+
+            } else {
+                if (move_uploaded_file($files['img']['tmp_name'], $target_file)) {
+                    //return file path
+                    return $target_dir['url'];
+
+
+                } else {
+                    //there was an error uploading your file
+                    return false;
+
+                }
+            }
+        }
+
 
     } // end of class
 ?>
