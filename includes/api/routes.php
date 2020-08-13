@@ -47,6 +47,11 @@
     require plugin_dir_path(__FILE__) . '/v1/address/class-listing.php';
     require plugin_dir_path(__FILE__) . '/v1/address/class-select-type.php';
 
+    //Coordinates Classes
+    require plugin_dir_path(__FILE__) . '/v1/coordinates/class-insert.php';
+    require plugin_dir_path(__FILE__) . '/v1/coordinates/class-update.php';
+
+
 	require plugin_dir_path(__FILE__) . '/v1/globals.php';
 	
 	// Init check if USocketNet successfully request from wapi.
@@ -195,7 +200,24 @@
                 'methods' => 'POST',
                 'callback' => array('DV_Select_All_Address', 'listen'),
             ));
+        
+        /*
+         * Coordinates
+        */
+        
+            register_rest_route( 'datavice/v1/coordinates', 'insert', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Insert_Coordinates', 'listen'),
+            ));
 
+            register_rest_route( 'datavice/v1/coordinates', 'update', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Update_Coordinates', 'listen'),
+            ));
+
+ 
+            
+        
         /*
          * Start unknown
         */

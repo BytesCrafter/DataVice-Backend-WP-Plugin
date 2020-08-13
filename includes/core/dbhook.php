@@ -58,6 +58,9 @@
 				$sql .= "`city` bigint(20) NOT NULL DEFAULT 0 COMMENT 'CityMun code from Revs, 0 if Null', ";
 				$sql .= "`province` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Province code from Revs, 0 if Null', ";
 				$sql .= "`country` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Country code from Revs, 0 if Null', ";
+				$sql .= "`latitude` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Latitude id from Revs, 0 if Null', ";
+				$sql .= "`longitude` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Longitude id from Revs, 0 if Null', ";
+				$sql .= "`img_url` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Url id from Revs, 0 if Null', ";
 				$sql .= "`date_created` datetime DEFAULT NULL COMMENT 'Date created', ";
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
