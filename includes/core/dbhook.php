@@ -22,6 +22,7 @@
 		$tbl_contacts = DV_CONTACTS_TABLE;
 		$tbl_address = DV_ADDRESS_TABLE;
 		$tbl_revs = DV_REVS_TABLE;
+		$tbl_events = DV_EVENTS_TABLE;
 
 		// Database table creation for dv_configs - QA: 01/08/2020
 		$tbl_configs = DV_CONFIG_TABLE;
@@ -204,6 +205,19 @@
 			
 			//Dumping data into tables
 			$wpdb->query("INSERT INTO `".$tbl_timezone."` $tz_field VALUES $tz_data");
+		}
+
+		//Database table creation for dv_events
+		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_events'" ) != $tbl_events) {
+			$sql = "CREATE TABLE `".$tbl_events."` (";
+				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`wpid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User id of the owner of this event',";
+				$sql .= "`keys` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Key of the event', ";
+				$sql .= "`info` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Additional Information on the event', ";
+				$sql .= "`date_created` datetime DEFAULT current_timestamp() COMMENT 'The date this event is created.', ";
+				$sql .= "PRIMARY KEY (`ID`) ";
+				$sql .= ") ENGINE = InnoDB; ";
+			$result = $wpdb->get_results($sql);
 		}
 
 

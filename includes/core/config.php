@@ -18,6 +18,8 @@
 	
 	// Wordpress CONSTANT
 	define('WP_USERS_META', WP_PREFIX.'usermeta');
+	define('WP_USERS', WP_PREFIX.'users');
+
 
 	
 	// Primary Table Constant
@@ -63,9 +65,12 @@
 	define("DV_BRGY_DATA", $dv_brgy_list);
 	define("DV_BRGY_FIELD", "(brgy_name, city_code)");
 
-	//Timezone CONSTANTS
+	// Timezone CONSTANTS
 	define('DV_TZ_TABLE', DV_PREFIX.'geo_timezone');
 	define("DV_TZ_FIELD", "(country_code, tzone_name, utc_offset, utc_dst_offset)");
 	define("DV_TZ_DATA", $dv_tz_list);
 
+	// Events CONSTANTS
+	define('DV_EVENTS_TABLE', DV_PREFIX.'events');
+	define("DV_EVENTS_FIELDS", "(`wpid`, `keys`, `info`)");
 

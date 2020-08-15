@@ -40,7 +40,12 @@
 
 		// Rest Api routing.
 		public static function listen() {
-		
+			global $wpdb;
+			$users_table = WP_USERS;
+			$usermeta_table = WP_USERS_META;
+			$events_table = DV_EVENTS_TABLE;
+			$events_fields = DV_EVENTS_FIELDS;
+
 			// Check that we're trying to authenticate
 			if (!isset($_POST["un"]) || !isset($_POST["pw"])) {
 				return rest_ensure_response( 
@@ -65,17 +70,69 @@
 			$uname = $_POST["un"];
 			$pword = $_POST["pw"];
 
+			// Check if account is locked due to incorrect login attempts
+			$check_account = $wpdb->get_row("SELECT um.meta_value as lock_expiry
+					FROM $users_table u 
+					INNER JOIN $usermeta_table um ON um.user_id = u.id
+					WHERE u.`user_login` = '$uname'
+					AND um.meta_key = 'lock_expiry_span'");
+			
+			if ( $check_account && date('Y-m-d H:i:s', strtotime("now")) <  $check_account->lock_expiry ) {
+				
+				//Get remaining time of releasing lock account
+				$now = strtotime("now");
+				$lock_expiry = strtotime($check_account->lock_expiry);
+				$interval  = abs($lock_expiry - $now);
+				$time_left = round($interval / 60);
+
+				return rest_ensure_response( 
+                    array(
+                            "status" => "failed",
+                            "message" => "Your account is currently locked. Please wait $time_left minutes before trying again",
+                    )
+                );
+			}
+			
 			//Initialize wp authentication process.
 			$user = wp_authenticate($uname, $pword);
 			
+			$error_code = array_keys( $user->errors );
+
 			// Check for WordPress authentication issue.
 			if ( is_wp_error($user) ) {
+				
+				if ( $error_code[0] == "incorrect_password") {
+					
+					$get_id = $wpdb->get_row("SELECT `ID` FROM $users_table WHERE user_login = '$uname'");
+					$wpdb->query("INSERT INTO $events_table $events_fields VALUES ('$get_id->ID', 'incorrect_password', ' ')");
+					$attempts = $wpdb->get_results("SELECT `ID` FROM $events_table WHERE date_created > now() - interval 30 minute AND wpid = $get_id->ID");
+					
+					if (count($attempts) >= 3) {
+
+						$lock_expiry_span = DV_Library_Config::dv_get_config('lock_expiry_span', 1800);
+            
+						$expiration_date = date( 'Y-m-d H:i:s', strtotime("now") + (int)$lock_expiry_span );
+						
+						$add_key_meta = update_user_meta( $get_id->ID, 'lock_expiry_span', $expiration_date );  
+						
+						return rest_ensure_response( 
+							array(
+									"status" => "error",
+									"message" => "Your account has been locked due to multiple failed login attempts.",
+							)
+						);
+
+					}
+
+				}
+
 				return rest_ensure_response( 
 					array(
 						"status" => "error",
 						"message" => $user->get_error_message(),
 					)
 				);
+
 			}
 	
 			// Return User ID and Session KEY as success data.
