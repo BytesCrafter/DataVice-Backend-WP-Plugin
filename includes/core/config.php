@@ -9,11 +9,16 @@
      * @version 0.1.0
      * This is where you provide all the constant config.
 	*/
+	
 
 	//Defining Global Variables
 	define('DV_PREFIX', 'dv_');
 	define('DV_MASTER', 'masterkey');
 	
+	// Maximum file size for uploading image
+	define('DV_UPLOAD_SIZE', 500000);
+
+
 	define('WP_PREFIX', 'wp_');
 	
 	// Wordpress CONSTANT

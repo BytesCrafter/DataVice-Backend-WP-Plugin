@@ -153,6 +153,8 @@
 
         public static function upload_image($request){
 
+            $max_size = DV_UPLOAD_SIZE;
+
 
             $files = $request->get_file_params();
 
@@ -214,7 +216,7 @@
             }
 
             // Check file size
-            if ($files['img']['size'] > 500000) {
+            if ($files['img']['size'] > $max_size) {
                 // file is too large
                 $uploadOk = 0;
                 return array(
