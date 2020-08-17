@@ -95,9 +95,10 @@
 			
 			//Initialize wp authentication process.
 			$user = wp_authenticate($uname, $pword);
-			
-			$error_code = array_keys( $user->errors );
-
+			if ($user->errors !== "") {
+				$error_code = array_keys( $user->errors );
+			}
+		
 			// Check for WordPress authentication issue.
 			if ( is_wp_error($user) ) {
 				
