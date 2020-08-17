@@ -50,6 +50,9 @@
     //Coordinates Classes
     require plugin_dir_path(__FILE__) . '/v1/coordinates/class-insert.php';
     require plugin_dir_path(__FILE__) . '/v1/coordinates/class-update.php';
+    
+    // Upload folder
+    require plugin_dir_path(__FILE__) . '/v1/process/class-upload.php';
 
 
 	require plugin_dir_path(__FILE__) . '/v1/globals.php';
@@ -66,10 +69,7 @@
                 'callback' => array('DV_Demoguy', 'listen'),
             ));
 
-            register_rest_route( 'datavice/test/demoguy', 'upload_image', array(
-                'methods' => 'POST',
-                'callback' => array('DV_Demoguy', 'upload_image'),
-            ));
+     
 
         /*
          * USER RESTAPI
@@ -226,6 +226,14 @@
         /*
          * Start unknown
         */
+
+        /*
+         * UPLOAD RESTAPI
+        */
+            register_rest_route( 'datavice/v1/process', 'upload', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Upload', 'listen'),
+            ));
     
 
     }

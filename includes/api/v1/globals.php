@@ -157,11 +157,17 @@
             $files = $request->get_file_params();
 
             if ( !isset($files['img'])) {
-				return false;
+				return  array(
+                    "status" => "unknown",
+                    "message" => "Please contact your administrator. Request Unknown!",
+                );
             }
 
             if ( $files['img']['name'] == NULL  || $files['img']['type'] == NULL) {
-				return false;
+				return array(
+                    "status" => "unknown",
+                    "message" => "Please select an image!",
+                );
             }
             
             //Get the directory of uploading folder
@@ -192,20 +198,29 @@
                 $uploadOk = 1;
             } else {
                 $uploadOk = 0;
-                return false;
+                return array(
+                    "status" => "failed",
+                    "message" => "File is not an image.",
+                );
             }
             // Check if file already exists
             if (file_exists($target_file)) {
                 //  file already exists
                 $uploadOk = 0;
-                return false;
+                return array(
+                    "status" => "failed",
+                    "message" => "File is already existed.",
+                );
             }
 
             // Check file size
             if ($files['img']['size'] > 500000) {
                 // file is too large
                 $uploadOk = 0;
-                return false;
+                return array(
+                    "status" => "failed",
+                    "message" => "File is too large.",
+                );
             }
             // Allow certain file formats
             if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != 
@@ -213,23 +228,36 @@
                 && $imageFileType != "gif" ) {
                 //only JPG, JPEG, PNG & GIF files are allowed
                 $uploadOk = 0;
-                return false;
+                return array(
+                    "status" => "failed",
+                    "message" => "Only JPG, JPEG, PNG & GIF files are allowed.",
+                );
             }
             // Check if $uploadOk is set to 0 by an error
             if ($uploadOk == 0) {
                // file was not uploaded.
                 // if everything is ok, try to upload file
-                return false;
+                    return array(
+                        "status" => "unknown",
+                        "message" => "Please contact your admnistrator. File has not uploaded! ",
+                    );
 
             } else {
                 if (move_uploaded_file($files['img']['tmp_name'], $target_file)) {
                     //return file path
-                    return $target_dir['url'];
+                    return array(
+                        "status" => "success",
+                        "data" =>  $target_dir['url'],
+
+                    );
 
 
                 } else {
                     //there was an error uploading your file
-                    return false;
+                    return array(
+                        "status" => "unknown",
+                        "message" => "Please contact your admnistrator. File has not uploaded! ",
+                    );
 
                 }
             }
