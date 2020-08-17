@@ -66,6 +66,11 @@
                 'callback' => array('DV_Demoguy', 'listen'),
             ));
 
+            register_rest_route( 'datavice/test/demoguy', 'upload_image', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Demoguy', 'upload_image'),
+            ));
+
         /*
          * USER RESTAPI
         */
