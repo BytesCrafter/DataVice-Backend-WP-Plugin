@@ -247,8 +247,8 @@
                     //return file path
                     return array(
                         "status" => "success",
-                        "data" =>  $target_dir['url'],
-
+                        "data" =>   $target_dir['url'].'/'.basename($completed_file_name),
+                        // $target_dir['url']
                     );
 
 
