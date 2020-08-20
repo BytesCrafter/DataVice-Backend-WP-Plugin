@@ -20,7 +20,8 @@
                 !isset($_POST['fn']) || !isset($_POST['ln']) || 
                 !isset($_POST['gd']) || !isset($_POST['bd']) || 
                 !isset($_POST['co']) || !isset($_POST['pv']) || 
-                !isset($_POST['ct']) || !isset($_POST['bg']) ){
+                !isset($_POST['ct']) || !isset($_POST['bg']) ||
+                !isset($_POST['st']) ){
                 return rest_ensure_response( 
                     array(
                             "status" => "unknown",
@@ -34,7 +35,8 @@
                 || empty($_POST['fn']) || empty($_POST['ln'])
                 || empty($_POST['gd']) || empty($_POST['bd'])
                 || empty($_POST['co']) || empty($_POST['pv']) 
-                || empty($_POST['ct']) || empty($_POST['bg']) ) {
+                || empty($_POST['ct']) || empty($_POST['bg'])||
+                empty($_POST['st']) ) {
                 return rest_ensure_response( 
                     array(
                             "status" => "failed",
@@ -251,7 +253,7 @@
                 
                 $revtype = $wpdb->insert_id;
 
-                $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'street', 'test street', $created_id, '$date');");
+                $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'street', '{$user["street"]}', $created_id, '$date');");
                 
                 $street = $wpdb->insert_id;
 
@@ -375,6 +377,7 @@
             $cur_user['province'] = $_POST['pv'];
             $cur_user['city'] = $_POST['ct'];
             $cur_user['brgy'] = $_POST['bg'];
+            $cur_user['street'] = $_POST['st'];
 
             $cur_user['show_admin_bar_front'] = false;
             $cur_user['role'] = "subscriber";
