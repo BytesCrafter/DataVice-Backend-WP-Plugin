@@ -27,6 +27,13 @@
 		// Database table creation for dv_configs - QA: 01/08/2020
 		$tbl_configs = DV_CONFIG_TABLE;
 
+
+
+		$wpdb->query("START TRANSACTION ");
+
+		$wpdb->query("SET GLOBAL max_allowed_packet=1073741824");
+
+
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_configs'" ) != $tbl_configs) {
 			$sql = "CREATE TABLE `".$tbl_configs."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
@@ -220,6 +227,7 @@
 			$result = $wpdb->get_results($sql);
 		}
 
+		$wpdb->query("COMMIT");
 
 
 	}
