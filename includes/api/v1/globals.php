@@ -151,27 +151,10 @@
             return false;
         }
 
-        public static function upload_image($request){
+        public static function upload_image($request, $files){
 
             $max_size = DV_UPLOAD_SIZE;
 
-
-            $files = $request->get_file_params();
-
-            if ( !isset($files['img'])) {
-				return  array(
-                    "status" => "unknown",
-                    "message" => "Please contact your administrator. Request Unknown!",
-                );
-            }
-
-            if ( $files['img']['name'] == NULL  || $files['img']['type'] == NULL) {
-				return array(
-                    "status" => "unknown",
-                    "message" => "Please select an image!",
-                );
-            }
-            
             //Get the directory of uploading folder
              $target_dir = wp_upload_dir();
 
@@ -250,7 +233,6 @@
                     return array(
                         "status" => "success",
                         "data" =>   $target_dir['url'].'/'.basename($completed_file_name),
-                        // $target_dir['url']
                     );
 
 

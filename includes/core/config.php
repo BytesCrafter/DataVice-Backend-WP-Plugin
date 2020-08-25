@@ -16,7 +16,7 @@
 	define('DV_MASTER', 'masterkey');
 	
 	// Maximum file size for uploading image
-	define('DV_UPLOAD_SIZE', 500000);
+	define('DV_UPLOAD_SIZE', 5000000);
 
 
 	define('WP_PREFIX', 'wp_');
