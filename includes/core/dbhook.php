@@ -28,11 +28,11 @@
 		$tbl_configs = DV_CONFIG_TABLE;
 
 
-
 		$wpdb->query("START TRANSACTION ");
 
-		$wpdb->query("SET GLOBAL max_allowed_packet=1073741824;");
+		$get_last_pocket = $wpdb->get_row(" SHOW VARIABLES LIKE 'max_allowed_packet'; ");
 
+		$wpdb->query("SET GLOBAL max_allowed_packet=12582912;");
 
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_configs'" ) != $tbl_configs) {
 			$sql = "CREATE TABLE `".$tbl_configs."` (";
@@ -226,6 +226,10 @@
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
 		}
+
+
+		$wpdb->query("SET GLOBAL max_allowed_packet=$get_last_pocket->value;");
+
 
 		$wpdb->query("COMMIT");
 
