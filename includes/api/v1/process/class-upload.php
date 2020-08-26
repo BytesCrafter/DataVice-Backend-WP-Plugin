@@ -221,14 +221,14 @@
                     if (!$check_product) {
                         return array(
                             "status" => "failed",
-                            "message" => "This store does not exists."
+                            "message" => "This product does not exists."
                         );
                     }
                     
                     if ($check_product->status == '0') {
                         return array(
                             "status" => "failed",
-                            "message" => "This store is currently inactive."
+                            "message" => "This product is currently inactive."
                         );
                     }
 
@@ -250,10 +250,13 @@
 
                         $wpdb->query("START TRANSACTION");
                             $product_img = $wpdb->query("INSERT INTO tp_revisions ( `revs_type`, `parent_id`, `child_key`, `child_val`, `created_by`, `date_created` ) 
-                                            VALUES ( 'products', '$product_id', 'logo', '$link', '$wpid', '$date') ");
+                                            VALUES ( 'products', '$product_id', 'preview', '$link', '$wpid', '$date') ");
+                            $product_img_id = $wpdb->insert_id;
+
+                            $update_product_data = $wpdb->query("UPDATE tp_products SET `preview` = $product_img_id  WHERE ID = '$product_id'  ");
                             
                         
-                        if ($product_img < 1  ) {
+                        if ($product_img < 1 || $update_product_data < 1 ) {
                             $wpdb->query("ROLLBACK");
                             return array(
                                 "status" => "failed",
@@ -273,31 +276,6 @@
                             }
                         }
                         
-                    }else{
-                        
-                        $wpdb->query("START TRANSACTION");
-                            $product_img = $wpdb->query("INSERT INTO tp_revisions ( `revs_type`, `parent_id`, `child_key`, `child_val`, `created_by`, `date_created` ) 
-                                            VALUES ( 'products', '$product_id', 'banner', '$link', '$wpid', '$date') ");
-                            
-                        if ($product_img < 1  ) {
-                            $wpdb->query("ROLLBACK");
-                            return array(
-                                "status" => "failed",
-                                "message" => "An error occured while submmiting data to server."
-                            );
-
-                        }else{
-
-                            if ($result['status'] == 'success') {
-                                $wpdb->query("COMMIT");
-
-                                return array(
-                                    "status" => $result['status'],
-                                    "data" => $result['data'],
-                                    "message" => ucfirst($type) . ' has been added successfully' 
-                                );
-                            }
-                        }
                     }
                 }
             }

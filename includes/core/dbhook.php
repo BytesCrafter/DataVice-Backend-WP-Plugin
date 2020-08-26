@@ -183,7 +183,7 @@
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_brgy'" ) != $tbl_brgy) {
 			$sql = "CREATE TABLE `".$tbl_brgy."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
-				$sql .= "`status` bigint(20) NOT NULL DEFAULT 0, ";
+				$sql .= "`status` bigint(20) NOT NULL DEFAULT 1, ";
 				$sql .= "`city_code` varchar(10) DEFAULT NULL, ";
 				$sql .= "`brgy_name` varchar(100) DEFAULT NULL, ";
 				$sql .= "PRIMARY KEY (`ID`) ";
