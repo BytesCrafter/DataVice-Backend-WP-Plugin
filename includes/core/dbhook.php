@@ -104,6 +104,12 @@
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
+			$conf_list_val = DV_CONFIG_VALUE;
+			$rev_table = DV_REVS_TABLE;
+			$rev_fields = DV_INSERT_REV_FIELDS;
+
+			//Dumping data into tables
+			$wpdb->query("INSERT INTO `".$rev_table."` ($rev_fields,  `parent_id`) VALUES $conf_list_val");
 		}
 
 		//Database table creation for dv_geo_countries - QA: 01/08/2020
