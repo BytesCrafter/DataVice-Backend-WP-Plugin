@@ -24,7 +24,7 @@
             if (!$result) {
                 return $default;
             } else {
-                return $result->config_val;
+                return $result->child_val;
             }
         }
 

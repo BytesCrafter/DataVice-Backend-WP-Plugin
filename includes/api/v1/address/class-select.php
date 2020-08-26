@@ -13,6 +13,8 @@
 <?php
     class DV_Select_Address{
         public static function listen(){
+
+			return DV_Library_Config::dv_set_config('sample_config', 'config info', 'sample', 'smpl');
 			global $wpdb;
 			
             // Step 1: Validate user
