@@ -31,7 +31,7 @@
 
 		$wpdb->query("START TRANSACTION ");
 
-		$wpdb->query("SET GLOBAL max_allowed_packet=1073741824");
+		$wpdb->query("SET GLOBAL max_allowed_packet=1073741824;");
 
 
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_configs'" ) != $tbl_configs) {

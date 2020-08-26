@@ -24,6 +24,12 @@
             global $wpdb;
             $date = DV_Globals:: date_stamp();
 
+            if ( DV_Verification::is_verified() == false ) {
+                return array(
+                        "status" => "unknown",
+                        "message" => "Please contact your administrator. Verification Issue!",
+                );
+            }
 
             $files = $request->get_file_params();
             
@@ -88,7 +94,8 @@
                     if ($result['status'] == 'success') {
                         return array(
                             "status" => $result['status'],
-                            "data" => $result['data']
+                            "data" => $result['data'],
+                            "message" => ucfirst($type) . ' has been added successfully' 
                         );
         
                     }
@@ -157,7 +164,8 @@
 
                                 return array(
                                     "status" => $result['status'],
-                                    "data" => $result['data']
+                                    "data" => $result['data'],
+                                    "message" => ucfirst($type) . ' has been added successfully' 
                                 );
                             }
                         }
@@ -185,7 +193,8 @@
 
                                 return array(
                                     "status" => $result['status'],
-                                    "data" => $result['data']
+                                    "data" => $result['data'],
+                                    "message" => ucfirst($type) . ' has been added successfully' 
                                 );
                             }
                         }
@@ -228,7 +237,8 @@
                     if ($result['status'] != 'success') {
                         return array(
                             "status" => $result['status'],
-                            "message" => $result['message']
+                            "message" => $result['message'],
+                            
                         );
         
                     }
@@ -257,7 +267,8 @@
 
                                 return array(
                                     "status" => $result['status'],
-                                    "data" => $result['data']
+                                    "data" => $result['data'],
+                                    "message" => ucfirst($type) . ' has been added successfully' 
                                 );
                             }
                         }
@@ -272,7 +283,7 @@
                             $wpdb->query("ROLLBACK");
                             return array(
                                 "status" => "failed",
-                                "message" => "An erro occured while submmiting data to server."
+                                "message" => "An error occured while submmiting data to server."
                             );
 
                         }else{
@@ -282,7 +293,8 @@
 
                                 return array(
                                     "status" => $result['status'],
-                                    "data" => $result['data']
+                                    "data" => $result['data'],
+                                    "message" => ucfirst($type) . ' has been added successfully' 
                                 );
                             }
                         }
