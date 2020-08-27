@@ -69,7 +69,7 @@
                     if ($master_key !== $_POST['mkey']) {
                         return  array(
                             "status" => "error",
-                            "message" => "Master keys does not match.",
+                            "message" => "Master key does not match.",
                         );
                     }
 
