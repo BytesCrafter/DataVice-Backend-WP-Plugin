@@ -46,20 +46,56 @@
                     "message" => "Please select an image!",
                 );
             }
-            
-
-
 
             isset($_POST['wpid']) ? $user_id = $_POST['wpid'] : $user_id = NULL;
             isset($_POST['stid']) ? $stid = $_POST['stid'] : $stid = NULL;
             isset($_POST['pdid']) ? $pdid = $_POST['pdid'] : $pdid = NULL;
             isset($_POST['type']) ? $typ = $_POST['type'] : $typ = NULL;
+            isset($_POST['mkey']) ? $mkey = $_POST['mkey'] : $mkey = NULL;
 
             $wpid = $user_id  == '0' || $user_id == NULL ? NULL: $wpid = $user_id;
             $store_id = $stid  == '0' || $stid == NULL ? NULL: $store_id = $stid;
             $product_id = $pdid  == '0' || $pdid == NULL ? NULL: $product_id = $pdid;
             $type = $typ  == '0' || $typ == NULL ? NULL: $type = $typ;
            
+            $master_key = $mkey  == '0' || $mkey == NULL ? NULL: $master_key = $mkey;
+
+            if (isset($_POST['wpid']) || isset($_POST['mkey'])  ) {
+                if ($wpid !== NULL || $master_key  !== NULL ) {
+
+                    $master_key = DV_Library_Config::dv_get_config('master_key', 123);
+            
+                    //Check if master key matches
+                    if (!((int)$master_key === (int)$_POST['mkey'])) {
+                        return  array(
+                            "status" => "error",
+                            "message" => "Master keys does not match.",
+                        );
+                    }
+
+                    // Call upload image function
+                    $result = DV_Globals::upload_image( $request, $files);
+
+                    if ($result['status'] != 'success') {
+                        return array(
+                            "status" => $result['status'],
+                            "message" => $result['message']
+                        );
+                    }
+
+                    if ($result['status'] == 'success') {
+                        return array(
+                            "status" => $result['status'],
+                            "data" => $result['data']
+                           
+                        );
+                    }
+                }
+            }
+
+
+
+
             // for inserting user avatar
             if (isset($_POST['wpid'])) {
                 if ($store_id == NULL && $product_id == NULL && $wpid !== NULL) {
@@ -81,7 +117,7 @@
         
                     }
 
-                    return$user_avatar = update_user_meta( $wpid,  'avatar',  $result['data'] );
+                    $user_avatar = update_user_meta( $wpid,  'avatar',  $result['data'] );
                     
                     if ($user_avatar == false) {
                         return array(
@@ -94,8 +130,8 @@
                     if ($result['status'] == 'success') {
                         return array(
                             "status" => $result['status'],
-                            "data" => $result['data'],
-                            "message" => ucfirst($type) . ' has been added successfully' 
+                            "data" => $result['data']
+                           
                         );
         
                     }
