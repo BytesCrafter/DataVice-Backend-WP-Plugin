@@ -63,10 +63,10 @@
             if (isset($_POST['wpid']) || isset($_POST['mkey'])  ) {
                 if ($wpid !== NULL || $master_key  !== NULL ) {
 
-                    $master_key = DV_Library_Config::dv_get_config('master_key', 123);
+                    $master_key = DV_Library_Config::dv_get_config('master_key', '');
             
                     //Check if master key matches
-                    if (!((int)$master_key === (int)$_POST['mkey'])) {
+                    if ($master_key !== $_POST['mkey']) {
                         return  array(
                             "status" => "error",
                             "message" => "Master keys does not match.",
