@@ -168,17 +168,14 @@
                 $img_name = sanitize_file_name($_POST['IN']);
             }
 
-
-            $completed_file_name = $img_name;
+            $completed_file_name = sha1(date("Y-m-d~h:i:s"))."-".$img_name;
 
             $target_file = $target_dir['path'] . '/' . basename($completed_file_name);
             $uploadOk = 1;
             $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
             
             $check = getimagesize($files['img']['tmp_name']);
-            
-            
-            
+
             if($check !== false) {
                 $uploadOk = 1;
             } else {
@@ -188,6 +185,7 @@
                     "message" => "File is not an image.",
                 );
             }
+
             // Check if file already exists
             if (file_exists($target_file)) {
                 //  file already exists
@@ -207,6 +205,7 @@
                     "message" => "File is too large.",
                 );
             }
+
             // Allow certain file formats
             if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != 
                 "jpeg"
@@ -218,6 +217,12 @@
                     "message" => "Only JPG, JPEG, PNG & GIF files are allowed.",
                 );
             }
+
+            // return array(
+            //     "status" => "success",
+            //     "data" =>   $target_dir['url'].'/'.basename($completed_file_name),
+            // );
+
             // Check if $uploadOk is set to 0 by an error
             if ($uploadOk == 0) {
                // file was not uploaded.

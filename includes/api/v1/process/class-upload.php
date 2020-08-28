@@ -40,12 +40,12 @@
                 );
             }
 
-            if ( $files['img']['name'] == NULL  || $files['img']['type'] == NULL) {
-				return array(
-                    "status" => "unknown",
-                    "message" => "Please select an image!",
-                );
-            }
+            // if ( $files['img']['name'] == NULL  || $files['img']['type'] == NULL) {
+			// 	return array(
+            //         "status" => "unknown",
+            //         "message" => "Please select an image!",
+            //     );
+            // }
 
             isset($_POST['wpid']) ? $user_id = $_POST['wpid'] : $user_id = NULL;
             isset($_POST['stid']) ? $stid = $_POST['stid'] : $stid = NULL;
