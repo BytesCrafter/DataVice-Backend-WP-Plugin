@@ -34,8 +34,8 @@
 
 	//Insert Fields
 	define('DV_INSERT_REV_FIELDS', '`revs_type`, `child_key`, `child_val`, `created_by`, `date_created`');
-	define('DV_INSERT_ADDRESS_FIELDS', '`status`, `types`, `wpid`, `street`, `brgy`, `city`, `province`, `country`, `date_created`');
-
+	define('DV_INSERT_ADDRESS_FIELDS', '`status`, `wpid`, `types`, `street`, `brgy`, `city`, `province`, `country`, `date_created`');
+	
 
 	// Config CONSTANT
 	define('DV_CONFIG_TABLE', DV_PREFIX.'configs');
