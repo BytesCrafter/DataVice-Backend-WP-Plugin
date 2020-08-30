@@ -16,8 +16,9 @@
 
 		public static function listen(WP_REST_Request $request) {
 			return rest_ensure_response( 
-				DV_Upload::listen_open($request)
-			);
+                
+                DV_Upload::listen_open($request)
+            );
 		}
 
 		public static function listen_open($request) {
@@ -60,7 +61,8 @@
            
             $master_key = $mkey  == '0' || $mkey == NULL ? NULL: $master_key = $mkey;
 
-            if (isset($_POST['wpid']) || isset($_POST['mkey'])  ) {
+            if (isset($_POST['wpid']) && isset($_POST['mkey'])  ) {
+
                 if ($wpid !== NULL || $master_key  !== NULL ) {
 
                     $master_key = DV_Library_Config::dv_get_config('master_key', '');
@@ -94,11 +96,10 @@
             }
 
 
-
-
             // for inserting user avatar
-            if (isset($_POST['wpid'])) {
-                if ($store_id == NULL && $product_id == NULL && $wpid !== NULL) {
+            if (isset($_POST['wpid']) && !isset($_POST['stid']) ) {
+
+                if ($store_id === NULL && $product_id == NULL && $wpid !== NULL) {
                     if ( !is_numeric($wpid)  ) {
                         return array(
                             "status" => "unknwon",
@@ -139,7 +140,7 @@
                 }    
             }
 
-            if (isset($_POST['stid']) || isset($_POST['type']) ) {
+            if (isset($_POST['stid']) && isset($_POST['type']) && !isset($_POST["pdid"]) ) {
 
                 if ($_POST['type'] !== 'logo' && $_POST['type'] !== 'banner') {
                     return array(
@@ -240,7 +241,7 @@
 
 
 
-            if (isset($_POST['pdid']) && isset($_POST['type']) && isset($_POST['stid']) ) {
+            if (isset($_POST['pdid']) && isset($_POST['type']) ) {
                 
                 if ($_POST['type'] !== 'logo' && $_POST['type'] !== 'banner') {
                     return array(

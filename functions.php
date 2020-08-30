@@ -1,7 +1,7 @@
 <?php
 
     /*
-        Plugin Name: DataVice WP Plugin
+        Plugin Name: DataV2ice WP Plugin
         Plugin URI: http://www.bytescrafter.net/projects/datavice
         Description: DataVice WP Plugin is a user management for your application or game users.
         Version: 0.1.0
