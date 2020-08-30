@@ -1,6 +1,6 @@
-# PasaData - WordPress Plugin
+# DataVice - WordPress Plugin
 
-PasaData is forked from the DataVice for WordPress is a user management for your application or game users. This is an alternative to firebase which you can host your own.
+DataVice is a user management for your application or game users. This is an alternative to firebase which you can host your own.
 
 ### Prerequisites
 
@@ -8,10 +8,10 @@ Due to large file size, some data cannot be imported to the database thus requir
 
 ### REST API Implementation
 
-- [USER RESTAPI DOCS](https://github.com/PasaBuyApp/WP-PasaData/documentation/USER)
-- [CONTACT RESTAPI DOCS](https://github.com/PasaBuyApp/WP-PasaData/documentation/CONTACT)
-- [LOCATION RESTAPI DOCS](https://github.com/PasaBuyApp/WP-PasaData/documentation/LOCATION)
-- [SETTINGS RESTAPI DOCS](https://github.com/PasaBuyApp/WP-PasaData/documentation/SETTINGS)
+- [USER RESTAPI DOCS](https://github.com//BytesCrafter/DataVice-WP-Plugin/documentation/USER)
+- [CONTACT RESTAPI DOCS](https://github.com//BytesCrafter/DataVice-WP-Plugin/documentation/CONTACT)
+- [LOCATION RESTAPI DOCS](https://github.com//BytesCrafter/DataVice-WP-Plugin/documentation/LOCATION)
+- [SETTINGS RESTAPI DOCS](https://github.com//BytesCrafter/DataVice-WP-Plugin/documentation/SETTINGS)
 
 ## Contributing
 
@@ -19,7 +19,7 @@ Please read [CONTRIBUTING](CONTRIBUTING) for details on our code of conduct, and
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/PasaBuyApp/WP-PasaData/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com//BytesCrafter/DataVice-WP-Plugin/tags). 
 
 ## Authors
 
@@ -27,7 +27,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 * **Lorz Becislao** - [Github](https://github.com/lorzbecislao)
 * **Miguel Radaza** - [Github](https://github.com/MiguelRadaza)
 
-See also the list of [contributors](https://github.com/PasaBuyApp/WP-PasaData/graphs/contributors) who participated in this project.
+See also the list of [contributors](https://github.com//BytesCrafter/DataVice-WP-Plugin/graphs/contributors) who participated in this project.
 
 ## License
 
