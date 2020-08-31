@@ -45,8 +45,8 @@
 			$conf_list = DV_CONFIG_DATA;
 			$conf_fields = DV_CONFIG_FIELD;
 
-			//Dumping data into tables
-			$wpdb->query("INSERT INTO `".$tbl_configs."` ($conf_fields, hash_id) VALUES $conf_list");
+			//Dumping data into tables(title, info, config_key, config_val,  hash_id) ($conf_fields, hash_id)
+			$wpdb->query("INSERT INTO `".$tbl_configs."` (title, info, config_key, config_val,  hash_id) VALUES $conf_list");
 		}
 
 		// Database table creation for dv_address - QA: 01/08/2020
