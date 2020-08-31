@@ -9,8 +9,7 @@
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
 	*/
-?>
-<?php
+
   	class DV_Globals {
 
         //Declare a private variable for mysql table name
@@ -42,7 +41,6 @@
             //STEP 1 - Get timezone name from tzone ID.
             //step 2 - USe that tzone to convert date_time to current timezone.
         }
-
      
         /** Checking if $id has row. Returns boolean
 	    * Returns true if  row found, false if not found, "unavail" if status is not active
@@ -72,8 +70,6 @@
                 }
             }
         }
-
-  
 
         public static function custom_update($parent_id, $wpid, $rev_type, $parent_table, $revisions_table, $data, $where){
            
@@ -252,6 +248,4 @@
             }
         }
 
-
     } // end of class
-?>

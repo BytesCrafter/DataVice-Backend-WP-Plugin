@@ -9,8 +9,6 @@
      * @version 0.1.0
      * Here is where you add hook to WP to create our custom database if not found.
 	*/
-?>
-<?php
 
 	function dv_dbhook_activate(){
 		
@@ -23,10 +21,7 @@
 		$tbl_address = DV_ADDRESS_TABLE;
 		$tbl_revs = DV_REVS_TABLE;
 		$tbl_events = DV_EVENTS_TABLE;
-
-		// Database table creation for dv_configs - QA: 01/08/2020
 		$tbl_configs = DV_CONFIG_TABLE;
-
 
 		$wpdb->query("START TRANSACTION ");
 
@@ -37,6 +32,7 @@
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_configs'" ) != $tbl_configs) {
 			$sql = "CREATE TABLE `".$tbl_configs."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`hash_id` varchar(255) NOT NULL , ";
 				$sql .= "`title` varchar(255) NOT NULL, ";
 				$sql .= "`info` varchar(255) NOT NULL, ";
 				$sql .= "`config_key` varchar(50) NOT NULL,";
@@ -50,13 +46,14 @@
 			$conf_fields = DV_CONFIG_FIELD;
 
 			//Dumping data into tables
-			$wpdb->query("INSERT INTO `".$tbl_configs."` $conf_fields VALUES $conf_list");
+			$wpdb->query("INSERT INTO `".$tbl_configs."` ($conf_fields, hash_id) VALUES $conf_list");
 		}
 
 		// Database table creation for dv_address - QA: 01/08/2020
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_address'" ) != $tbl_address) {
 			$sql = "CREATE TABLE `".$tbl_address."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`hash_id` varchar(255) NOT NULL , ";
 				$sql .= "`status` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Live/Hiden', ";
 				$sql .= "`wpid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID, 0 if Null', ";
 				$sql .= "`stid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Store ID, 0 if Null', ";
@@ -79,6 +76,7 @@
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_contacts'" ) != $tbl_contacts) {
 			$sql = "CREATE TABLE `".$tbl_contacts."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`hash_id` varchar(255) NOT NULL , ";
 				$sql .= "`status` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Live/Hiden', ";
 				$sql .= "`wpid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID, 0 if Null', ";
 				$sql .= "`stid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Store ID, 0 if Null', ";
@@ -95,6 +93,7 @@
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_revs'" ) != $tbl_revs) {
 			$sql = "CREATE TABLE `".$tbl_revs."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`hash_id` varchar(255) NOT NULL , ";
 				$sql .= "`revs_type` enum('none','configs','address','contacts') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Plugin Tables', ";
 				$sql .= "`parent_id` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Row ID',";
 				$sql .= "`child_key` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Column Name', ";
@@ -109,7 +108,7 @@
 			$rev_fields = DV_INSERT_REV_FIELDS;
 
 			//Dumping data into tables
-			$wpdb->query("INSERT INTO `".$rev_table."` ($rev_fields,  `parent_id`) VALUES $conf_list_val");
+			$wpdb->query("INSERT INTO `".$rev_table."` ($rev_fields,  `parent_id`, `hash_id`) VALUES $conf_list_val");
 		}
 
 		//Database table creation for dv_geo_countries - QA: 01/08/2020
@@ -233,15 +232,8 @@
 			$result = $wpdb->get_results($sql);
 		}
 
-
 		$wpdb->query("SET GLOBAL max_allowed_packet=$get_last_pocket->value;");
 
-
 		$wpdb->query("COMMIT");
-
-
 	}
-
     add_action( 'activated_plugin', 'dv_dbhook_activate' );
-
-?>

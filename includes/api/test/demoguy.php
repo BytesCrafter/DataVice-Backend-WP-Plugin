@@ -10,8 +10,7 @@
         * @package datavice-wp-plugin
         * @version 0.1.0
 	*/
-?>
-<?php
+
 	class DV_Demoguy {
 
 		// Rest Api routing.
@@ -65,5 +64,3 @@
 			
 		}
 	}
-
-?>

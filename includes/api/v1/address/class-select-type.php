@@ -9,8 +9,7 @@
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
 	*/
-?>
-<?php
+
     class DV_Select_type_Address{
         public static function listen(){
 			global $wpdb;
