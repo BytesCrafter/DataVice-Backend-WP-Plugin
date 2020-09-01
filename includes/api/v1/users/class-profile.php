@@ -9,8 +9,7 @@
         * @package datavice-wp-plugin
         * @version 0.1.0
 	*/
-?>
-<?php
+
 	class DV_Userprofile{
 
                 public static function listen(){
@@ -59,5 +58,3 @@
                 }// End of function initialize()
 
 	} // End of class
-
-?>

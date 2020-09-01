@@ -10,8 +10,7 @@
         * @package datavice-wp-plugin
         * @version 0.1.0
 	*/
-?>
-<?php
+
 	class DV_Authenticate {
 
 		//Get the user session token string and if nothing, create and return one.
@@ -148,5 +147,3 @@
 			);
 		}
 	}
-
-?>

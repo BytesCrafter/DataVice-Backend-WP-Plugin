@@ -9,8 +9,7 @@
         * @package datavice-wp-plugin
         * @version 0.1.0
 	*/
-?>
-<?php
+
 	class DV_Stats{
 
                 public static function listen(){
@@ -61,5 +60,3 @@
                 }// End of function initialize()
 
 	} // End of class
-
-?>

@@ -10,8 +10,7 @@
         * @package datavice-wp-plugin
         * @version 0.1.0
 	*/
-?>
-<?php
+
 	class DV_Upload {
 
 		public static function listen(WP_REST_Request $request) {

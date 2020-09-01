@@ -9,8 +9,7 @@
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
 	*/
-?>
-<?php
+
   	class DV_Globals {
 
         //Declare a private variable for mysql table name
@@ -42,7 +41,6 @@
             //STEP 1 - Get timezone name from tzone ID.
             //step 2 - USe that tzone to convert date_time to current timezone.
         }
-
      
         /** Checking if $id has row. Returns boolean
 	    * Returns true if  row found, false if not found, "unavail" if status is not active
@@ -72,8 +70,6 @@
                 }
             }
         }
-
-  
 
         public static function custom_update($parent_id, $wpid, $rev_type, $parent_table, $revisions_table, $data, $where){
            
@@ -153,31 +149,41 @@
 
         public static function upload_image($request, $files){
 
-            $max_size = DV_UPLOAD_SIZE;
+
+            $max_img_size = DV_Library_Config::dv_get_config('max_img_size', 123);
+            if (!$max_img_size) {
+                return array(
+                    "status" => "unknown",
+                    "message" => "Please contact your administrator. Can't find config of img size.",
+                );
+            }
 
             //Get the directory of uploading folder
-             $target_dir = wp_upload_dir();
+            $target_dir = wp_upload_dir();
 
             //Get the file extension of the uploaded image
             $file_type = strtolower(pathinfo($target_dir['path'] . '/' . basename($files['img']['name']),PATHINFO_EXTENSION));
 
-
             if (!isset($_POST['IN'])) {
                 $img_name = $files['img']['name'];
+
             } else {
                 $img_name = sanitize_file_name($_POST['IN']);
+
             }
 
             $completed_file_name = sha1(date("Y-m-d~h:i:s"))."-".$img_name;
 
             $target_file = $target_dir['path'] . '/' . basename($completed_file_name);
             $uploadOk = 1;
+
             $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
             
             $check = getimagesize($files['img']['tmp_name']);
 
             if($check !== false) {
                 $uploadOk = 1;
+
             } else {
                 $uploadOk = 0;
                 return array(
@@ -197,7 +203,7 @@
             }
 
             // Check file size
-            if ($files['img']['size'] > $max_size) {
+            if ($files['img']['size'] > $max_img_size) {
                 // file is too large
                 $uploadOk = 0;
                 return array(
@@ -218,11 +224,6 @@
                 );
             }
 
-            // return array(
-            //     "status" => "success",
-            //     "data" =>   $target_dir['url'].'/'.basename($completed_file_name),
-            // );
-
             // Check if $uploadOk is set to 0 by an error
             if ($uploadOk == 0) {
                // file was not uploaded.
@@ -240,7 +241,6 @@
                         "data" =>   $target_dir['url'].'/'.basename($completed_file_name),
                     );
 
-
                 } else {
                     //there was an error uploading your file
                     return array(
@@ -251,7 +251,4 @@
                 }
             }
         }
-
-
     } // end of class
-?>

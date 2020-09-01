@@ -10,22 +10,17 @@
      * This is where you provide all the constant config.
 	*/
 	
-
 	//Defining Global Variables
 	define('DV_PREFIX', 'dv_');
 	define('DV_MASTER', 'masterkey');
 	
 	// Maximum file size for uploading image
 	define('DV_UPLOAD_SIZE', 5000000);
-
-
 	define('WP_PREFIX', 'wp_');
 	
 	// Wordpress CONSTANT
 	define('WP_USERS_META', WP_PREFIX.'usermeta');
 	define('WP_USERS', WP_PREFIX.'users');
-
-
 	
 	// Primary Table Constant
 	define('DV_CONTACTS_TABLE', DV_PREFIX.'contacts');
@@ -41,7 +36,7 @@
 	define('DV_CONFIG_TABLE', DV_PREFIX.'configs');
 	define("DV_CONFIG_DATA", $dv_config_list);
 	define("DV_CONFIG_VALUE", $dv_config_val);
-	define("DV_CONFIG_FIELD", "(title, info, config_key, config_val)");
+	define("DV_CONFIG_FIELD", "title, info, config_key, config_val");
 
 	// Country CONSTANT
 	define('DV_COUNTRY_FIELDS', 'country_code as code, country_name as name');

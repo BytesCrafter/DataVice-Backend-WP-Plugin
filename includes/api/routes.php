@@ -63,13 +63,10 @@
         /*
          * TEST RESTAPI
         */
-
             register_rest_route( 'datavice/test', 'demoguy', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Demoguy', 'listen'),
             ));
-
-     
 
         /*
          * USER RESTAPI
@@ -220,13 +217,6 @@
                 'callback' => array('DV_Update_Coordinates', 'listen'),
             ));
 
- 
-            
-        
-        /*
-         * Start unknown
-        */
-
         /*
          * UPLOAD RESTAPI
         */
@@ -234,7 +224,5 @@
                 'methods' => 'POST',
                 'callback' => array('DV_Upload', 'listen'),
             ));
-    
-
     }
     add_action( 'rest_api_init', 'datavice_route' );
