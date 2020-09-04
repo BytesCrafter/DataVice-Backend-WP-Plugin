@@ -86,18 +86,18 @@
 
             //Country input validation
                 // Step 2 : Check if country passed is in integer format.
-                if ( !is_numeric($_POST['co']) ) {
-                    return rest_ensure_response( 
-                        array(
-                                "status" => "failed",
-                                "message" => "Invalid value for country.",
-                        )
-                    );
-                }
+                // if ( !is_numeric($_POST['co']) ) {
+                //     return rest_ensure_response( 
+                //         array(
+                //                 "status" => "failed",
+                //                 "message" => "Invalid value for country.",
+                //         )
+                //     );
+                // }
 
                 // Step 2 : Check if country_id is in database. 
                 $country_id= $_POST['co']; 
-                $co_status = DV_Globals:: check_availability(DV_COUNTRY_TABLE, "WHERE id = $country_id");
+                $co_status = DV_Globals:: check_availability(DV_COUNTRY_TABLE, "WHERE country_code = '$country_id' ");
                 
                 if ( $co_status == false ) {
                     return rest_ensure_response( 
@@ -237,7 +237,6 @@
                 $add_key_meta = update_user_meta( $created_id, 'gender', $user['gender'] );
                 $add_key_meta = update_user_meta( $created_id, 'birthday', $user['birthday'] );
 
-                
                 //Start for mysql transaction.
                 //This is crucial in inserting data with connection with each other
                 $wpdb->query("START TRANSACTION");
@@ -248,11 +247,11 @@
 
                 $rev_fields = DV_INSERT_REV_FIELDS;
 
-                $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'status', 'active', $created_id, '$date');");
+                 $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'status', 'active', $created_id, '$date');");
                 
                 $revtype = $wpdb->insert_id;
 
-                $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'street', '{$user["street"]}', $created_id, '$date');");
+                 $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'street', '{$user["street"]}', $created_id, '$date');");
                 
                 $street = $wpdb->insert_id;
 
@@ -260,7 +259,7 @@
                 
                 $brgy = $wpdb->insert_id;
 
-                $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'city', {$user["city"]}, $created_id, '$date');");
+                 $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'city', {$user["city"]}, $created_id, '$date');");
                 
                 $city = $wpdb->insert_id;
                 
@@ -268,7 +267,7 @@
                 
                 $province = $wpdb->insert_id;
 
-                $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'country', {$user["country"]}, $created_id, '$date');");
+                $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'country', '{$user["country"]}', $created_id, '$date');");
                 
                 $country = $wpdb->insert_id;
                 
@@ -284,10 +283,12 @@
                             "message" => "An error occured while submitting data to the server."
                         )
                     );
+                }else{
+                    $wpdb->query("COMMIT");
                 }
 
                 //If no problems found in queries above, do mysql commit (do changes(insert rows))
-                $wpdb->query("COMMIT");
+               
 
                 
                 $table_address = DV_ADDRESS_TABLE;
@@ -393,7 +394,13 @@
             $message .= "\nPassword Reset Key: " .$user['user_activation_key'];
             $message .= "\n\nPasaBuy.App";
             $message .= "\nsupport@pasabuy.app";
-            return wp_mail( $user['user_email'], "Bytes Crafter - Forgot Password", $message );
+            $mail = wp_mail( $user['user_email'], "Bytes Crafter - Forgot Password", $message );
+        
+            if(is_wp_error($mail)){
+                return false;
+            }else{
+                return $mail;
+            }
         }
 
     }
