@@ -49,11 +49,29 @@
                 );
             }
 
-            $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email
+
+            if (is_email($_POST['un'])) {
+
+                // Sanitize email
+                $email = sanitize_email($_POST['un']);
+
+                $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email
+                FROM {$wpdb->prefix}users 
+                WHERE user_email = '{$_POST['un']}' 
+                AND `user_activation_key` = '{$_POST['ak']}'", OBJECT );
+               
+            } else {
+
+                //Sanitize username
+                $uname = sanitize_user($_POST['un']);
+                
+                $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email
                 FROM {$wpdb->prefix}users 
                 WHERE user_login = '{$_POST['un']}' 
                 AND `user_activation_key` = '{$_POST['ak']}'", OBJECT );
 
+            }
+            
             if ( !$cur_user ) {
                 return rest_ensure_response( 
 					array(
