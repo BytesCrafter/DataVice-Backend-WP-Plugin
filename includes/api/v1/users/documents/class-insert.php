@@ -111,7 +111,7 @@
             $id = array();
 
             foreach ( $child_key as $key => $child_val) {                                     
-                $insert2 = $wpdb->query("INSERT INTO $table_revs ($revs_fields, `parent_id`) VALUES ('documents', '$key', '$child_val', '$wpid', '$date_created', $last_id_doc ) ");
+                $insert2 = $wpdb->query("INSERT INTO $table_revs ($revs_fields, `parent_id`) VALUES ('documents', '$key', '$child_val', '$wpid', '$date_created', sha2($last_id_doc, 256) ) ");
                 $id[] = $wpdb->insert_id; 
             }
 

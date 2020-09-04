@@ -41,7 +41,7 @@
             }
 
             // Step 3: Sanitize all Request
-            if (!isset($_POST['stid']) || !isset($_POST['doc_id']) ) {
+            if (!isset($_POST['docid']) ) {
 				return array(
 					"status" => "unknown",
 					"message" => "Please contact your administrator. Request unknown!",
@@ -49,25 +49,34 @@
             }
             
             // Step 4: Sanitize all Request if emply
-            if ( empty($_POST['stid']) || empty($_POST['doc_id']) ) {
+            if (empty($_POST['docid']) ) {
 				return array(
-						"status" => "failed",
-						"message" => "Required fields cannot be empty.",
+					"status" => "failed",
+					"message" => "Required fields cannot be empty.",
                 );
             }
 
             // Put all request to variable
             $wpid = $_POST['wpid'];
-            $stid = $_POST['stid'];
-            $doc_id = $_POST['doc_id'];
+            $doc_id = $_POST['docid'];
             $date_created = TP_Globals::date_stamp();
-            $tp_docs = TP_DOCU_TABLE;
+            $tp_docs = DV_DOCUMENTS;
             $doc_fields = DOCS_FIELDS;
-            $table_revs = TP_REVISIONS_TABLE;  
-            $revs_fields = TP_REVISION_FIELDS; 
+            $table_revs = DV_REVS_TABLE;  
+            $revs_fields = DV_INSERT_REV_FIELDS; 
 
             // Step 5: Check document if exist using document id, store id and document type
-            $check_doc =  $wpdb->get_row("SELECT ID, (SELECT child_val FROM $table_revs WHERE ID = $tp_docs.status) AS status FROM $tp_docs WHERE ID = $doc_id  AND stid = '$stid' ");
+            $check_doc =  $wpdb->get_row("SELECT 
+                ID, 
+                (SELECT child_val FROM $table_revs WHERE parent_id = doc.status) AS `status` 
+            FROM 
+                $tp_docs doc
+            WHERE 
+                hash_id = '$doc_id'  
+            AND 
+                wpid = '$wpid' ");
+
+
             if (!$check_doc || $check_doc->status === '0') {
                 return array(
                     "status" => "failed",
@@ -81,7 +90,9 @@
             $insert = $wpdb->query("INSERT INTO $table_revs ($revs_fields, parent_id) VALUES ('documents', 'status', '0', '$wpid', '$date_created', '$doc_id' ) ");
             $last_id_doc = $wpdb->insert_id;
 
-            $update = $wpdb->query("UPDATE $tp_docs SET status = $last_id_doc WHERE ID = $doc_id ");
+            $wpdb->query("UPDATE $table_revs SET hash_id = sha2($last_id_doc, 256) WHERE ID = $last_id_doc");
+
+            $update = $wpdb->query("UPDATE $tp_docs SET status = $last_id_doc WHERE hash_id = '$doc_id' ");
 
             //  Step 7: Return Success
             if ($insert < 1 || $update < 1 ) {

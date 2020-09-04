@@ -30,6 +30,7 @@
     // documents folder
     require plugin_dir_path(__FILE__) . '/v1/users/documents/class-insert.php';
     require plugin_dir_path(__FILE__) . '/v1/users/documents/class-update.php';
+    require plugin_dir_path(__FILE__) . '/v1/users/documents/class-delete.php';
 
     // Contacts Classes
     require plugin_dir_path(__FILE__) . '/v1/contacts/class-insert.php';
@@ -147,6 +148,11 @@
                 register_rest_route( 'datavice/v1/user/documents', 'update', array(
                     'methods' => 'POST',
                     'callback' => array('DV_Update_docs', 'listen'),
+                ));
+
+                register_rest_route( 'datavice/v1/user/documents', 'delete', array(
+                    'methods' => 'POST',
+                    'callback' => array('DV_Delete_docs', 'listen'),
                 ));
 
         /*
