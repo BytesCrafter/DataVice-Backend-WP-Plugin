@@ -110,14 +110,15 @@
 
             $id = array();
 
-            foreach ( $child_key as $key => $child_val) {
-                return$insert2 = $wpdb->query("INSERT INTO $table_revs $revs_fields VALUES ('documents', $last_id_doc, '$key', '$child_val', '$wpid', '$date_created' ) ");
+            foreach ( $child_key as $key => $child_val) {                                     
+                $insert2 = $wpdb->query("INSERT INTO $table_revs ($revs_fields, `parent_id`) VALUES ('documents', '$key', '$child_val', '$wpid', '$date_created', $last_id_doc ) ");
                 $id[] = $wpdb->insert_id; 
+            }
+
                 $update1 = $wpdb->query("UPDATE $table_revs SET `hash_id` = sha2($id[0], 256) WHERE ID = $id[0]");
                 $update2 = $wpdb->query("UPDATE $table_revs SET `hash_id` = sha2($id[1], 256) WHERE ID = $id[1]");
-            }
             
-            $update = $wpdb->query("UPDATE $tp_docs SET preview = $id[0], status = '$id[1]', date_created = '$date_created', `hash_id` = sha2($last_id_doc, 256) WHERE ID = $last_id_doc ");
+            $update = $wpdb->query("UPDATE $dv_docs SET preview = $id[0], status = '$id[1]', date_created = '$date_created', `hash_id` = sha2($last_id_doc, 256) WHERE ID = $last_id_doc ");
            
             // Step 7: Check if query has result
             if ($insert2 < 1 || $insert1 < 1 || $update < 1 || !$result) {

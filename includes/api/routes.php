@@ -29,6 +29,7 @@
     require plugin_dir_path(__FILE__) . '/v1/users/class_verify_activation.php';
     // documents folder
     require plugin_dir_path(__FILE__) . '/v1/users/documents/class-insert.php';
+    require plugin_dir_path(__FILE__) . '/v1/users/documents/class-update.php';
 
     // Contacts Classes
     require plugin_dir_path(__FILE__) . '/v1/contacts/class-insert.php';
@@ -141,6 +142,11 @@
                 register_rest_route( 'datavice/v1/user/documents', 'insert', array(
                     'methods' => 'POST',
                     'callback' => array('DV_Create_Documents', 'listen'),
+                ));
+
+                register_rest_route( 'datavice/v1/user/documents', 'update', array(
+                    'methods' => 'POST',
+                    'callback' => array('DV_Update_docs', 'listen'),
                 ));
 
         /*

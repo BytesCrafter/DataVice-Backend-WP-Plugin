@@ -21,14 +21,84 @@
         public static function listen_open(){
             global $wpdb;
 
-           if (!isset($_POST['ak']) || !isset($_POST['npas']) || !isset($_POST['cpas']) || !isset($_POST['un'])) {
+
+            if (isset($_POST['ak']) && isset($_POST['npas']) && isset($_POST['cpas']) && !isset($_POST['un'])) {
+                if (empty($_POST['ak']) || empty($_POST['npas']) || empty($_POST['cpas'])) {
+                    return array(
+                        "status" => "failed",
+                        "message" => "Required fields cannot be empty.",
+                    );
+                } 
+    
+                if ($_POST['cpas'] !== $_POST['npas']) {
+                    return array(
+                        "status" => "failed",
+                        "message" => "Password does not match.",
+                    );
+                }
+    
+                if (DV_Globals::old_tiger(true) !==  $_POST['ak']) {
+                    return array(
+                        "status" => "failed",
+                        "message" => "Please contact your administrator. Key does not match.",
+                    );
+                }
+    
+                $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email
+                FROM {$wpdb->prefix}users 
+                WHERE `user_activation_key` = '{$_POST['ak']}'", OBJECT );
+                
+                if ( !$cur_user ) {
+                    return rest_ensure_response( 
+                        array(
+                            "status" => "failed",
+                            "message" => "Password reset key and username/email is invalid!",
+                        )
+                    );
+                }
+    
+                // Hash the new password
+                $pword_hash = wp_hash_password($_POST['cpas']);
+    
+                $status = DV_Globals::old_tiger('activated');
+                
+                // Update users activation key.
+                $result = $wpdb->update(
+                    $wpdb->users,array(
+                        'user_pass' => $pword_hash,
+                        'user_activation_key' => $status
+                    ),
+                    array( 'user_activation_key' => $_POST['ak'] )
+                );
+    
+                // Check if row successfully updated or not
+                if (!$result) {
+                    return array(
+                        "status" => "failed",
+                        "message" => "Password was not change"
+                    );
+                }
+    
+                //Removed expirate date forcing activation key unusable.
+                $add_key_meta = update_user_meta( $cur_user->ID, 'reset_pword_expiry', "" );   
+    
+                // If success, return status and message
+                return array(
+                    "status" => "success",
+                    "message" => "Password updated successfully!"
+                );
+            }
+
+            // when activating after registration
+
+            if (!isset($_POST['ak']) || !isset($_POST['npas']) || !isset($_POST['cpas']) || !isset($_POST['un'])) {
                 return array(
                     "status" => "unknown",
                     "message" => "Please contact your administrator. Request unknown.",
                 );
-           } 
+            } 
 
-           if (empty($_POST['ak']) || empty($_POST['npas']) || empty($_POST['cpas']) || empty($_POST['un'])) {
+            if (empty($_POST['ak']) || empty($_POST['npas']) || empty($_POST['cpas']) || empty($_POST['un'])) {
                 return array(
                     "status" => "failed",
                     "message" => "Required fields cannot be empty.",
@@ -111,6 +181,5 @@
                 "status" => "success",
                 "message" => "Password updated successfully!"
             );
-
         }  
     }
