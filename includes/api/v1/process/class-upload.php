@@ -40,13 +40,6 @@
                 );
             }
 
-            // if ( $files['img']['name'] == NULL  || $files['img']['type'] == NULL) {
-			// 	return array(
-            //         "status" => "unknown",
-            //         "message" => "Please select an image!",
-            //     );
-            // }
-
             isset($_POST['wpid']) ? $user_id = $_POST['wpid'] : $user_id = NULL;
             isset($_POST['stid']) ? $stid = $_POST['stid'] : $stid = NULL;
             isset($_POST['pdid']) ? $pdid = $_POST['pdid'] : $pdid = NULL;
@@ -96,9 +89,17 @@
 
 
             // for inserting user avatar
-            if (isset($_POST['wpid']) && !isset($_POST['stid']) ) {
+            if (isset($_POST['wpid']) && !isset($_POST['stid']) && isset($_POST['type']) ) {
 
-                if ($store_id === NULL && $product_id == NULL && $wpid !== NULL) {
+                if ($store_id === NULL && $product_id == NULL && $wpid !== NULL && $type !== NULL) {
+
+                    if ($_POST['type'] !== 'avatar' && $_POST['type'] !== 'banner') {
+                        return array(
+                            "status" => "failed",
+                            "message" => "Invalid value of type."
+                        );
+                    }
+
                     if ( !is_numeric($wpid)  ) {
                         return array(
                             "status" => "unknwon",
@@ -117,7 +118,7 @@
         
                     }
 
-                    $user_avatar = update_user_meta( $wpid,  'avatar',  $result['data'] );
+                    $user_avatar = update_user_meta( $wpid,  $type,  $result['data'] );
                     
                     if ($user_avatar == false) {
                         return array(

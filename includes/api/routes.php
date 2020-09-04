@@ -23,6 +23,8 @@
     require plugin_dir_path(__FILE__) . '/v1/users/class-verify.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-profile.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-stats.php';
+    require plugin_dir_path(__FILE__) . '/v1/users/class-edit-profile.php';
+    require plugin_dir_path(__FILE__) . '/v1/users/class-change-password.php';
 
     // Contacts Classes
     require plugin_dir_path(__FILE__) . '/v1/contacts/class-insert.php';
@@ -106,6 +108,16 @@
             register_rest_route( 'datavice/v1/user', 'stats', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Stats', 'listen'),
+            ));
+
+            register_rest_route( 'datavice/v1/user', 'edit', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Edit_Profile', 'listen'),
+            ));
+
+            register_rest_route( 'datavice/v1/user/password', 'edit', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Change_Password', 'listen'),
             ));
 
         /*
