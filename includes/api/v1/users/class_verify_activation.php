@@ -157,13 +157,25 @@
             $status = DV_Globals::old_tiger('activated');
             
             // Update users activation key.
-            $result = $wpdb->update(
-                $wpdb->users,array(
-                    'user_pass' => $pword_hash,
-                    'user_activation_key' => $status
-                ),
-                array( 'user_login' => $_POST['un'] )
-            );
+
+            if (is_email($_POST['un'])) {
+                $result = $wpdb->update(
+                    $wpdb->users,array(
+                        'user_pass' => $pword_hash,
+                        'user_activation_key' => $status
+                    ),
+                    array( 'user_email' => $_POST['un'] )
+                );
+            }else{
+                $result = $wpdb->update(
+                    $wpdb->users,array(
+                        'user_pass' => $pword_hash,
+                        'user_activation_key' => $status
+                    ),
+                    array( 'user_login' => $_POST['un'] )
+                );
+            }
+          
 
             // Check if row successfully updated or not
             if (!$result) {

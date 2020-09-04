@@ -56,13 +56,14 @@
                     );
                 }
                 $key = DV_Globals::old_tiger(true);
+
                 $result = $wpdb->update(
                     $wpdb->users,array(
                         'user_activation_key' => $key
                     ),
-                    array( 'user_login' => $_POST['un'] )
+                    array( 'user_activation_key' => $_POST['ak'] )
                 );
-
+                
                 // Check if row successfully updated or not
                 if (!$result) {
                     return array(
@@ -71,7 +72,7 @@
                     );
                 }
 
-                return DV_Globals::old_tiger(true);
+                return array(DV_Globals::old_tiger(true));
 
             } 
 
@@ -144,12 +145,25 @@
                     );
                 }
                 $key = DV_Globals::old_tiger(true);
-                $result = $wpdb->update(
-                    $wpdb->users,array(
-                        'user_activation_key' => $key
-                    ),
-                    array( 'user_login' => $_POST['un'] )
-                );
+
+                if (is_email($_POST['un'])) {
+
+                    $result = $wpdb->update(
+                        $wpdb->users,array(
+                            'user_activation_key' => $key
+                        ),
+                        array( 'user_email' => $_POST['un'] )
+                    );
+
+                }else{
+
+                    $result = $wpdb->update(
+                        $wpdb->users,array(
+                            'user_activation_key' => $key
+                        ),
+                        array( 'user_login' => $_POST['un'] )
+                    );
+                }
     
                 // Check if row successfully updated or not
                 if (!$result) {
@@ -159,7 +173,7 @@
                     );
                 }
     
-                return DV_Globals::old_tiger(true);
+                return array(DV_Globals::old_tiger(true));
             }
 
         }
