@@ -21,64 +21,64 @@
         public static function listen_open(){
             global $wpdb;
 
-            if (isset($_POST['ak']) && !isset($_POST['un'])) {
+            // if (isset($_POST['ak']) && !isset($_POST['un'])) {
                 
-                $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email
-                    FROM {$wpdb->prefix}users 
-                    WHERE `user_activation_key` = '{$_POST['ak']}'", OBJECT );
+            //     $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email
+            //         FROM {$wpdb->prefix}users 
+            //         WHERE `user_activation_key` = '{$_POST['ak']}'", OBJECT );
 
 
-                // Check for cur_user. Return a message if null
-                if ( !$cur_user ) {
-                    return array(
-                        "status" => "failed",
-                        "message" => "Password reset key and username/email is invalid!",
-                    );
-                }
+            //     // Check for cur_user. Return a message if null
+            //     if ( !$cur_user ) {
+            //         return array(
+            //             "status" => "failed",
+            //             "message" => "Password reset key and username/email is invalid!",
+            //         );
+            //     }
 
-                $expiry_meta = get_user_meta($cur_user->ID, 'reset_pword_expiry', true);
+            //     $expiry_meta = get_user_meta($cur_user->ID, 'reset_pword_expiry', true);
 
-                // Check if password reset key is used.
-                if( empty($expiry_meta) ) {
-                    return array(
-                        "status" => "failed",
-                        "message" => "Password reset key is already used.",
-                    );
-                }
+            //     // Check if password reset key is used.
+            //     if( empty($expiry_meta) ) {
+            //         return array(
+            //             "status" => "failed",
+            //             "message" => "Password reset key is already used.",
+            //         );
+            //     }
 
 
-                // Check if activation key is expired.
-                if( time() >= strtotime($expiry_meta) )
-                {
-                    return array(
-                        "status" => "failed",
-                        "message" => "Password reset key is already expired.",
-                    );
-                }
-                $key = DV_Globals::old_tiger(true);
+            //     // Check if activation key is expired.
+            //     if( time() >= strtotime($expiry_meta) )
+            //     {
+            //         return array(
+            //             "status" => "failed",
+            //             "message" => "Password reset key is already expired.",
+            //         );
+            //     }
+            //     $key = DV_Globals::old_tiger(true);
 
-                $result = $wpdb->update(
-                    $wpdb->users,array(
-                        'user_activation_key' => $key
-                    ),
-                    array( 'user_activation_key' => $_POST['ak'] )
-                );
+            //     $result = $wpdb->update(
+            //         $wpdb->users,array(
+            //             'user_activation_key' => $key
+            //         ),
+            //         array( 'user_activation_key' => $_POST['ak'] )
+            //     );
                 
-                // Check if row successfully updated or not
-                if (!$result) {
-                    return array(
-                        "status" => "failed",
-                        "message" => "An erro occured while submitting data to server"
-                    );
-                }
+            //     // Check if row successfully updated or not
+            //     if (!$result) {
+            //         return array(
+            //             "status" => "failed",
+            //             "message" => "An erro occured while submitting data to server"
+            //         );
+            //     }
 
-                return array(DV_Globals::old_tiger(true));
+            //     return array(DV_Globals::old_tiger(true));
 
-            } 
+            // } 
 
-            // when listen activation key and user name
+            // // when listen activation key and user name
 
-            if (isset($_POST['ak']) || isset($_POST['un'])) {
+            // if (isset($_POST['ak']) || isset($_POST['un'])) {
                 if (!isset($_POST['ak']) || !isset($_POST['un'])) {
                     return array(
                         "status" => "failed",
@@ -144,37 +144,42 @@
                         "message" => "Password reset key is already expired.",
                     );
                 }
-                $key = DV_Globals::old_tiger(true);
+                 $key = DV_Globals::old_tiger(true);
 
                 if (is_email($_POST['un'])) {
 
-                    $result = $wpdb->update(
-                        $wpdb->users,array(
-                            'user_activation_key' => $key
-                        ),
-                        array( 'user_email' => $_POST['un'] )
-                    );
+                    // $result = $wpdb->update(
+                    //     $wpdb->users,array(
+                    //         'user_activation_key' => $ak
+                    //     ),
+                    //     array( 'user_email' => $_POST['un'] )
+                    // );
+                    
+                    $un = $_POST['un'];
+                    $result = $wpdb -> query( "UPDATE wp_users  SET user_activation_key = '$key' WHERE user_email = '$un' " );
 
                 }else{
 
-                    $result = $wpdb->update(
-                        $wpdb->users,array(
-                            'user_activation_key' => $key
-                        ),
-                        array( 'user_login' => $_POST['un'] )
-                    );
+                    $un = $_POST['un'];
+                    $result = $wpdb -> query( "UPDATE wp_users  SET user_activation_key = '$key' WHERE user_login = '$un' " );
+
+                    //$result = $wpdb->update( 'wp_users',array( 'user_activation_key' => $ak ), array( 'user_login' => $un ) );
                 }
-    
+                
                 // Check if row successfully updated or not
                 if (!$result) {
                     return array(
                         "status" => "failed",
-                        "message" => "An erro occured while submitting data to server"
+                        "message" => "An error occured while submitting data to server."
                     );
                 }
-    
-                return array(DV_Globals::old_tiger(true));
-            }
+
+                return array(
+                    "status" => "success",
+                    "key" => $key 
+                );
+                
+            //}
 
         }
     }
