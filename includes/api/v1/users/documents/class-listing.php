@@ -35,7 +35,7 @@
             LEFT JOIN dv_revisions prev ON prev.ID = doc.`preview`";
 
             $results = $wpdb->get_results($sql);
-
+            
             return $results;
 
         }

@@ -1,21 +1,21 @@
 
 <?php
 	// Exit if accessed directly
-	if ( ! defined( 'ABSPATH' ) ) 
+	if ( ! defined( 'ABSPATH' ) )
 	{
 		exit;
 	}
 
-	/** 
+    /**
         * @package datavice-wp-plugin
         * @version 0.1.0
-	*/
+    */
 
 	class DV_Upload {
 
 		public static function listen(WP_REST_Request $request) {
-			return rest_ensure_response( 
-                
+			return rest_ensure_response(
+
                 DV_Upload::listen_open($request)
             );
 		}
@@ -32,7 +32,7 @@
             }
 
             $files = $request->get_file_params();
-            
+
             if ( !isset($files['img'])) {
 				return  array(
                     "status" => "unknown",
@@ -50,15 +50,15 @@
             $store_id = $stid  == '0' || $stid == NULL ? NULL: $store_id = $stid;
             $product_id = $pdid  == '0' || $pdid == NULL ? NULL: $product_id = $pdid;
             $type = $typ  == '0' || $typ == NULL ? NULL: $type = $typ;
-           
+
             $master_key = $mkey  == '0' || $mkey == NULL ? NULL: $master_key = $mkey;
 
             if (isset($_POST['wpid']) && isset($_POST['mkey'])  ) {
 
                 if ($wpid !== NULL || $master_key  !== NULL ) {
 
-                    $master_key = DV_Library_Config::dv_get_config('master_key', '');
-            
+                    $master_key = DV_Library_Config::dv_get_config('master_key', '123');
+
                     //Check if master key matches
                     if ($master_key !== $_POST['mkey']) {
                         return  array(
@@ -81,7 +81,7 @@
                         return array(
                             "status" => $result['status'],
                             "data" => $result['data']
-                           
+
                         );
                     }
                 }
@@ -115,11 +115,11 @@
                             "status" => $result['status'],
                             "message" => $result['message']
                         );
-        
+
                     }
 
                     $user_avatar = update_user_meta( $wpid,  $type,  $result['data'] );
-                    
+
                     if ($user_avatar == false) {
                         return array(
                             "status" => "failed",
@@ -132,12 +132,12 @@
                         return array(
                             "status" => $result['status'],
                             "data" => $result['data']
-                           
+
                         );
-        
+
                     }
 
-                }    
+                }
             }
 
             if (isset($_POST['stid']) && isset($_POST['type']) && !isset($_POST["pdid"]) ) {
@@ -151,7 +151,7 @@
 
 
                 if ($store_id !== NULL && $product_id == NULL && $type !== NULL) {
-                    $check_store = $wpdb->get_row("SELECT str.ID, child_val as `status` FROM  tp_stores str INNER JOIN tp_revisions rev ON rev.ID = str.`status` WHERE str.ID = '$store_id'");   
+                    $check_store = $wpdb->get_row("SELECT str.ID, child_val as `status` FROM  tp_stores str INNER JOIN tp_revisions rev ON rev.ID = str.`status` WHERE str.ID = '$store_id'");
 
                     if ($check_store->status == '0') {
                         return array(
@@ -173,20 +173,20 @@
                             "status" => $result['status'],
                             "message" => $result['message']
                         );
-        
+
                     }
 
                     $link = $result['data'];
-                    
+
                     if ($type == 'logo') {
 
                         $wpdb->query("START TRANSACTION");
-                            $store_img = $wpdb->query("INSERT INTO tp_revisions ( `revs_type`, `parent_id`, `child_key`, `child_val`, `created_by`, `date_created` ) 
+                            $store_img = $wpdb->query("INSERT INTO tp_revisions ( `revs_type`, `parent_id`, `child_key`, `child_val`, `created_by`, `date_created` )
                                             VALUES ( 'stores', '$store_id', 'logo', '$link', '$wpid', '$date') ");
                             $store_img_ID = $wpdb->insert_id;
-                            
+
                             $update_store = $wpdb->query(" UPDATE tp_stores SET `logo` = '$store_img_ID' WHERE ID = '$store_id' ");
-                        
+
                         if ($store_img < 1 || $store_img_ID < 1 || $update_store < 1 ) {
                             $wpdb->query("ROLLBACK");
                             return array(
@@ -202,20 +202,20 @@
                                 return array(
                                     "status" => $result['status'],
                                     "data" => $result['data'],
-                                    "message" => ucfirst($type) . ' has been added successfully' 
+                                    "message" => ucfirst($type) . ' has been added successfully'
                                 );
                             }
                         }
-                        
+
                     }else{
-                        
+
                         $wpdb->query("START TRANSACTION");
-                            $store_img = $wpdb->query("INSERT INTO tp_revisions ( `revs_type`, `parent_id`, `child_key`, `child_val`, `created_by`, `date_created` ) 
+                            $store_img = $wpdb->query("INSERT INTO tp_revisions ( `revs_type`, `parent_id`, `child_key`, `child_val`, `created_by`, `date_created` )
                                             VALUES ( 'stores', '$store_id', 'banner', '$link', '$wpid', '$date') ");
                             $store_img_ID = $wpdb->insert_id;
-                            
+
                             $update_store = $wpdb->query(" UPDATE tp_stores SET `banner` = '$store_img_ID' WHERE ID = '$store_id' ");
-                            
+
                         if ($store_img < 1 || $store_img_ID < 1 || $update_store < 1 ) {
                             $wpdb->query("ROLLBACK");
                             return array(
@@ -231,7 +231,7 @@
                                 return array(
                                     "status" => $result['status'],
                                     "data" => $result['data'],
-                                    "message" => ucfirst($type) . ' has been added successfully' 
+                                    "message" => ucfirst($type) . ' has been added successfully'
                                 );
                             }
                         }
@@ -242,7 +242,7 @@
 
 
             if (isset($_POST['pdid']) && isset($_POST['type']) ) {
-                
+
                 if ($_POST['type'] !== 'logo' && $_POST['type'] !== 'banner') {
                     return array(
                         "status" => "failed",
@@ -261,7 +261,7 @@
                             "message" => "This product does not exists."
                         );
                     }
-                    
+
                     if ($check_product->status == '0') {
                         return array(
                             "status" => "failed",
@@ -275,9 +275,9 @@
                         return array(
                             "status" => $result['status'],
                             "message" => $result['message'],
-                            
+
                         );
-        
+
                     }
 
                     $link = $result['data'];
@@ -286,13 +286,13 @@
                     if ($type == 'logo') {
 
                         $wpdb->query("START TRANSACTION");
-                            $product_img = $wpdb->query("INSERT INTO tp_revisions ( `revs_type`, `parent_id`, `child_key`, `child_val`, `created_by`, `date_created` ) 
+                            $product_img = $wpdb->query("INSERT INTO tp_revisions ( `revs_type`, `parent_id`, `child_key`, `child_val`, `created_by`, `date_created` )
                                             VALUES ( 'products', '$product_id', 'preview', '$link', '$wpid', '$date') ");
                             $product_img_id = $wpdb->insert_id;
 
                             $update_product_data = $wpdb->query("UPDATE tp_products SET `preview` = $product_img_id  WHERE ID = '$product_id'  ");
-                            
-                        
+
+
                         if ($product_img < 1 || $update_product_data < 1 ) {
                             $wpdb->query("ROLLBACK");
                             return array(
@@ -308,11 +308,11 @@
                                 return array(
                                     "status" => $result['status'],
                                     "data" => $result['data'],
-                                    "message" => ucfirst($type) . ' has been added successfully' 
+                                    "message" => ucfirst($type) . ' has been added successfully'
                                 );
                             }
                         }
-                        
+
                     }
                 }
             }
