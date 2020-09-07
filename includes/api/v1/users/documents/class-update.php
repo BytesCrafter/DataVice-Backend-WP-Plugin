@@ -1,12 +1,12 @@
 
 <?php
 	// Exit if accessed directly
-	if ( ! defined( 'ABSPATH' ) ) 
+	if ( ! defined( 'ABSPATH' ) )
 	{
 		exit;
 	}
 
-	/** 
+	/**
         * @package datavice-wp-plugin
         * @version 0.1.0
 	*/
@@ -14,14 +14,14 @@
 	class DV_Update_docs {
 
 		public static function listen(WP_REST_Request $request) {
-			return rest_ensure_response( 
-                
+			return rest_ensure_response(
+
                 self::listen_open($request)
             );
 		}
 
         public static function listen_open($request){
-            
+
             global $wpdb;
             $files = $request->get_file_params();
 
@@ -33,7 +33,7 @@
                     "message" => "Please contact your administrator. ".$plugin." plugin missing!",
                 );
             }
-           
+
             // Step 2: Validate user
             if (DV_Verification::is_verified() == false) {
                 return array(
@@ -43,17 +43,17 @@
             }
 
             // Step 3: Sanitize if all variables at POST
-            if ( !isset($_POST['type']) 
+            if ( !isset($_POST['type'])
                 || !isset($_POST['docid']) ) {
 				return array(
 					"status" => "unknown",
 					"message" => "Please contact your administrator. Request unknown!",
                 );
-                
+
             }
 
-            // Step 4: Check if all variables is not empty 
-            if ( empty($_POST['type']) 
+            // Step 4: Check if all variables is not empty
+            if ( empty($_POST['type'])
                 || empty($_POST['docid'])) {
                 return array(
                     "status" => "failed",
@@ -81,8 +81,8 @@
             // Declare variables
             $tp_docs = DV_DOCUMENTS;
             $doc_fields = DV_DOCS_FIELDS;
-            $table_revs = DV_REVS_TABLE;  
-            $revs_fields = DV_INSERT_REV_FIELDS;        
+            $table_revs = DV_REVS_TABLE;
+            $revs_fields = DV_INSERT_REV_FIELDS;
             $doc_type = $_POST['type'];
             $wpid = $_POST['wpid'];
             $doc_id = $_POST['docid'];
@@ -111,13 +111,14 @@
             $update = $wpdb->query("UPDATE $tp_docs SET preview = $last_id_doc WHERE `hash_id` = '$doc_id' ");
 
             // Step 7: Check if query has result
-            if ($result < 1 || $insert < 1 || $update < 1) {
+            if ($result == false|| $insert < 1 || $update < 1) {
                 $wpdb->query("ROLLBACK");
                 // Step 8: return result
                 return array(
                     "status" => "failed",
                     "message" => "An error occurred while submitting data to server."
                 );
+
             }else {
                 //  Step 9: Return Success
                 $wpdb->query("COMMIT");

@@ -11,7 +11,7 @@
 	*/
 
 	function dv_dbhook_activate(){
-		
+
 		// Initialized WordPress core.
 		global $wpdb;
 
@@ -58,7 +58,7 @@
 				$sql .= "`status` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Live/Hiden', ";
 				$sql .= "`wpid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID, 0 if Null', ";
 				$sql .= "`stid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Store ID, 0 if Null', ";
-				$sql .= "`types` enum('none','home','office','business') NOT NULL DEFAULT 'none' COMMENT 'Group', ";				
+				$sql .= "`types` enum('none','home','office','business') NOT NULL DEFAULT 'none' COMMENT 'Group', ";
 				$sql .= "`street` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Street address from Revs, 0 if Null', ";
 				$sql .= "`brgy` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Barangay code from Revs, 0 if Null', ";
 				$sql .= "`city` bigint(20) NOT NULL DEFAULT 0 COMMENT 'CityMun code from Revs, 0 if Null', ";
@@ -83,7 +83,6 @@
 				$sql .= "`preview` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Image url of document', ";
 				$sql .= "`doctype` enum('none','sss','drivers_license','prc','owwa','voters_id','pnp','senior_id','postal_id', 'school_id', 'passport') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Document type', ";
 				$sql .= "`status` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Revision ID of status', ";
-				$sql .= "`approved_by` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Pasabuy Staff User ID who approved this document', ";
 				$sql .= "`date_created` datetime(0) NULL DEFAULT NULL COMMENT 'Date document was created', ";
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
@@ -141,7 +140,7 @@
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; ";
 			$result = $wpdb->get_results($sql);
-			
+
 			//Pass the globally defined constant to a variable
 			$ctry_data = DV_COUNTRY_DATA;
 			$ctry_fields = DV_COUNTRY_FIELD;
@@ -163,7 +162,7 @@
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; ";
 			$result = $wpdb->get_results($sql);
-			
+
 			//Pass the globally defined constant to a variable
 			$prov_list = DV_PROVINCE_DATA;
 			$prov_fields = DV_PROVINCE_FIELD;
@@ -185,7 +184,7 @@
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; ";
 			$result = $wpdb->get_results($sql);
-			
+
 			//Pass the globally defined constant to a variable
 			$cty_list = DV_CITY_DATA;
 			$cty_fields = DV_CITY_FIELD;
@@ -206,11 +205,11 @@
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; ";
 			$result = $wpdb->get_results($sql);
-			
+
 			//Pass the globally defined constant to a variable
 			$brgy_data = DV_BRGY_DATA;
 			$brgy_field = DV_BRGY_FIELD;
-			
+
 			//Dumping data into tables
 			$wpdb->query("INSERT INTO `".$tbl_brgy."` $brgy_field VALUES $brgy_data");
 		}
@@ -228,11 +227,11 @@
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; ";
 			$result = $wpdb->get_results($sql);
-			
+
 			//Pass the globally defined constant to a variable
 			$tz_data = DV_TZ_DATA;
 			$tz_field = DV_TZ_FIELD;
-			
+
 			//Dumping data into tables
 			$wpdb->query("INSERT INTO `".$tbl_timezone."` $tz_field VALUES $tz_data");
 		}
