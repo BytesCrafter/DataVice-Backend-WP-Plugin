@@ -85,16 +85,6 @@
             }
 
             //Country input validation
-                // Step 2 : Check if country passed is in integer format.
-                // if ( !is_numeric($_POST['co']) ) {
-                //     return rest_ensure_response(
-                //         array(
-                //                 "status" => "failed",
-                //                 "message" => "Invalid value for country.",
-                //         )
-                //     );
-                // }
-
                 // Step 2 : Check if country_id is in database.
                 $country_id= $_POST['co'];
                 $co_status = DV_Globals:: check_availability(DV_COUNTRY_TABLE, "WHERE country_code = '$country_id' ");

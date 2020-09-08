@@ -28,7 +28,7 @@
     require plugin_dir_path(__FILE__) . '/v1/users/class-activation.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class_verify_activation.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-link-account.php';
-    require plugin_dir_path(__FILE__) . '/v1/users/class-delete-link-account.php';
+    require plugin_dir_path(__FILE__) . '/v1/users/class-delete-link-acount.php';
     // documents folder
     require plugin_dir_path(__FILE__) . '/v1/users/documents/class-insert.php';
     require plugin_dir_path(__FILE__) . '/v1/users/documents/class-update.php';
