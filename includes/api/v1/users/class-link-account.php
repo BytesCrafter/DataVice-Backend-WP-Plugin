@@ -14,6 +14,12 @@
 
         // REST API for Forgotten Passwords
 		public static function listen() {
+            return rest_ensure_response(
+				self::listen_open()
+			);
+        }
+
+		public static function listen_open() {
             global $wpdb;
 
             $tbl_link_acc = DV_LINK_ACCOUNT;

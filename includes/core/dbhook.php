@@ -253,11 +253,12 @@
 		//Database table creation for dv_events
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_link_acc'" ) != $tbl_link_acc) {
 			$sql = "CREATE TABLE `".$tbl_link_acc."` (";
-				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
-				$sql .= "`hash_id` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User id of the owner of this event',";
+				$sql .= " `ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= " `hash_id` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User id of the owner of this event',";
 				$sql .= " `wpid` bigint(20) NOT NULL,";
-				$sql .= "`platform` enum('facebook','google') NOT NULL, ";
+				$sql .= " `platform` enum('facebook','google') NOT NULL, ";
 				$sql .= " `token` varchar(255) NOT NULL, ";
+				$sql .= " `status` enum('1','0') DEFAULT '1' NOT NULL, ";
 				$sql .= " `date_created` datetime NOT NULL DEFAULT current_timestamp(),";
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
