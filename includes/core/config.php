@@ -9,19 +9,19 @@
      * @version 0.1.0
      * This is where you provide all the constant config.
 	*/
-	
+
 	//Defining Global Variables
 	define('DV_PREFIX', 'dv_');
 	define('DV_MASTER', 'masterkey');
-	
+
 	// Maximum file size for uploading image
 	define('DV_UPLOAD_SIZE', 5000000);
 	define('WP_PREFIX', 'wp_');
-	
+
 	// Wordpress CONSTANT
 	define('WP_USERS_META', WP_PREFIX.'usermeta');
 	define('WP_USERS', WP_PREFIX.'users');
-	
+
 	// Primary Table Constant
 	define('DV_CONTACTS_TABLE', DV_PREFIX.'contacts');
 	define('DV_ADDRESS_TABLE', DV_PREFIX.'address');
@@ -30,8 +30,10 @@
 	//Insert Fields
 	define('DV_INSERT_REV_FIELDS', '`revs_type`, `child_key`, `child_val`, `created_by`, `date_created`');
 	define('DV_INSERT_ADDRESS_FIELDS', '`status`, `wpid`, `types`, `street`, `brgy`, `city`, `province`, `country`, `date_created`');
-	
-	
+
+	define('DV_LINK_ACCOUNT', DV_PREFIX.'link_account');
+
+
 	define('DV_DOCUMENTS', DV_PREFIX.'documents');
 	define('DV_DOCS_FIELDS', 'wpid, preview, doctype');
 

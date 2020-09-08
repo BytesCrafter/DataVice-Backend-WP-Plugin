@@ -358,8 +358,8 @@
         public static function catch_post()
         {
             $cur_user = array();
-
             $cur_user['user_login'] = $_POST['un'];
+
             $cur_user['user_pass'] = wp_generate_password( 49, false, false );
             $cur_user['user_email'] = $_POST['em'];
 
@@ -391,10 +391,10 @@
         public static function is_success_sendmail($user) {
             $message = "Hello " .$user['display_name']. ",";
             $message .= "\n\nWelcome to PasaBuy.App! We're happy that your here.";
-            $message .= "\nPassword Reset Key: " .$user['user_activation_key'];
+            $message .= "\nPassword Activation Key: " .$user['user_activation_key'];
             $message .= "\n\nPasaBuy.App";
             $message .= "\nsupport@pasabuy.app";
-            $mail = wp_mail( $user['user_email'], "Bytes Crafter - Forgot Password", $message );
+            $mail = wp_mail( $user['user_email'], "Pasabuy.app - Verify Password", $message );
 
             if(is_wp_error($mail)){
                 return false;

@@ -23,6 +23,7 @@
 		$tbl_events = DV_EVENTS_TABLE;
 		$tbl_configs = DV_CONFIG_TABLE;
 		$tbl_docu = DV_DOCUMENTS;
+		$tbl_link_acc = DV_LINK_ACCOUNT;
 
 		$wpdb->query("START TRANSACTION ");
 
@@ -244,6 +245,20 @@
 				$sql .= "`keys` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Key of the event', ";
 				$sql .= "`info` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Additional Information on the event', ";
 				$sql .= "`date_created` datetime DEFAULT current_timestamp() COMMENT 'The date this event is created.', ";
+				$sql .= "PRIMARY KEY (`ID`) ";
+				$sql .= ") ENGINE = InnoDB; ";
+			$result = $wpdb->get_results($sql);
+		}
+
+		//Database table creation for dv_events
+		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_link_acc'" ) != $tbl_link_acc) {
+			$sql = "CREATE TABLE `".$tbl_link_acc."` (";
+				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`hash_id` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User id of the owner of this event',";
+				$sql .= " `wpid` bigint(20) NOT NULL,";
+				$sql .= "`platform` enum('facebook','google') NOT NULL, ";
+				$sql .= " `token` varchar(255) NOT NULL, ";
+				$sql .= " `date_created` datetime NOT NULL DEFAULT current_timestamp(),";
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
