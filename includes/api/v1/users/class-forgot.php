@@ -1,11 +1,11 @@
 <?php
 	// Exit if accessed directly
-	if ( ! defined( 'ABSPATH' ) ) 
+	if ( ! defined( 'ABSPATH' ) )
 	{
 		exit;
 	}
 
-	/** 
+	/**
         * @package datavice-wp-plugin
         * @version 0.1.0
 	*/
@@ -14,10 +14,9 @@
 
         // REST API for Forgotten Passwords
 		public static function listen() {
-
             // Step 1: Check if UN field is passed
 			if (!isset($_POST["un"])) {
-				return rest_ensure_response( 
+				return rest_ensure_response(
 					array(
 						"status" => "unknown",
 						"message" => "Please contact your administrator. Request Unknown!",
@@ -27,7 +26,7 @@
 
             // Step 2 : Check if username or email is not empty.
             if ( empty($_POST['un']) ) {
-                return rest_ensure_response( 
+                return rest_ensure_response(
                     array(
                             "status" => "failed",
                             "message" => "Required field cannot be empty.",
@@ -46,7 +45,7 @@
 
                 // If email, use email in where clause
                 $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email
-                    FROM {$wpdb->prefix}users 
+                    FROM {$wpdb->prefix}users
                     WHERE user_email = '$email'", OBJECT );
 
             } else {
@@ -56,13 +55,13 @@
 
                 // if username, use username in where clause
                 $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email
-                    FROM {$wpdb->prefix}users 
+                    FROM {$wpdb->prefix}users
                     WHERE user_login = '$uname'", OBJECT );
             }
-            
+
             // Step 3: Check for cur_user. Return a message if null
             if ( !$cur_user ) {
-                return rest_ensure_response( 
+                return rest_ensure_response(
 					array(
 						"status" => "failed",
 						"message" => "Email or username doesn't exists!",
@@ -70,12 +69,12 @@
 				);
             }
 
-            // Step 4: Check if existing reset email is ongoing and not expired yet. 
+            // Step 4: Check if existing reset email is ongoing and not expired yet.
             $expiry_meta = get_user_meta($cur_user->ID, 'reset_pword_expiry', true);
             if( !empty($expiry_meta) ) {
                 if( time() <= strtotime($expiry_meta) )
                 {
-                    return rest_ensure_response( 
+                    return rest_ensure_response(
                         array(
                                 "status" => "failed",
                                 "message" => "Password reset is ongoing. Wait for 30 minutes then try again.",
@@ -83,7 +82,7 @@
                     );
                 }
             }
-            
+
             /** Getting the length of password reset key
 			 * Returns the value of the length of password reset key from the database
 			 * Returns default value if not exists
@@ -95,13 +94,13 @@
             $cur_user->activation_key = wp_generate_password( $pword_resetkey_length, false, false );
 
             // Set the new activation key.
-            $inserted_key = $wpdb->query("UPDATE {$wpdb->prefix}users 
-                SET `user_activation_key` = '{$cur_user->activation_key}' 
+            $inserted_key = $wpdb->query("UPDATE {$wpdb->prefix}users
+                SET `user_activation_key` = '{$cur_user->activation_key}'
                 WHERE `ID` = '{$cur_user->ID}';");
 
             // Check if we successfully inserted password reset key.
             if( !$inserted_key ) {
-                return rest_ensure_response( 
+                return rest_ensure_response(
                     array(
                             "status" => "failed",
                             "message" => "Password reset key failed to updated.",
@@ -116,29 +115,29 @@
 			 * @param2 = {default value}
 			 */
             $pword_expiry_span = DV_Library_Config::dv_get_config('pword_expiry_span', 1800);
-            
+
             $expiration_date = date( 'Y-m-d H:i:s', strtotime("now") + (int)$pword_expiry_span );
-            
-            $add_key_meta = update_user_meta( $cur_user->ID, 'reset_pword_expiry', $expiration_date );  
+
+            $add_key_meta = update_user_meta( $cur_user->ID, 'reset_pword_expiry', $expiration_date );
 
             if (DV_Forgot::is_success_sendmail($cur_user) == false) {
-                return rest_ensure_response( 
+                return rest_ensure_response(
 					array(
 						"status" => "failed",
 						"message" => "Please contact site administrator. Email not sent!",
 					)
 				);
             } else {
-                return rest_ensure_response( 
+                return rest_ensure_response(
                     array(
                         "status" => "success",
                         "message" => "An email has been sent to your email address.",
-                        
+
                     )
                 );
             }
         }
-        
+
         // Try to Send email for a new verification or activation key.
         public static function is_success_sendmail($user) {
             // TODO: PENDING! Put this on config (HTML SOURCE). Need a research about this.

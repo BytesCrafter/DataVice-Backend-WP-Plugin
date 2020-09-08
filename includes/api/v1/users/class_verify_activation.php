@@ -1,19 +1,19 @@
 <?php
 	// Exit if accessed directly
-	if ( ! defined( 'ABSPATH' ) ) 
+	if ( ! defined( 'ABSPATH' ) )
 	{
 		exit;
 	}
 
-	/** 
+	/**
         * @package datavice-wp-plugin
         * @version 0.1.0
     */
-    
+
     class DV_Verify_Account{
 
         public static function listen(){
-            return rest_ensure_response( 
+            return rest_ensure_response(
 				self::listen_open()
 			);
         }
@@ -28,40 +28,40 @@
                         "status" => "failed",
                         "message" => "Required fields cannot be empty.",
                     );
-                } 
-    
+                }
+
                 if ($_POST['cpas'] !== $_POST['npas']) {
                     return array(
                         "status" => "failed",
                         "message" => "Password does not match.",
                     );
                 }
-    
+
                 if (DV_Globals::old_tiger(true) !==  $_POST['ak']) {
                     return array(
                         "status" => "failed",
                         "message" => "Please contact your administrator. Key does not match.",
                     );
                 }
-    
+
                 $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email
-                FROM {$wpdb->prefix}users 
+                FROM {$wpdb->prefix}users
                 WHERE `user_activation_key` = '{$_POST['ak']}'", OBJECT );
-                
+
                 if ( !$cur_user ) {
-                    return rest_ensure_response( 
+                    return rest_ensure_response(
                         array(
                             "status" => "failed",
                             "message" => "Password reset key and username/email is invalid!",
                         )
                     );
                 }
-    
+
                 // Hash the new password
                 $pword_hash = wp_hash_password($_POST['cpas']);
-    
+
                 $status = DV_Globals::old_tiger('activated');
-                
+
                 // Update users activation key.
                 $result = $wpdb->update(
                     $wpdb->users,array(
@@ -70,7 +70,7 @@
                     ),
                     array( 'user_activation_key' => $_POST['ak'] )
                 );
-    
+
                 // Check if row successfully updated or not
                 if (!$result) {
                     return array(
@@ -78,10 +78,10 @@
                         "message" => "Password was not change"
                     );
                 }
-    
+
                 //Removed expirate date forcing activation key unusable.
-                $add_key_meta = update_user_meta( $cur_user->ID, 'reset_pword_expiry', "" );   
-    
+                $add_key_meta = update_user_meta( $cur_user->ID, 'reset_pword_expiry', "" );
+
                 // If success, return status and message
                 return array(
                     "status" => "success",
@@ -96,14 +96,14 @@
                     "status" => "unknown",
                     "message" => "Please contact your administrator. Request unknown.",
                 );
-            } 
+            }
 
             if (empty($_POST['ak']) || empty($_POST['npas']) || empty($_POST['cpas']) || empty($_POST['un'])) {
                 return array(
                     "status" => "failed",
                     "message" => "Required fields cannot be empty.",
                 );
-            } 
+            }
 
             if ($_POST['cpas'] !== $_POST['npas']) {
                 return array(
@@ -126,24 +126,24 @@
                 $email = sanitize_email($_POST['un']);
 
                 $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email
-                FROM {$wpdb->prefix}users 
-                WHERE user_email = '{$_POST['un']}' 
+                FROM {$wpdb->prefix}users
+                WHERE user_email = '{$_POST['un']}'
                 AND `user_activation_key` = '{$_POST['ak']}'", OBJECT );
-               
+
             } else {
 
                 //Sanitize username
                 $uname = sanitize_user($_POST['un']);
-                
+
                 $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email
-                FROM {$wpdb->prefix}users 
-                WHERE user_login = '{$_POST['un']}' 
+                FROM {$wpdb->prefix}users
+                WHERE user_login = '{$_POST['un']}'
                 AND `user_activation_key` = '{$_POST['ak']}'", OBJECT );
 
             }
-            
+
             if ( !$cur_user ) {
-                return rest_ensure_response( 
+                return rest_ensure_response(
 					array(
 						"status" => "failed",
 						"message" => "Password reset key and username/email is invalid!",
@@ -155,7 +155,7 @@
             $pword_hash = wp_hash_password($_POST['cpas']);
 
             $status = DV_Globals::old_tiger('activated');
-            
+
             // Update users activation key.
 
             if (is_email($_POST['un'])) {
@@ -175,7 +175,7 @@
                     array( 'user_login' => $_POST['un'] )
                 );
             }
-          
+
 
             // Check if row successfully updated or not
             if (!$result) {
@@ -186,12 +186,12 @@
             }
 
             //Removed expirate date forcing activation key unusable.
-            $add_key_meta = update_user_meta( $cur_user->ID, 'reset_pword_expiry', "" );   
+            $add_key_meta = update_user_meta( $cur_user->ID, 'reset_pword_expiry', "" );
 
             // If success, return status and message
             return array(
                 "status" => "success",
                 "message" => "Password updated successfully!"
             );
-        }  
+        }
     }

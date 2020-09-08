@@ -68,13 +68,21 @@
                     );
                 }
 
+                // $date_registered = get_userdata($cur_user->ID);
+
                 $expiry_meta = get_user_meta($cur_user->ID, 'reset_pword_expiry', true);
+
+
+                // $date = $date_registered->user_registered;
+                // $time = strtotime($date);
+                // $time = $time - (1800);
+                // $date = date("Y-m-d H:i:s", $time);
 
                 // Check if password reset key is used.
                 if( empty($expiry_meta) ) {
                     return array(
                         "status" => "failed",
-                        "message" => "Password reset key is already used.",
+                        "message" => "Password activation key is already used.",
                     );
                 }
 
@@ -87,7 +95,8 @@
                         "message" => "Password reset key is already expired.",
                     );
                 }
-                 $key = DV_Globals::old_tiger(true);
+// =========================================
+                $key = DV_Globals::old_tiger(true);
 
                 if (is_email($_POST['un'])) {
 
