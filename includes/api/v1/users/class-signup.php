@@ -384,7 +384,9 @@
             $message .= "\nPassword Activation Key: " .$user['user_activation_key'];
             $message .= "\n\nPasaBuy.App";
             $message .= "\nsupport@pasabuy.app";
-            $mail = wp_mail( $user['user_email'], "Pasabuy.app - Verify Password", $message );
+            $pasabuy = EMAIL_HEADER;
+            $subject = EMAIL_HEADER_SUBJECT_ACTIVATE;
+            $mail = wp_mail( $user['user_email'], $pasabuy." - ".$subject, $message );
 
             if(is_wp_error($mail)){
                 return false;

@@ -149,7 +149,9 @@
             $message .= "\n\nIf did not make this request, just ignore this email.";
             $message .= "\n\nPasaBuy.App";
             $message .= "\nsupport@pasabuy.app";
-            return wp_mail( $user->user_email, "Bytes Crafter - Forgot Password", $message );
+            $pasabuy = EMAIL_HEADER;
+            $subject = EMAIL_HEADER_SUBJECT_FORGOT;
+            return wp_mail( $user->user_email, $pasabuy." - ".$subject, $message );
         }
 
 	}

@@ -9,6 +9,13 @@
      * @version 0.1.0
      * This is where you provide all the constant config.
 	*/
+	// Email Subject
+	define('EMAIL_HEADER', 'Pasabuy.app');
+	define('EMAIL_HEADER_SUBJECT_FORGOT', 'Forgot Password');
+	define('EMAIL_HEADER_SUBJECT_ACTIVATE', 'Activate Password');
+
+
+
 
 	//Defining Global Variables
 	define('DV_PREFIX', 'dv_');
@@ -32,7 +39,6 @@
 	define('DV_INSERT_ADDRESS_FIELDS', '`status`, `wpid`, `types`, `street`, `brgy`, `city`, `province`, `country`, `date_created`');
 
 	define('DV_LINK_ACCOUNT', DV_PREFIX.'link_account');
-
 
 	define('DV_DOCUMENTS', DV_PREFIX.'documents');
 	define('DV_DOCS_FIELDS', 'wpid, preview, doctype');
