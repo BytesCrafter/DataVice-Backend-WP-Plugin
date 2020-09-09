@@ -80,3 +80,8 @@
 	define('DV_EVENTS_TABLE', DV_PREFIX.'events');
 	define("DV_EVENTS_FIELDS", "(`wpid`, `keys`, `info`)");
 
+
+	// Error Log
+	define('DV_ERROR_LOG', DV_PREFIX.'error_log');
+	define('DV_ERROR_LOG_FIELDS', '`platform`, `device_ip`, `public_ip`');
+

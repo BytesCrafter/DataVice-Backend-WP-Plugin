@@ -24,6 +24,7 @@
 		$tbl_configs = DV_CONFIG_TABLE;
 		$tbl_docu = DV_DOCUMENTS;
 		$tbl_link_acc = DV_LINK_ACCOUNT;
+		$tbl_error_log = DV_ERROR_LOG;
 
 		$wpdb->query("START TRANSACTION ");
 
@@ -250,7 +251,7 @@
 			$result = $wpdb->get_results($sql);
 		}
 
-		//Database table creation for dv_events
+		//Database table creation for link ACCOUNT
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_link_acc'" ) != $tbl_link_acc) {
 			$sql = "CREATE TABLE `".$tbl_link_acc."` (";
 				$sql .= " `ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
@@ -264,6 +265,25 @@
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
 		}
+
+		//Database table creation for error log
+		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_error_log'" ) != $tbl_error_log) {
+			$sql = "CREATE TABLE `".$tbl_error_log."` (";
+				$sql .= "  `ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "  `hash_id` varchar(255) NOT NULL DEFAULT 0 COMMENT 'User id of the owner of this event',";
+				$sql .= "  `platform` varchar(50) NOT NULL, ";
+				$sql .= "  `device_ip` varchar(50) NOT NULL, ";
+				$sql .= "  `public_ip` varchar(50) NOT NULL, ";
+				$sql .= "  `error_key` varchar(255) DEFAULT NULL, ";
+				$sql .= "  `error_code` varchar(255) DEFAULT NULL, ";
+				$sql .= "  `status` tinyint(2) NOT NULL, ";
+				$sql .= "  `date_created` datetime NOT NULL DEFAULT current_timestamp(),";
+				$sql .= "PRIMARY KEY (`ID`) ";
+				$sql .= ") ENGINE = InnoDB; ";
+			$result = $wpdb->get_results($sql);
+		}
+
+
 
 		$wpdb->query("SET GLOBAL max_allowed_packet=$get_last_pocket->value;");
 

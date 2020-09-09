@@ -63,21 +63,31 @@
     require plugin_dir_path(__FILE__) . '/v1/coordinates/class-insert.php';
     require plugin_dir_path(__FILE__) . '/v1/coordinates/class-update.php';
 
-    // Upload folder
+    // Process folder
     require plugin_dir_path(__FILE__) . '/v1/process/class-upload.php';
-
+    require plugin_dir_path(__FILE__) . '/v1/process/class-error-insert.php';
 
 	require plugin_dir_path(__FILE__) . '/v1/globals.php';
 
 	// Init check if USocketNet successfully request from wapi.
     function datavice_route()
     {
+
+
         /*
          * TEST RESTAPI
         */
             register_rest_route( 'datavice/test', 'demoguy', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Demoguy', 'listen'),
+            ));
+
+        /*
+         * ERROR RESTAPI
+        */
+            register_rest_route( 'datavice/v1/process/error', 'insert', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Error_Log_Insert', 'listen'),
             ));
 
         /*
