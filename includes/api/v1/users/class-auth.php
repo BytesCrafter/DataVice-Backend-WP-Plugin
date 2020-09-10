@@ -68,7 +68,11 @@
 			$pword = $_POST["pw"];
 			// Check account if activated or not
 
-				$validate_account = $wpdb->get_row("SELECT * FROM $users_table WHERE `user_login` = '$uname' ");
+				if ( is_email($_POST['un']) ) {
+					$validate_account = $wpdb->get_row("SELECT * FROM $users_table WHERE `user_email` = '$uname' ");
+				}else{
+					$validate_account = $wpdb->get_row("SELECT * FROM $users_table WHERE `user_login` = '$uname' ");
+				}
 				$wp_user = get_user_by("ID", $validate_account->ID);
 				if (empty($wp_user->roles)) {
 					if ($wp_user->roles[0] !== 'administrator') {
