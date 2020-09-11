@@ -66,30 +66,7 @@
 			}
 			$uname = $_POST["un"];
 			$pword = $_POST["pw"];
-			// Check account if activated or not
 
-				if ( is_email($_POST['un']) ) {
-					$validate_account = $wpdb->get_row("SELECT * FROM $users_table WHERE `user_email` = '$uname' ");
-				}else{
-					$validate_account = $wpdb->get_row("SELECT * FROM $users_table WHERE `user_login` = '$uname' ");
-				}
-				$wp_user = get_user_by("ID", $validate_account->ID);
-				if (empty($wp_user->roles)) {
-					if ($wp_user->roles[0] !== 'administrator') {
-
-						if (DV_Globals::old_tiger('activated') !== $validate_account->user_activation_key) {
-							return rest_ensure_response(
-								array(
-									"status" => "failed",
-									"message" => "Please activate your account first.",
-								)
-							);
-						}
-					}
-				}
-
-
-			// End check account if activated or not
 
 			// Store post variable into vars.
 
@@ -122,6 +99,30 @@
 			if ($user->errors !== "") {
 				$error_code = array_keys( $user->errors );
 			}
+
+			// Check account if activated or not
+
+			if ( is_email($_POST['un']) ) {
+				$validate_account = $wpdb->get_row("SELECT * FROM $users_table WHERE `user_email` = '$uname' ");
+			}else{
+				$validate_account = $wpdb->get_row("SELECT * FROM $users_table WHERE `user_login` = '$uname' ");
+			}
+			$wp_user = get_user_by("ID", $validate_account->ID);
+			if (empty($wp_user->roles)) {
+				if ($wp_user->roles[0] !== 'administrator') {
+
+					if (DV_Globals::old_tiger('activated') !== $validate_account->user_activation_key) {
+						return rest_ensure_response(
+							array(
+								"status" => "failed",
+								"message" => "Please activate your account first.",
+							)
+						);
+					}
+				}
+			}
+
+		// End check account if activated or not
 
 			// Check for WordPress authentication issue.
 			if ( is_wp_error($user) ) {
