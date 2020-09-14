@@ -4,7 +4,7 @@
 		exit;
 	}
 
-	/** 
+	/**
         * @package datavice-wp-plugin
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
@@ -15,8 +15,8 @@
         //Declare a private variable for mysql table name
         private $table;
         private $rev_table;
-         
-        /** Global function for retrieving from database 
+
+        /** Global function for retrieving from database
 		* @param1 = {table name in database};
         * @param2 = {fields to be selected}
         * @param3 = {optional. WHERE clause}
@@ -41,7 +41,7 @@
             //STEP 1 - Get timezone name from tzone ID.
             //step 2 - USe that tzone to convert date_time to current timezone.
         }
-     
+
         /** Checking if $id has row. Returns boolean
 	    * Returns true if  row found, false if not found, "unavail" if status is not active
 		* @param1 = {table name in database};
@@ -72,7 +72,7 @@
         }
 
         public static function custom_update($parent_id, $wpid, $rev_type, $parent_table, $revisions_table, $data, $where){
-           
+
             global $wpdb;
 
             $date = DV_Globals:: date_stamp();
@@ -80,7 +80,7 @@
             if ( ! is_array( $data ) || ! is_array( $where ) ) {
                 return false;
             }
-            
+
             //Initialize empty array
             $fields     = array();
             $insert_fields = array();
@@ -103,7 +103,7 @@
                     $wpdb->query("ROLLBACK");
                     return false;
                 }
-                $insert_values[$key] = $wpdb->insert_id; 
+                $insert_values[$key] = $wpdb->insert_id;
             }
 
             //Get all `where` conditions
@@ -112,13 +112,13 @@
                     $conditions[] = "`$field` IS NULL";
                     continue;
                 }
-         
+
                 $conditions[] = "`$field` = " . $value;
             }
-            
+
             //Make fields a comma seperated values
             $conditions = implode( ' AND ', $conditions );
-            
+
             foreach ($insert_values as $key => $value) {
                 $result = $wpdb->query("UPDATE $parent_table SET $key = $value");
                 if ($result < 1) {
@@ -129,13 +129,13 @@
 
             $wpdb->query("COMMIT");
             return true;
-            
+
         }
-        
+
         public static function check_roles($role){
-            
+
             $wp_user = get_userdata($_POST['wpid']);
-            
+
             if ( in_array('administrator' , $wp_user->roles, true) ) {
                 return true;
             }
@@ -192,7 +192,7 @@
             $uploadOk = 1;
 
             $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-            
+
             $check = getimagesize($files['img']['tmp_name']);
 
             if($check !== false) {
@@ -227,7 +227,7 @@
             }
 
             // Allow certain file formats
-            if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != 
+            if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType !=
                 "jpeg"
                 && $imageFileType != "gif" ) {
                 //only JPG, JPEG, PNG & GIF files are allowed
@@ -247,8 +247,32 @@
                         "message" => "Please contact your admnistrator. File has not uploaded! ",
                     );
 
-            } else {
+            } else {//
+
                 if (move_uploaded_file($files['img']['tmp_name'], $target_file)) {
+
+                    $pic = $files['img'];
+                    $file_mime = mime_content_type( $target_file);
+
+                    $upload_id = wp_insert_attachment( array(
+                        'guid'           => $target_file,
+                        'post_mime_type' => $file_mime,
+                        'post_title'     => preg_replace( '/\.[^.]+$/', '', $pic['name'] ),
+                        'post_content'   => '',
+                        'post_status'    => 'inherit'
+                    ), $target_file );
+
+                    // wp_generate_attachment_metadata() won't work if you do not include this file
+                    require_once( ABSPATH . 'wp-admin/includes/image.php' );
+
+                    $attach_data = wp_generate_attachment_metadata( $upload_id, $target_file );
+
+                    // Generate and save the attachment metas into the database
+                    wp_update_attachment_metadata( $upload_id, $attach_data );
+
+                    // Show the uploaded file in browser
+	                wp_redirect( $target_dir['url'] . '/' . basename( $target_file ) );
+
                     //return file path
                     return array(
                         "status" => "success",
