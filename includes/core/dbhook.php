@@ -75,17 +75,14 @@
 			$result = $wpdb->get_results($sql);
 		}
 
-
 		//Database table creation for plugin_config
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_docu'" ) != $tbl_docu) {
 			$sql = "CREATE TABLE `".$tbl_docu."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
 				$sql .= "`hash_id` varchar(255) NOT NULL COMMENT 'Hash of id.', ";
 				$sql .= "`wpid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Store ID of Merchant', ";
-				$sql .= "`preview` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Image url of document', ";
-				$sql .= "`doctype` enum('none','sss','drivers_license','prc','owwa','voters_id','pnp','senior_id','postal_id', 'school_id', 'passport') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Document type', ";
-				$sql .= "`status` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Revision ID of status', ";
-				$sql .= "`date_created` datetime(0) NULL DEFAULT NULL COMMENT 'Date document was created', ";
+				$sql .= "`parent_id` bigint(20) NOT NULL COMMENT 'Image url of document', ";
+				$sql .= " `date_created` datetime DEFAULT current_timestamp() COMMENT 'Date document was created', ";
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
