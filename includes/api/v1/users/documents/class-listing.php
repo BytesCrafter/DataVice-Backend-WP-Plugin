@@ -22,21 +22,8 @@
 
             global $wpdb;
 
-            $sql = "SELECT
-                doc.hash_id as ID,
-                prev.child_val as preview,
-                IF ( sts.child_val = 1, 'Active', 'Inactive') as `status`,
-                ( SELECT child_val FROM dv_revisions WHERE parent_id = doc.ID AND child_key ='approve_status' AND revs_type ='documents' ) as `approve_status`,
-                ( SELECT date_created FROM dv_revisions WHERE parent_id = doc.ID AND child_key ='approve_status' AND revs_type ='documents' ) as `approve_date`,
-                ( SELECT created_by FROM dv_revisions WHERE parent_id = doc.ID AND child_key ='approve_status' AND revs_type ='documents' ) as `approve_by`
-            FROM
-                dv_documents doc
-            LEFT JOIN dv_revisions sts ON sts.ID = doc.`status`
-            LEFT JOIN dv_revisions prev ON prev.ID = doc.`preview`";
-
-            $results = $wpdb->get_results($sql);
             
-            return $results;
+
 
         }
     }

@@ -31,8 +31,6 @@
     require plugin_dir_path(__FILE__) . '/v1/users/class-delete-link-acount.php';
     // documents folder
     require plugin_dir_path(__FILE__) . '/v1/users/documents/class-insert.php';
-    require plugin_dir_path(__FILE__) . '/v1/users/documents/class-update.php';
-    require plugin_dir_path(__FILE__) . '/v1/users/documents/class-delete.php';
     require plugin_dir_path(__FILE__) . '/v1/users/documents/class-listing.php';
     require plugin_dir_path(__FILE__) . '/v1/users/documents/class-approve.php';
 
@@ -167,16 +165,6 @@
                 register_rest_route( 'datavice/v1/user/documents', 'insert', array(
                     'methods' => 'POST',
                     'callback' => array('DV_Create_Documents', 'listen'),
-                ));
-
-                register_rest_route( 'datavice/v1/user/documents', 'update', array(
-                    'methods' => 'POST',
-                    'callback' => array('DV_Update_docs', 'listen'),
-                ));
-
-                register_rest_route( 'datavice/v1/user/documents', 'delete', array(
-                    'methods' => 'POST',
-                    'callback' => array('DV_Delete_docs', 'listen'),
                 ));
 
                 register_rest_route( 'datavice/v1/user/documents', 'list', array(
