@@ -29,12 +29,12 @@
             $date_created = TP_Globals::date_stamp();
 
             // Step 2: Validate user
-            /* if (DV_Verification::is_verified() == false) {
+            if (DV_Verification::is_verified() == false) {
                 return array(
                     "status" => "unknown",
                     "message" => "Please contact your administrator. Verification Issues!",
                 );
-            } */
+            }
 
             if (!isset($_POST['docid']) || !isset($_POST['status']) ) {
                 return array(

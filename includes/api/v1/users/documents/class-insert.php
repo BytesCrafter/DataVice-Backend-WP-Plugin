@@ -56,6 +56,7 @@
                 );
             }
 
+            
             // Declare variables
             $dv_docs = DV_DOCUMENTS;
             $doc_fields = DV_DOCS_FIELDS;
