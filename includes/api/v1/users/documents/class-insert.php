@@ -23,13 +23,13 @@
             global $wpdb;
 
             // Step 2: Validate user
-         /*    if (DV_Verification::is_verified() == false) {
+            if (DV_Verification::is_verified() == false) {
                 return array(
                     "status" => "unknown",
                     "message" => "Please contact your administrator. Verification Issues!",
                 );
             }
- */
+ 
             $files = $request->get_file_params();
 
             if ( !isset($files['img']) ) {
