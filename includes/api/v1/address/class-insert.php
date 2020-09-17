@@ -31,7 +31,7 @@
             }
 
             // Step 1 : Check if the fields are passed
-            if( !isset($_POST['type']) || !isset($_POST['co']) || !isset($_POST['pv']) || !isset($_POST['ct']) || !isset($_POST['bg']) || !isset($_POST['st']) ||  !isset($_POST['contact']) || !isset($_POST['contact_type']) ){
+            if( !isset($_POST['type']) || !isset($_POST['co']) || !isset($_POST['pv']) || !isset($_POST['ct']) || !isset($_POST['bg']) || !isset($_POST['st']) ||  !isset($_POST['cnt'])   || !isset($_POST['cnt_person']) ){
                 return rest_ensure_response(
                     array(
                             "status" => "unknown",
@@ -41,7 +41,7 @@
             }
 
              // Step 1 : Check if the fields are passed
-             if( empty($_POST['type']) || empty($_POST['co']) || empty($_POST['pv']) || empty($_POST['ct']) || empty($_POST['bg']) || empty($_POST['st']) ||  empty($_POST['contact']) || empty($_POST['contact_type']) ){
+             if( empty($_POST['type']) || empty($_POST['co']) || empty($_POST['pv']) || empty($_POST['ct']) || empty($_POST['bg']) || empty($_POST['st']) ||  empty($_POST['cnt'])  || empty($_POST['cnt_person']) ){
                 return rest_ensure_response(
                     array(
                             "status" => "unknown",
@@ -202,35 +202,7 @@
             $user = DV_Insert_Address::catch_post();
             $created_id = $user['created_by'];
 
-            $files = $request->get_file_params();
 
-            if (!empty($files)) {
-                if ( !isset($files['img'])) {
-                    return  array(
-                        "status" => "unknown",
-                        "message" => "Please contact your administrator. Request Unknown!",
-                    );
-                }
-
-                // Call upload image function
-                $result = DV_Globals::upload_image( $request, $files);
-
-                if ($result['status'] != 'success') {
-                    return array(
-                        "status" => $result['status'],
-                        "message" => $result['message']
-                    );
-                }
-
-                $user_address_image = update_user_meta( $created_id,  'image_address',  $result['data'] );
-
-                if (is_wp_error($user_address_image)) {
-                    return  array(
-                        "status" => "failed",
-                        "message" => "An error occured while submitting data to server.",
-                    );
-                }
-            }
 
 
             //Start for mysql transaction.
@@ -267,60 +239,18 @@
 
             $country = $wpdb->insert_id;
 
+            // Contact
+            $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'contact', '{$user["contact"]}', $created_id, '$date');");
+            $contact = $wpdb->insert_id;
+
+            $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'contact_person', '{$user["contact_person"]}', $created_id, '$date');");
+            $contact_person = $wpdb->insert_id;
+
             $table_address = DV_ADDRESS_TABLE;
-
             $address_fields = DV_INSERT_ADDRESS_FIELDS;
+            $table_contact = DV_CONTACTS_TABLE;
+            $table_revs = DV_REVS_TABLE;
 
-            /**
-             *  Contact Insert
-             * */
-
-                // Check if value of type is valid
-                if (!($_POST['contact_type'] === 'phone') && !($_POST['contact_type'] === 'email') && !($_POST['contact_type'] === 'emergency')) {
-                    return rest_ensure_response(
-                        array(
-                            "status" => "failed",
-                            "message" => "Contact type submitted is unknown.",
-                        )
-                    );
-                }
-
-                $contact_person = update_user_meta( $created_id,  'contact_type', $user['contact_person']  );
-
-                if (is_wp_error($contact_person)) {
-                    return  array(
-                        "status" => "failed",
-                        "message" => "An error occured while submitting data to server.",
-                    );
-                }
-
-                $wpdb->query("INSERT INTO `$table_contact` (`status`, `wpid`, `types`, `revs`, `created_by`, `date_created`)
-                                VALUES ('1', $created_id, '{$user["contact_type"]}', '0', $created_id, '$date');");
-
-                $contact_id = $wpdb->insert_id;
-
-                $wpdb->query("INSERT INTO `$table_revs` (revs_type, parent_id, child_key, child_val, created_by, date_created)
-                                    VALUES ( 'contacts', $contact_id, '{$user["contact_type"]}', ''{$user["contact"]}'', $created_id, '$date'  )");
-
-                $revs_id = $wpdb->insert_id;
-
-                $wpdb->query("UPDATE `$table_contact` SET `revs` = $revs_id WHERE ID = $contact_id ");
-
-                //Step 6: Check if any of the insert queries above failed
-                if ($contact_id < 1  || $revs_id < 1) {
-                    //If failed, do mysql rollback (discard the insert queries(no inserted data))
-                    $wpdb->query("ROLLBACK");
-
-                    return rest_ensure_response(
-                        array(
-                            "status" => "error",
-                            "message" => "An error occured while submitting data to the server."
-                        )
-                    );
-                }
-            /**
-             *  End contact Insert
-             * */
             //Save the address in the parent table
             $wpdb->query("INSERT INTO $table_address ($address_fields) VALUES ($status, '{$user["created_by"]}', '{$user["type"]}',  $street, $brgy, $city, $province, $country, '$date')");
 
@@ -328,7 +258,35 @@
 
             //Update revision table for saving the parent_id(address_id)
             $wpdb->query("UPDATE $dv_rev_table SET `parent_id` = $address_id
-            WHERE ID IN ($status, '{$user["type"]}', $street, $brgy, $city, $province, $country)");
+            WHERE ID IN ($status, '{$user["type"]}', $street, $brgy, $city, $province, $country, $contact, $contact_person)");
+
+            $files = $request->get_file_params();
+
+            if (!empty($files)) {
+                if ( !isset($files['img'])) {
+                    return  array(
+                        "status" => "unknown",
+                        "message" => "Please contact your administrator. Request Unknown!",
+                    );
+                }
+
+                // Call upload image function
+                $result = DV_Globals::upload_image( $request, $files);
+
+                if ($result['status'] != 'success') {
+                    return array(
+                        "status" => $result['status'],
+                        "message" => $result['message']
+                    );
+                }
+                $image_add = $result['data'];
+                $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields, `parent_id`) VALUES ('address', 'image_address', '$image_add', $created_id, '$date', '$address_id' );");
+                $image_address =  $wpdb->insert_id;
+
+                $wpdb->query("UPDATE $table_address SET `img_url` = $image_address
+                WHERE ID IN ($address_id)");
+
+            }
 
             $update_id = $wpdb->insert_id;
 
@@ -370,8 +328,8 @@
             $cur_user['province'] = $_POST['pv'];
             $cur_user['country'] = $_POST['co'];
             $cur_user['created_by'] = $_POST['wpid'];
-            $cur_user['contact'] = $_POST['contact'];
-            $cur_user['contact_type'] = $_POST['contact_type'];
+            $cur_user['contact'] = $_POST['cnt'];
+            $cur_user['contact_person'] = $_POST['cnt_person'];
 
             return  $cur_user;
         }
