@@ -14,9 +14,6 @@
 	define('EMAIL_HEADER_SUBJECT_FORGOT', 'Forgot Password');
 	define('EMAIL_HEADER_SUBJECT_ACTIVATE', 'Activate Password');
 
-
-
-
 	//Defining Global Variables
 	define('DV_PREFIX', 'dv_');
 	define('DV_MASTER', 'masterkey');
@@ -90,4 +87,3 @@
 	// Error Log
 	define('DV_ERROR_LOG', DV_PREFIX.'error_log');
 	define('DV_ERROR_LOG_FIELDS', '`platform`, `device_ip`, `public_ip`');
-
