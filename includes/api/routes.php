@@ -10,9 +10,6 @@
 		* This is the primary gateway of all the rest api request.
 	*/
 
-    // For debugging purpose only.
-    require plugin_dir_path(__FILE__) . '/test/demoguy.php';
-
     //Require the USocketNet class which have the core function of this plguin.
 
     //Users Classes
