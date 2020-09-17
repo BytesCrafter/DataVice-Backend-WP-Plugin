@@ -245,15 +245,15 @@
 
                 $street = $wpdb->insert_id;
 
-                $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'brgy', {$user["brgy"]}, $created_id, '$date');");
+                $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'brgy', '{$user["brgy"]}', $created_id, '$date');");
 
                 $brgy = $wpdb->insert_id;
 
-                 $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'city', {$user["city"]}, $created_id, '$date');");
+                 $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'city', '{$user["city"]}', $created_id, '$date');");
 
                 $city = $wpdb->insert_id;
 
-                $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'province', {$user["province"]}, $created_id, '$date');");
+                $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'province', '{$user["province"]}', $created_id, '$date');");
 
                 $province = $wpdb->insert_id;
 
