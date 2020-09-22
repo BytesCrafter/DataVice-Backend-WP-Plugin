@@ -166,19 +166,28 @@
                         );
                     }
 
-                    $result = DV_Globals::upload_image( $request, $files);
-
-                    if ($result['status'] != 'success') {
+                    if (empty($_POST['stid']) || empty($_POST['type']) ) {
                         return array(
-                            "status" => $result['status'],
-                            "message" => $result['message']
+                            "status" => "unknown",
+                            "message" => "Please contact your administrator. Request unknown."
                         );
-
                     }
 
-                    $link = $result['data'];
-
                     if ($type == 'logo') {
+
+
+
+                        $result = DV_Globals::upload_image( $request, $files);
+
+                        if ($result['status'] != 'success') {
+                            return array(
+                                "status" => $result['status'],
+                                "message" => $result['message']
+                            );
+
+                        }
+
+                        $link = $result['data'];
 
                         $wpdb->query("START TRANSACTION");
                             $store_img = $wpdb->query("INSERT INTO tp_revisions ( `revs_type`, `parent_id`, `child_key`, `child_val`, `created_by`, `date_created` )
@@ -208,6 +217,18 @@
                         }
 
                     }else{
+
+                        $result = DV_Globals::upload_image( $request, $files);
+
+                        if ($result['status'] != 'success') {
+                            return array(
+                                "status" => $result['status'],
+                                "message" => $result['message']
+                            );
+
+                        }
+
+                        $link = $result['data'];
 
                         $wpdb->query("START TRANSACTION");
                             $store_img = $wpdb->query("INSERT INTO tp_revisions ( `revs_type`, `parent_id`, `child_key`, `child_val`, `created_by`, `date_created` )

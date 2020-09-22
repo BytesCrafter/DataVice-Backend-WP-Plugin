@@ -317,6 +317,9 @@
                 $expiration_date = date( 'Y-m-d H:i:s', strtotime("now") + (int)$pword_expiry_span );
                 $add_key_meta = update_user_meta( $created_id, 'reset_pword_expiry', $expiration_date );
 
+
+
+
                 // Try to send mail.
                 if( DV_Signup::is_success_sendmail( $user ) ) {
                     return rest_ensure_response(
@@ -371,7 +374,7 @@
 
             $cur_user['show_admin_bar_front'] = false;
             $cur_user['role'] = "subscriber";
-            $cur_user['user_activation_key'] = wp_generate_password( 12, false, false );
+            $cur_user['user_activation_key'] = DV_Globals::activation_key();
             $cur_user['user_registered'] = Date("Y-m-d H:i:s");
 
             return  $cur_user;
