@@ -131,6 +131,12 @@
             return true;
 
         }
+        public static function activation_key(){
+            $pword_resetkey_length = DV_Library_Config:: dv_get_config('pword_resetkey_length', 12);
+
+            $digits = $word_resetkey_length;
+            return rand(pow(10, $digits-1), pow(10, $digits)-1);
+        }
 
         public static function check_roles($role){
 
@@ -147,7 +153,7 @@
             return false;
         }
 
-        public static function old_tiger($data = "", $width=192, $rounds = 3) {
+        public static function old_tiger($data = "", $width=20, $rounds = 3) {
             return substr(
                 implode(
                     array_map(

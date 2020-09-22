@@ -25,6 +25,6 @@
 	('configs', 'lock_expiry_span', '1800', '1', '$date', '1', sha2(1, 256) ),
 	('configs', 'master_key', 'datavice', '1', '$date', '2', sha2(2, 256) ),
 	('configs', 'pword_expiry_span', '1800', '1', '$date', '3', sha2(3, 256) ),
-	('configs', 'pword_resetkey_length', '12', '1', '$date', '4', sha2(4, 256) ),
+	('configs', 'pword_resetkey_length', '5', '1', '$date', '4', sha2(4, 256) ),
 	('configs', 'max_img_size', '5000000', '1', '$date', '5', sha2(5, 256) )
 	;";
