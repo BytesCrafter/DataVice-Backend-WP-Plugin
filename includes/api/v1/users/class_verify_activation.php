@@ -37,16 +37,10 @@
                     );
                 }
 
-                if (DV_Globals::old_tiger(true) !==  $_POST['ak']) {
-                    return array(
-                        "status" => "failed",
-                        "message" => "Please contact your administrator. Key does not match.",
-                    );
-                }
-
+                $actkey = md5($_POST['ak']);
                 $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email
-                FROM {$wpdb->prefix}users
-                WHERE `user_activation_key` = '{$_POST['ak']}'", OBJECT );
+                    FROM {$wpdb->prefix}users
+                    WHERE `user_activation_key` = '{$actkey}'", OBJECT );
 
                 if ( !$cur_user ) {
                     return rest_ensure_response(
@@ -60,13 +54,11 @@
                 // Hash the new password
                 $pword_hash = wp_hash_password($_POST['cpas']);
 
-                $status = DV_Globals::old_tiger('activated');
 
                 // Update users activation key.
                 $result = $wpdb->update(
                     $wpdb->users,array(
-                        'user_pass' => $pword_hash,
-                        'user_activation_key' => $status
+                        'user_pass' => $pword_hash
                     ),
                     array( 'user_activation_key' => $_POST['ak'] )
                 );

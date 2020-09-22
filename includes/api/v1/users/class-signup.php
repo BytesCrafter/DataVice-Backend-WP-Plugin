@@ -216,6 +216,8 @@
 
             // Get user object.
             $user = DV_Signup::catch_post();
+            $tempActKey = $user['user_activation_key'];
+            $user['user_activation_key'] = md5($user['user_activation_key']);
 
             // Try to create a User.
             $created_id = wp_insert_user( $user );
@@ -318,7 +320,7 @@
                 $add_key_meta = update_user_meta( $created_id, 'reset_pword_expiry', $expiration_date );
 
 
-
+                $user['user_activation_key'] = $tempActKey;
 
                 // Try to send mail.
                 if( DV_Signup::is_success_sendmail( $user ) ) {

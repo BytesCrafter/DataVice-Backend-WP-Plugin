@@ -36,6 +36,8 @@
                     );
                 }
 
+                $actkey = md5($_POST['ak']);
+
                 // Check if user input is email or username
                 if (is_email($_POST['un'])) {
 
@@ -46,7 +48,7 @@
                     $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email
                         FROM {$wpdb->prefix}users
                         WHERE user_email = '$email'
-                        AND `user_activation_key` = '{$_POST['ak']}'", OBJECT );
+                        AND `user_activation_key` = '{$actkey}'", OBJECT );
 
                 } else {
 
@@ -57,7 +59,7 @@
                     $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email
                         FROM {$wpdb->prefix}users
                         WHERE user_login = '$uname'
-                        AND `user_activation_key` = '{$_POST['ak']}'", OBJECT );
+                        AND `user_activation_key` = '{$actkey}'", OBJECT );
                 }
 
                 // Check for cur_user. Return a message if null
@@ -95,8 +97,9 @@
                         "message" => "Password reset key is already expired.",
                     );
                 }
+
 // =========================================
-                $key = DV_Globals::old_tiger(true);
+                $key = md5($_POST['un']);
 
                 if (is_email($_POST['un'])) {
 
@@ -107,8 +110,6 @@
 
                     $un = $_POST['un'];
                     $result = $wpdb -> query( "UPDATE wp_users  SET user_activation_key = '$key' WHERE user_login = '$un' " );
-
-
                 }
 
                 // Check if row successfully updated or not
