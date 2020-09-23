@@ -87,9 +87,8 @@
                 }
             }
 
-
             // for inserting user avatar
-            if (isset($_POST['wpid']) && !isset($_POST['stid']) && isset($_POST['type']) ) {
+            else if (isset($_POST['wpid']) && !isset($_POST['stid']) && isset($_POST['type']) ) {
 
                 if ($store_id === NULL && $product_id == NULL && $wpid !== NULL && $type !== NULL) {
 
@@ -140,7 +139,7 @@
                 }
             }
 
-            if (isset($_POST['stid']) && isset($_POST['type']) && !isset($_POST["pdid"]) ) {
+            else if (isset($_POST['stid']) && isset($_POST['type']) && !isset($_POST["pdid"]) ) {
 
                 if ($_POST['type'] !== 'logo' && $_POST['type'] !== 'banner') {
                     return array(
@@ -260,9 +259,7 @@
                 }
             }
 
-
-
-            if (isset($_POST['pdid']) && isset($_POST['type']) ) {
+            else if (isset($_POST['pdid']) && isset($_POST['type']) ) {
 
                 if ($_POST['type'] !== 'logo' && $_POST['type'] !== 'banner') {
                     return array(
@@ -337,5 +334,13 @@
                     }
                 }
             }
+
+            else {
+                return array(
+                    "status" => "unknown",
+                    "message" => "Please contact your administrator. Unknown Request.",
+                );
+            }
         }
+
     }
