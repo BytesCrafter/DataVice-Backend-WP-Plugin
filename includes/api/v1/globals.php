@@ -282,7 +282,7 @@
                     //return file path
                     return array(
                         "status" => "success",
-                        "data" =>   $target_dir['url'].'/'.basename($completed_file_name),
+                        "data" =>  (string)$target_dir['url'].'/'.basename($completed_file_name),
                     );
 
                 } else {

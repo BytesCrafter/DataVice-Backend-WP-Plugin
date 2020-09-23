@@ -83,7 +83,7 @@
 								"message" => "Please activate your account first.",
 							)
 						);
-						
+
 					}
 				}
 
