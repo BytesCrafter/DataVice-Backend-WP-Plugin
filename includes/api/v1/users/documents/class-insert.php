@@ -40,7 +40,7 @@
             }
 
             // Step 3: Sanitize if all variables at POST
-            if ( !isset($_POST['type']) ) {
+            if ( !isset($_POST['type']) || !isset($_POST['number_contact']) ) {
 				return array(
 					"status" => "unknown",
 					"message" => "Please contact your administrator. Request unknown!",
@@ -49,7 +49,7 @@
             }
 
             // Step 4: Check if all variables is not empty
-            if ( empty($_POST['type']) ) {
+            if ( empty($_POST['type']) || empty($_POST['number_contact']) ) {
                 return array(
                     "status" => "failed",
                     "message" => "Required fileds cannot be empty.",
@@ -64,6 +64,7 @@
             $revs_fields = DV_INSERT_REV_FIELDS;
             $doc_type = $_POST['type'];
             $wpid = $_POST['wpid'];
+            $number_contact = $_POST['number_contact'];
             $doctype = 'face';
             $date_created = TP_Globals::date_stamp();
 
@@ -100,6 +101,15 @@
                     );
                 }
                 $doctype = $_POST['doctype'];
+            }
+            if ( $_POST['type'] == 'face'  ){
+                if ( !isset($_POST['nationality']) ) {
+                    return array(
+                        "status" => "unknown",
+                        "message" => "Please contact your administrator. Request unknown!",
+                    );
+                }
+                $nationality = $_POST['nationality'];
             }
 
             $wpdb->query("START TRANSACTION");
@@ -168,7 +178,7 @@
                     );
                 }
 
-                $doc_prev = substr($result['data'], 45); // get /year/month/filename to save in database
+                $doc_prev = $result['data'];
             /* End */
 
 
@@ -210,6 +220,21 @@
                 $c_doc_rev_preview = $wpdb->query("INSERT INTO $table_revs (revs_type, parent_id, child_key, child_val, created_by, date_created) VALUES ('documents', '$c_doc_id', 'preview', '$doc_prev', '$wpid', '$date_created')");
                 $c_doc_rev_preview_id = $wpdb->insert_id;
                 $wpdb->query("UPDATE $table_revs SET hash_id = sha2($c_doc_rev_preview_id, 256) WHERE ID = $c_doc_rev_preview_id");
+
+                if ($_POST['type'] == "face"){
+
+                    $c_doc_rev_nationality = $wpdb->query("INSERT INTO $table_revs (revs_type, parent_id, child_key, child_val, created_by, date_created) VALUES ('documents', '$c_doc_id', 'nationality', '$nationality', '$wpid', '$date_created')");
+                    $wpdb->query("UPDATE $table_revs SET hash_id = sha2($c_doc_rev_name_id, 256) WHERE ID = $wpdb->insert_id;");
+
+                    $c_doc_rev_contact = $wpdb->query("INSERT INTO $table_revs (revs_type, parent_id, child_key, child_val, created_by, date_created) VALUES ('documents', '$c_doc_id', 'contact', '$number_contact', '$wpid', '$date_created')");
+                    $wpdb->query("UPDATE $table_revs SET hash_id = sha2($c_doc_rev_name_id, 256) WHERE ID = $wpdb->insert_id;");
+                }
+                if ($_POST['type'] == "id"){
+
+                    $c_doc_rev_num = $wpdb->query("INSERT INTO $table_revs (revs_type, parent_id, child_key, child_val, created_by, date_created) VALUES ('documents', '$c_doc_id', 'id_number', '$number_contact', '$wpid', '$date_created')");
+                    $wpdb->query("UPDATE $table_revs SET hash_id = sha2($c_doc_rev_name_id, 256) WHERE ID = $wpdb->insert_id;");
+                }
+
             /* End */
 
             if ($c_doc == false || $c_doc_rev_name == false || $c_doc_rev_preview == false) {
