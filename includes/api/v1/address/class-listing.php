@@ -46,12 +46,13 @@
 				(SELECT co.country_name FROM $country_table co WHERE co.ID = (SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.ID = dv_add.country ) ) as country,
 				(SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.ID = dv_add.img_url ) as `preview`,
 				(SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.parent_id = dv_add.ID  AND child_key = 'contact' AND revs_type = 'address' ) as `contact`,
+				(SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.parent_id = dv_add.ID  AND child_key = 'contact_type' AND revs_type = 'address' ) as `contact_type`,
 				(SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.parent_id = dv_add.ID  AND child_key = 'contact_person' AND revs_type = 'address' ) as `contact_person`
 			FROM
 				$table_address dv_add
 			INNER JOIN $dv_rev_table dv_rev
 				ON dv_rev.ID = dv_add.`status`
-				WHERE  dv_add.wpid = '11' AND (SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.ID = dv_add.status ) = 1
+				WHERE  dv_add.wpid = '1' AND (SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.ID = dv_add.status ) = 1
 			");
 
 				return rest_ensure_response(
