@@ -248,7 +248,7 @@
                             $address_place_id = $wpdb->insert_id;
 
                             $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'formatted_address', '{$geolocation["formatted_address"]}', $created_id, '$date');");
-                            $address_place_id = $wpdb->insert_id;
+                            $address_formated_address = $wpdb->insert_id;
                         }
                     }
 
@@ -394,6 +394,8 @@
             $cur_user['contact'] = $_POST['cnt'];
             $cur_user['contact_type'] = $_POST['cnt_type'];
             $cur_user['contact_person'] = $_POST['cnt_person'];
+            $cur_user['lat'] = $_POST['lat'];
+            $cur_user['long'] = $_POST['long'];
 
             return  $cur_user;
         }
