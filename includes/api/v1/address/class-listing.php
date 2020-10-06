@@ -15,14 +15,14 @@
 			global $wpdb;
 
             // Step 1: Validate user
-            if ( DV_Verification::is_verified() == false ) {
+           /*  if ( DV_Verification::is_verified() == false ) {
                 return rest_ensure_response(
                     array(
                         "status" => "unknown",
                         "message" => "Please contact your administrator. Verification Issue!",
                     )
                 );
-            }
+            } */
 
 			$dv_rev_table = DV_REVS_TABLE;
             $table_address = DV_ADDRESS_TABLE;
@@ -52,7 +52,7 @@
 				$table_address dv_add
 			INNER JOIN $dv_rev_table dv_rev
 				ON dv_rev.ID = dv_add.`status`
-				WHERE  dv_add.wpid = '1' AND (SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.ID = dv_add.status ) = 1
+				WHERE  dv_add.wpid = '$user' AND (SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.ID = dv_add.status ) = 1
 			");
 
 				return rest_ensure_response(
