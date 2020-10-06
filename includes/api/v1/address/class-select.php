@@ -70,6 +70,7 @@
             $brgy_table = DV_BRGY_TABLE;
 
             $result  = $wpdb->get_results("SELECT
+					dv_add.ID,
 					dv_add.types,
 					(SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.ID = dv_add.street ) as street,
 					(SELECT $brgy_table.brgy_name FROM $brgy_table WHERE $brgy_table.ID = (SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.ID = dv_add.brgy ) ) as brgy,
@@ -77,7 +78,10 @@
 					(SELECT $province_table.prov_name FROM $province_table WHERE $province_table.prov_code = (SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.ID = dv_add.province ) ) as province,
 					(SELECT $country_table.country_name FROM $country_table WHERE $country_table.ID = (SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.ID = dv_add.country ) ) as country,
 					(SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.ID = dv_add.latitude ) as latitude,
-					(SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.ID = dv_add.longitude ) as longitude
+					(SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.ID = dv_add.longitude ) as longitude,
+					(SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.parent_id = dv_add.ID  AND child_key = 'contact' AND revs_type = 'address' ) as `contact`,
+					(SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.parent_id = dv_add.ID  AND child_key = 'contact_type' AND revs_type = 'address' ) as `contact_type`,
+					(SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.parent_id = dv_add.ID  AND child_key = 'contact_person' AND revs_type = 'address' ) as `contact_person`
 				FROM
 					$table_address dv_add
 				INNER JOIN $dv_rev_table dv_rev
