@@ -36,8 +36,8 @@
                 );
             }
 
-             // Step 1 : Check if the fields are passed
-             if( empty($_POST['id'])  || empty($_POST['lat']) || empty($_POST['long']) ){
+            // Step 1 : Check if the fields are passed
+            if( empty($_POST['id'])  || empty($_POST['lat']) || empty($_POST['long']) ){
                 return rest_ensure_response(
                     array(
                             "status" => "unknown",
@@ -174,19 +174,12 @@
             $province_table = DV_PROVINCE_TABLE;
             $city_table = DV_CITY_TABLE;
             $brgy_table = DV_BRGY_TABLE;
+
             $id = $_POST['id'];
             $lat = $_POST['lat'];
             $long = $_POST['long'];
             $data['latitude'] = $_POST['lat'];
             $data['longitude'] = $_POST['long'];
-
-            // $data = array('country' => $country_code,
-            //               'province' => $prov_code,
-            //               'city' => $city_code,
-            //               'brgy' => $brgy_code,
-            //               'street' => $street
-            // );
-
 
             $where = array('id' => $id);
 
@@ -194,15 +187,14 @@
 
             if ($update == false) {
                 return  array(
-                        "status" => "error",
-                        "message" => "An error occured while submitting data to the server."
+                    "status" => "error",
+                    "message" => "An error occured while submitting data to the server."
                 );
             }
 
             return array(
-                    "status" => "success",
-                    "message" => "Data has been updated successfully."
+                "status" => "success",
+                "message" => "Data has been updated successfully."
             );
         }
-
     }
