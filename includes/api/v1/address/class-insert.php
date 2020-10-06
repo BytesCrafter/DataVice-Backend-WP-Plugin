@@ -17,14 +17,14 @@
 
 
              // Step1: Validate user
-            /*  if ( DV_Verification::is_verified() == false ) {
+             if ( DV_Verification::is_verified() == false ) {
                 return rest_ensure_response(
                     array(
                         "status" => "unknown",
                         "message" => "Please contact your administrator. Verification Issue!",
                     )
                 );
-            } */
+            }
 
             // Step 1 : Check if the fields are passed
             if( !isset($_POST['type']) || !isset($_POST['co']) || !isset($_POST['pv']) || !isset($_POST['ct']) || !isset($_POST['bg']) || !isset($_POST['st']) ||  !isset($_POST['cnt'])   || !isset($_POST['cnt_type']) ){
@@ -40,8 +40,8 @@
              if( empty($_POST['type']) || empty($_POST['co']) || empty($_POST['pv']) || empty($_POST['ct']) || empty($_POST['bg']) || empty($_POST['st']) ||  empty($_POST['cnt'])  || empty($_POST['cnt_type']) ){
                 return rest_ensure_response(
                     array(
-                            "status" => "unknown",
-                            "message" => "Please contact your administrator. Request Empty!",
+                        "status" => "unknown",
+                        "message" => "Please contact your administrator. Request Empty!",
                     )
                 );
             }
@@ -50,8 +50,8 @@
             if( !is_numeric($_POST['pv']) || !is_numeric($_POST['ct']) || !is_numeric($_POST['bg']) ){
                 return rest_ensure_response(
                     array(
-                            "status" => "unknown",
-                            "message" => "Please contact your administrator. Request not in valid format!",
+                        "status" => "unknown",
+                        "message" => "Please contact your administrator. Request not in valid format!",
                     )
                 );
             }
@@ -230,7 +230,8 @@
 
             // Get Geolocation of Address
                 if (isset($_POST['lat']) && isset($_POST['long'])) {
-                    if ($_POST['lat'] !== null && $_POST['long'] !== null) {
+
+                    if ($_POST['lat'] != null && $_POST['long'] != null) {
 
                         if($geolocation == null){
                             return array(
@@ -250,16 +251,16 @@
                             $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'formatted_address', '{$geolocation["formatted_address"]}', $created_id, '$date');");
                             $address_formated_address = $wpdb->insert_id;
                         }
-                    }
-
-                }else{
-
-                    if($geolocation == null){
-                        return array(
-                            "status" => "failed",
-                            "message" => "Please contact your administrator. Geolocation Api Failed"
-                        );
                     }else{
+
+                        if($geolocation == null){
+
+                            return array(
+                                "status" => "failed",
+                                "message" => "Please contact your administrator. Geolocation Api Failed"
+                            );
+                        }
+
                         $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'latitude', '{$geolocation["latitude"]}', $created_id, '$date');");
                         $address_latitude = $wpdb->insert_id;
 
@@ -271,7 +272,9 @@
 
                         $wpdb->query("INSERT INTO $dv_rev_table ($rev_fields) VALUES ('address', 'formatted_address', '{$geolocation["formatted_address"]}', $created_id, '$date');");
                         $address_formated_address = $wpdb->insert_id;
+
                     }
+
                 }
             // End
 

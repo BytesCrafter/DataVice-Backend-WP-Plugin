@@ -96,8 +96,10 @@
                         "status" => "failed",
                         "message" => "Address return empty."
                     )
-                );
+				);
+
             } else {
+				
                 return rest_ensure_response(
 					array(
 						"status" => "success",
