@@ -120,7 +120,7 @@
             $conditions = implode( ' AND ', $conditions );
 
             foreach ($insert_values as $key => $value) {
-                $result = $wpdb->query("UPDATE $parent_table SET $key = $value");
+                $result = $wpdb->query("UPDATE $parent_table SET $key = $value WHERE ID = $parent_id");
                 if ($result < 1) {
                     $wpdb->query("ROLLBACK");
                     return false;
@@ -282,7 +282,7 @@
                     //return file path
                     return array(
                         "status" => "success",
-                        "data" =>   $target_dir['url'].'/'.basename($completed_file_name),
+                        "data" =>  (string)$target_dir['url'].'/'.basename($completed_file_name),
                     );
 
                 } else {
@@ -295,4 +295,78 @@
                 }
             }
         }
+
+
+        public static function get_location($string, $api_key){
+            $string = str_replace(" ", "+", urlencode($string));
+
+            $details_url = "https://maps.googleapis.com/maps/api/geocode/json?address=".$string."&sensor=false&key=".$api_key."";
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $details_url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $response = json_decode(curl_exec($ch), true);
+
+            // If Status Code is ZERO_RESULTS, OVER_QUERY_LIMIT, REQUEST_DENIED or INVALID_REQUEST
+            if ($response['status'] != 'OK') {
+                return null;
+            }
+
+            $geometry = $response['results'][0]['geometry'];
+            $place_id = $response['results'][0]['place_id'];
+            $formatted_address = $response['results'][0]['formatted_address'];
+
+
+            $longitude = $geometry['location']['lat'];
+            $latitude = $geometry['location']['lng'];
+
+            $array = array(
+                'latitude' => $geometry['location']['lng'],
+                'longitude' => $geometry['location']['lat'],
+                'location_type' => $geometry['location_type'],
+                'place_id' => $place_id,
+                'formatted_address' => $formatted_address,
+            );
+
+
+	        return $array;
+
+        }
+
+        public static function get_formated_address($street, $data){
+
+            global $wpdb;
+
+            $brgy = '';
+            $city = '';
+            $province = '';
+            $country = '';
+
+            foreach ($data as $key => $value) {
+
+                switch($key){
+                    case 'dv_geo_brgys':
+                        $brgy = $wpdb->get_row("SELECT brgy_name FROM $key WHERE ID = '$value';");
+                        break;
+                    case 'dv_geo_cities':
+                        $city = $wpdb->get_row("SELECT city_name FROM $key WHERE city_code = '$value';");
+                        break;
+                    case 'dv_geo_provinces':
+                        $province = $wpdb->get_row("SELECT prov_name FROM $key WHERE prov_code = '$value';");
+                        break;
+                    case 'dv_geo_countries':
+                        $country = $wpdb->get_row("SELECT country_name FROM $key WHERE country_code = '$value';");
+                        break;
+
+                }
+
+            }
+
+
+            return  $street.", ".$brgy->brgy_name.", ".$city->city_name.", ".$province->prov_name.", ".$country->country_name;
+
+
+        }
+
+
     } // end of class

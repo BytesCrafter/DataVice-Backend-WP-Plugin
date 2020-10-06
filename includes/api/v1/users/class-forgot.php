@@ -44,7 +44,7 @@
                 $email = sanitize_email($_POST['un']);
 
                 // If email, use email in where clause
-                $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email
+                $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email, user_activation_key
                     FROM {$wpdb->prefix}users
                     WHERE user_email = '$email'", OBJECT );
 
@@ -54,7 +54,7 @@
                 $uname = sanitize_user($_POST['un']);
 
                 // if username, use username in where clause
-                $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email
+                $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email,user_activation_key
                     FROM {$wpdb->prefix}users
                     WHERE user_login = '$uname'", OBJECT );
             }
