@@ -99,7 +99,7 @@
 				);
 
             } else {
-				
+
                 return rest_ensure_response(
 					array(
 						"status" => "success",

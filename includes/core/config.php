@@ -18,6 +18,10 @@
 	define('DV_PREFIX', 'dv_');
 	define('DV_MASTER', 'masterkey');
 
+	// Dv users
+	define('DV_USERS', DV_PREFIX.'users');
+
+
 	// Maximum file size for uploading image
 	define('DV_UPLOAD_SIZE', 5000000);
 	define('WP_PREFIX', 'wp_');

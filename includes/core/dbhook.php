@@ -25,6 +25,7 @@
 		$tbl_docu = DV_DOCUMENTS;
 		$tbl_link_acc = DV_LINK_ACCOUNT;
 		$tbl_error_log = DV_ERROR_LOG;
+		$tbl_users = DV_USERS;
 
 		$wpdb->query("START TRANSACTION ");
 
@@ -280,6 +281,46 @@
 			$result = $wpdb->get_results($sql);
 		}
 
+
+		//Database table creation for dv_events
+		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_users'" ) != $tbl_users) {
+			$sql = "CREATE TABLE `".$tbl_users."` (";
+				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= "`hash_id` varchar(255) NOT NULL DEFAULT 0 COMMENT 'Hash id of user',";
+				$sql .= "`wpid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User id of the owner of this event',";
+				$sql .= "`date_created` datetime DEFAULT current_timestamp() COMMENT 'The date this event is created.', ";
+				$sql .= "PRIMARY KEY (`ID`) ";
+				$sql .= ") ENGINE = InnoDB; ";
+			$result = $wpdb->get_results($sql);
+
+			$get_all_user = $wpdb->get_results("SELECT ID FROM wp_users  ORDER BY `ID` ");
+
+
+			for ($count=0; $count < count($get_all_user) ; $count++) {
+
+				$id = $get_all_user[$count]->ID;
+				$wpdb->query("INSERT INTO $tbl_users (wpid) VALUES ($id)");
+				$user_id = $wpdb->insert_id;
+
+				$results = $wpdb->query("UPDATE  $tbl_users SET hash_id = concat(
+					substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand($user_id)*4294967296))*36+1, 1),
+					substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1),
+					substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1),
+					substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1),
+					substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1),
+					substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1),
+					substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1),
+					substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1),
+					substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1),
+					substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1),
+					substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1),
+					substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed)*36+1, 1)
+				)
+				WHERE ID = $user_id;");
+
+			}
+
+		}
 
 
 		$wpdb->query("SET GLOBAL max_allowed_packet=$get_last_pocket->value;");

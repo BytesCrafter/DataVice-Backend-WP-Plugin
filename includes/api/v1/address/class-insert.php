@@ -15,8 +15,7 @@
         public static function listen(WP_REST_Request $request){
             global $wpdb;
 
-
-             // Step1: Validate user
+            // Step1: Validate user
              if ( DV_Verification::is_verified() == false ) {
                 return rest_ensure_response(
                     array(
