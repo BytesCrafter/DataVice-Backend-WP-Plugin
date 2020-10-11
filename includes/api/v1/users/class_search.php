@@ -22,6 +22,5 @@
         public static function listen_open(){
             global $wpdb;
 
-            
         }
     }
