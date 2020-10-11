@@ -177,7 +177,7 @@
 			$sql = "CREATE TABLE `".$tbl_city."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
 				$sql .= "`status` bigint(20) NOT NULL DEFAULT 0, ";
-				$sql .= "`prov_code` varchar(10) DEFAULT NULL,";
+				$sql .= "`prov_code` varchar(10) DEFAULT NULL,"; 	
 				$sql .= "`city_code` varchar(10) DEFAULT NULL, ";
 				$sql .= "`city_name` varchar(100) DEFAULT NULL, ";
 				$sql .= "PRIMARY KEY (`ID`) ";
