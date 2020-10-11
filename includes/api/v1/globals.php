@@ -321,8 +321,8 @@
             $latitude = $geometry['location']['lng'];
 
             $array = array(
-                'latitude' => $geometry['location']['lng'],
-                'longitude' => $geometry['location']['lat'],
+                'latitude' => $geometry['location']['lat'],
+                'longitude' => $geometry['location']['lng'],
                 'location_type' => $geometry['location_type'],
                 'place_id' => $place_id,
                 'formatted_address' => $formatted_address,
