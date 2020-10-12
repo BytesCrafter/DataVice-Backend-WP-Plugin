@@ -36,12 +36,19 @@
                 );
             }
 
-            $limit = 12;
+            $limit = 5;
 
             $search = $_POST['search'];
             $avatar = DV_PLUGIN_URL . "assets/default-avatar.png";
 
-            $sql = "SELECT IF((SELECT meta_value FROM wp_usermeta WHERE `user_id` = w.ID AND meta_key = 'avatar') is null, '$avatar', (SELECT meta_value FROM wp_usermeta WHERE `user_id` = w.ID AND meta_key = 'avatar') ) as avatar, w.display_name as `name` FROM `pasabuy`.`wp_users` w WHERE w.`display_name` LIKE '%$search%' LIMIT $limit";
+            $sql = "SELECT
+                ID,
+                IF((SELECT meta_value FROM wp_usermeta WHERE `user_id` = w.ID AND meta_key = 'avatar') is null, '$avatar', (SELECT meta_value FROM wp_usermeta WHERE `user_id` = w.ID AND meta_key = 'avatar') ) as avatar,
+                w.display_name as `name`
+            FROM `pasabuy`.`wp_users` w
+                WHERE
+                    w.`display_name` LIKE '%$search%' OR w.user_login LIKE '%$search%'  OR w.user_email LIKE '%$search%'
+                LIMIT $limit";
 
 			if( isset($_POST['lid']) ){
 				// Step 4: Validate parameter
@@ -56,10 +63,11 @@
 
                     $lastid = $_POST['lid'];
                     $sql .= " WHERE ID < $lastid ";
-                    $limit = 7;
+                    $limit = 5;
 
                 }
             }
+
             $data = $wpdb->get_results($sql);
 
             return array(
