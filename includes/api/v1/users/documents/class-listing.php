@@ -26,8 +26,8 @@
             $table_revs = DV_REVS_TABLE;
             $revs_fields = DV_INSERT_REV_FIELDS;
 
-             // Step 2: Validate user
-             if (DV_Verification::is_verified() == false) {
+            // Step 2: Validate user
+            if (DV_Verification::is_verified() == false) {
                 return array(
                     "status" => "unknown",
                     "message" => "Please contact your administrator. Verification Issues!",

@@ -83,7 +83,7 @@
 				$sql .= "`hash_id` varchar(255) NOT NULL COMMENT 'Hash of id.', ";
 				$sql .= "`wpid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Store ID of Merchant', ";
 				$sql .= "`parent_id` bigint(20) NOT NULL COMMENT 'Image url of document', ";
-				$sql .= " `date_created` datetime DEFAULT current_timestamp() COMMENT 'Date document was created', ";
+				$sql .= "`date_created` datetime DEFAULT current_timestamp() COMMENT 'Date document was created', ";
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
