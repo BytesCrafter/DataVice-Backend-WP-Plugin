@@ -13,9 +13,10 @@
     class DV_Verify_User_Documents{
 
         public static function listen(){
+            $verified = self::listen_open();
             return rest_ensure_response(
-				self::listen_open()
-			);
+                $verified['status'] == true ? true : $verified
+            );
         }
 
         public static function listen_open(){
@@ -25,7 +26,7 @@
             // Step 2: Validate user
             if (DV_Verification::is_verified() == false) {
                 return array(
-                    "status" => "unknown",
+                    "status" => false,
                     "message" => "Please contact your administrator. Verification Issues!",
                 );
             }
@@ -37,6 +38,13 @@
                 IF((SELECT child_val FROM dv_revisions WHERE parent_id = doc.ID AND revs_type ='documents' AND child_key ='approve_status' AND ID = (SELECT MAX(ID) FROM dv_revisions rev WHERE parent_id = doc.ID AND ID = rev.ID AND revs_type ='documents' AND child_key ='approve_status'  )  ) is null, 'Pending', 'Not approved' )
                     )as `approve_status`
             FROM dv_documents doc WHERE parent_id != 0 AND wpid = '$wpid'  ");
+
+            if(!$get_data){
+                return array(
+                    "status" => false,
+                    "message" => "This user does not exits in document list."
+                );
+            }
 
             if (count($get_data) != 2) {
                 return array(
