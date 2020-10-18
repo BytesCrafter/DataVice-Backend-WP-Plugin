@@ -13,10 +13,13 @@
     class DV_Verify_User_Documents{
 
         public static function listen(){
-            $verified = self::listen_open();
+            // $verified = self::listen_open();
+            // return rest_ensure_response(
+            //     $verified['status'] == true ? true : $verified
+            // );
             return rest_ensure_response(
-                $verified['status'] == true ? true : $verified
-            );
+				self::listen_open()
+			);
         }
 
         public static function listen_open(){
@@ -26,7 +29,7 @@
             // Step 2: Validate user
             if (DV_Verification::is_verified() == false) {
                 return array(
-                    "status" => false,
+                    "status" => "failed",
                     "message" => "Please contact your administrator. Verification Issues!",
                 );
             }
@@ -41,14 +44,14 @@
 
             if(!$get_data){
                 return array(
-                    "status" => false,
+                    "status" => "failed",
                     "message" => "This user does not exits in document list."
                 );
             }
 
             if (count($get_data) != 2) {
                 return array(
-                    "status" => false,
+                    "status" => "failed",
                     "message" => "user must have 2 documents"
                 );
             }
@@ -62,12 +65,12 @@
 
             if ($var != 2) {
                 return array(
-                    "status" => false,
+                    "status" => "failed",
                     "message" => "Only ".$var." document is approve. All documents must be approved to be fully verified."
                 );
             }else{
                 return array(
-                    "status" => true,
+                    "status" => "success",
                     "message" => "This user is fully verified."
                 );
             }
