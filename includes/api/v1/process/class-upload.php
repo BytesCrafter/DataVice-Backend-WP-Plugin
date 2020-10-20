@@ -174,11 +174,9 @@
 
                     if ($type == 'logo') {
 
-
-
                         $result = DV_Globals::upload_image( $request, $files);
 
-                        if ($result['status'] != 'success') {
+                        if ($result['status'] != 'success' || $result['status'] == "unknown") {
                             return array(
                                 "status" => $result['status'],
                                 "message" => $result['message']
@@ -199,7 +197,7 @@
                             $wpdb->query("ROLLBACK");
                             return array(
                                 "status" => "failed",
-                                "message" => "An erro occured while submmiting data to server."
+                                "message" => "An error occured while submmiting data to server."
                             );
 
                         }else{
@@ -289,7 +287,7 @@
 
                     $result = DV_Globals::upload_image( $request, $files);
 
-                    if ($result['status'] != 'success') {
+                    if ($result['status'] != 'success' || $result['status'] == "unknown") {
                         return array(
                             "status" => $result['status'],
                             "message" => $result['message'],
