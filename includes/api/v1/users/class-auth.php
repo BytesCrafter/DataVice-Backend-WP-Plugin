@@ -37,8 +37,14 @@
 			return $session_now;
 		}
 
-		// Rest Api routing.
 		public static function listen() {
+			return rest_ensure_response(
+				DV_Authenticate::submit()
+			);
+		}
+
+		// Rest Api routing.
+		public static function submit() {
 			global $wpdb;
 			$users_table = WP_USERS;
 			$usermeta_table = WP_USERS_META;
@@ -47,21 +53,17 @@
 
 			// Check that we're trying to authenticate
 			if (!isset($_POST["un"]) || !isset($_POST["pw"])) {
-				return rest_ensure_response(
-					array(
-						"status" => "unknown",
-						"message" => "Please contact your administrator. Request Unknown!",
-					)
+				return array(
+					"status" => "unknown",
+					"message" => "Please contact your administrator. Request Unknown!",
 				);
 			}
 
 			// Step 2 : Check if username or password is not empty.
             if ( empty($_POST['un']) || empty($_POST['pw']) ) {
-                return rest_ensure_response(
-                    array(
-                        "status" => "failed",
-                        "message" => "Required fields cannot be empty.",
-                    )
+				return array(
+					"status" => "failed",
+					"message" => "Required fields cannot be empty.",
                 );
 			}
 			$uname = $_POST["un"];
@@ -77,11 +79,9 @@
 				if( $validate_account ) {
 					if (md5($validate_account->user_login) != $validate_account->user_activation_key) {
 
-						return rest_ensure_response(
-							array(
-								"status" => "failed",
-								"message" => "Please activate your account first.",
-							)
+						return array(
+							"status" => "failed",
+							"message" => "Please activate your account first.",
 						);
 
 					}
@@ -104,11 +104,9 @@
 				$interval  = abs($lock_expiry - $now);
 				$time_left = round($interval / 60);
 
-				return rest_ensure_response(
-                    array(
-                            "status" => "failed",
-                            "message" => "Your account is currently locked. Please wait $time_left minutes before trying again",
-                    )
+				return array(
+					"status" => "failed",
+					"message" => "Your account is currently locked. Please wait $time_left minutes before trying again",
                 );
 			}
 
@@ -137,34 +135,28 @@
 
 						$add_key_meta = update_user_meta( $get_id->ID, 'lock_expiry_span', $expiration_date );
 
-						return rest_ensure_response(
-							array(
-									"status" => "error",
-									"message" => "Your account has been locked due to multiple failed login attempts.",
-							)
+						return array(
+							"status" => "error",
+							"message" => "Your account has been locked due to multiple failed login attempts.",
 						);
 
 					}
 
 				}
 
-				return rest_ensure_response(
-					array(
-						"status" => "error",
-						"message" => $user->get_error_message(),
-					)
+				return array(
+					"status" => "error",
+					"message" => $user->get_error_message(),
 				);
 
 			}
 
 			// Return User ID and Session KEY as success data.
-			return rest_ensure_response(
-				array(
-					"status" => "success",
-					"data" => array(
-						"wpid" => $user->ID,
-						"snky" => DV_Authenticate::get_session($user->ID),
-					)
+			return array(
+				"status" => "success",
+				"data" => array(
+					"wpid" => $user->ID,
+					"snky" => DV_Authenticate::get_session($user->ID),
 				)
 			);
 		}
