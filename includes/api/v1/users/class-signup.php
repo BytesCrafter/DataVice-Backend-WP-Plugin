@@ -345,7 +345,7 @@
                     return rest_ensure_response(
                         array(
                                 "status" => "failed",
-                                "message" => "Please contact site administrator. Email not sent! + ". $user['user_activation_key'],
+                                "message" => "Please contact site administrator. Email not sent!"
                         )
                     );
                 }
