@@ -345,7 +345,7 @@
                     return rest_ensure_response(
                         array(
                                 "status" => "failed",
-                                "message" => "Please contact site administrator. Email not sent!",
+                                "message" => "Please contact site administrator. Email not sent!"
                         )
                     );
                 }

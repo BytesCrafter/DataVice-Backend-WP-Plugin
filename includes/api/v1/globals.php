@@ -132,9 +132,9 @@
 
         }
         public static function activation_key(){
-            $word_resetkey_length = DV_Library_Config:: dv_get_config('pword_resetkey_length', 12);
+            $activation_key_length = DV_Library_Config:: dv_get_config('activation_key_length', 5);
 
-            $digits = $word_resetkey_length;
+            $digits = $activation_key_length;
             return rand(pow(10, $digits-1), pow(10, $digits)-1);
         }
 
