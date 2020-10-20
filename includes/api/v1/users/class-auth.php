@@ -74,7 +74,7 @@
 
 			// Check account if activated or not
 
-				/* $validate_account = $wpdb->get_row("SELECT user_login, user_activation_key FROM $users_table WHERE `user_email` = '$uname' OR `user_login` = '$uname' ");
+				$validate_account = $wpdb->get_row("SELECT user_login, user_activation_key FROM $users_table WHERE `user_email` = '$uname' OR `user_login` = '$uname' ");
 
 				if( $validate_account ) {
 					if (md5($validate_account->user_login) != $validate_account->user_activation_key) {
@@ -86,7 +86,6 @@
 
 					}
 				}
- */
 			// End check account if activated or not
 
 			// Check if account is locked due to incorrect login attempts
