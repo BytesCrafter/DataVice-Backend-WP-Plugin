@@ -132,9 +132,9 @@
 
         }
         public static function activation_key(){
-            $pword_resetkey_length = DV_Library_Config:: dv_get_config('pword_resetkey_length', 12);
+            $activation_key_length = DV_Library_Config:: dv_get_config('activation_key_length', 5);
 
-            $digits = $word_resetkey_length;
+            $digits = $activation_key_length;
             return rand(pow(10, $digits-1), pow(10, $digits)-1);
         }
 
@@ -321,8 +321,8 @@
             $latitude = $geometry['location']['lng'];
 
             $array = array(
-                'latitude' => $geometry['location']['lng'],
-                'longitude' => $geometry['location']['lat'],
+                'latitude' => $geometry['location']['lat'],
+                'longitude' => $geometry['location']['lng'],
                 'location_type' => $geometry['location_type'],
                 'place_id' => $place_id,
                 'formatted_address' => $formatted_address,
@@ -367,6 +367,33 @@
 
 
         }
+
+        public static function update_public_key_hash($primary_key, $table_name){
+			global $wpdb;
+
+			$results = $wpdb->query("UPDATE  $table_name SET hash_id = concat(
+							substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand($primary_key)*4294967296))*36+1, 1),
+							substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1),
+							substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1),
+							substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1),
+							substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1),
+							substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1),
+							substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1),
+							substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1),
+							substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1),
+							substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1),
+							substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1),
+							substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed)*36+1, 1)
+						)
+						WHERE ID = $primary_key;");
+			if ($results < 1) {
+				return false;
+			}else{
+				if ($results == 1) {
+					return true;
+				}
+			}
+		}
 
 
     } // end of class

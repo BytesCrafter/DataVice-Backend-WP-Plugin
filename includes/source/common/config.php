@@ -17,7 +17,9 @@
 	('Master Key', 'Use this key if function does not required snky and wpid.', 'master_key', '2', sha2(2, 256)),
 	('Password Expiry Span', 'Time it takes to expire the given password reset key.', 'pword_expiry_span', '3', sha2(3, 256)),
 	('Password Reset Key length', 'Length of hashed password reset key.', 'pword_resetkey_length', '4', sha2(4, 256)),
-	('Maximum image file size', 'Length of Maximum file size to be upload to server.', 'max_img_size', '5', sha2(5, 256));";
+	('Activation Key length', 'Length of activation key.', 'activation_key_length', '5', sha2(5, 256)),
+	('Maximum image file size', 'Length of Maximum file size to be upload to server.', 'max_img_size', '6', sha2(6, 256)),
+	('Limit of output in search user', 'This config is the length output of search query.', 'limit_search', '7', sha2(7, 256));";
 
 	$date = date("Y-m-d h:i:s");
 
@@ -26,5 +28,6 @@
 	('configs', 'master_key', 'datavice', '1', '$date', '2', sha2(2, 256) ),
 	('configs', 'pword_expiry_span', '1800', '1', '$date', '3', sha2(3, 256) ),
 	('configs', 'pword_resetkey_length', '5', '1', '$date', '4', sha2(4, 256) ),
-	('configs', 'max_img_size', '5000000', '1', '$date', '5', sha2(5, 256) )
-	;";
+	('configs', 'max_img_size', '5000000', '1', '$date', '5', sha2(5, 256) ),
+	('configs', 'limit_search', '10', '1', '$date', '6', sha2(6, 256), 
+	('configs', 'activation_key_length', '5', '1', '$date', '7', sha2(7, 256) );";

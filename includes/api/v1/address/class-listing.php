@@ -52,7 +52,7 @@
 				$table_address dv_add
 			INNER JOIN $dv_rev_table dv_rev
 				ON dv_rev.ID = dv_add.`status`
-				WHERE  dv_add.wpid = '1' AND (SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.ID = dv_add.status ) = 1
+				WHERE  dv_add.wpid = '$user' AND (SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.ID = dv_add.status ) = 1
 			");
 
 				return rest_ensure_response(

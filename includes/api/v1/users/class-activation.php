@@ -66,7 +66,7 @@
                 if ( !$cur_user ) {
                     return array(
                         "status" => "failed",
-                        "message" => "Password reset key and username/email is invalid!",
+                        "message" => "Activation key or username/email is invalid!",
                     );
                 }
 

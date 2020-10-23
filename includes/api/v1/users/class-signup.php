@@ -225,6 +225,17 @@
             // Handle user creation events.
             if( !is_wp_error($created_id) ) {
 
+                $insert_dv_user = self::insert_dv_users($created_id);
+
+                if ($insert_dv_user == false) {
+                    return rest_ensure_response(
+                        array(
+                            "status" => "failed",
+                            "message" => "An error occured while submitting data to server.",
+                        )
+                    );
+                }
+
                 // Insert Gender etc.
                 $add_key_meta = update_user_meta( $created_id, 'gender', $user['gender'] );
                 $add_key_meta = update_user_meta( $created_id, 'birthday', $user['birthday'] );
@@ -334,7 +345,7 @@
                     return rest_ensure_response(
                         array(
                                 "status" => "failed",
-                                "message" => "Please contact site administrator. Email not sent!",
+                                "message" => "Please contact site administrator. Email not sent!"
                         )
                     );
                 }
@@ -397,6 +408,22 @@
                 return false;
             }else{
                 return $mail;
+            }
+        }
+
+        public static function insert_dv_users($wpid){
+            global $wpdb;
+            $table = DV_USERS;
+
+            $insert_user = $wpdb->query("INSERT INTO $table (wpid) VALUES ('$wpid') ");
+            $insert_id = $wpdb->insert_id;
+
+            $data = DV_Globals::update_public_key_hash($insert_id, $table);
+
+            if ($insert_user == false || $data == false) {
+                return false;
+            }else{
+                return true;
             }
         }
 

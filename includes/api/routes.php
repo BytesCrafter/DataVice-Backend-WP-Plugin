@@ -26,10 +26,12 @@
     require plugin_dir_path(__FILE__) . '/v1/users/class_verify_activation.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-link-account.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-delete-link-acount.php';
+    require plugin_dir_path(__FILE__) . '/v1/users/class-search.php';
     // documents folder
     require plugin_dir_path(__FILE__) . '/v1/users/documents/class-insert.php';
     require plugin_dir_path(__FILE__) . '/v1/users/documents/class-listing.php';
     require plugin_dir_path(__FILE__) . '/v1/users/documents/class-approve.php';
+    require plugin_dir_path(__FILE__) . '/v1/users/documents/class-verify-user-docs.php';
 
     // Contacts Classes
     require plugin_dir_path(__FILE__) . '/v1/contacts/class-insert.php';
@@ -88,6 +90,15 @@
         /*
          * USER RESTAPI
         */
+            register_rest_route( 'datavice/v1/user/verify', 'docs', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Verify_User_Documents', 'listen'),
+            ));
+
+            register_rest_route( 'datavice/v1/user', 'search', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Search_User', 'listen'),
+            ));
 
             register_rest_route( 'datavice/v1/user/account/link', 'delete', array(
                 'methods' => 'POST',
