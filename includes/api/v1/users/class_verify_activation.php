@@ -21,7 +21,6 @@
         public static function listen_open(){
             global $wpdb;
 
-
             if (isset($_POST['ak']) && isset($_POST['npas']) && isset($_POST['cpas']) && !isset($_POST['un'])) {
                 if (empty($_POST['ak']) || empty($_POST['npas']) || empty($_POST['cpas'])) {
                     return array(
@@ -53,7 +52,6 @@
 
                 // Hash the new password
                 $pword_hash = wp_hash_password($_POST['cpas']);
-
 
                 // Update users activation key.
                 $result = $wpdb->update(
@@ -103,14 +101,6 @@
                     "message" => "Password does not match.",
                 );
             }
-
-            if (DV_Globals::old_tiger(true) !==  $_POST['ak']) {
-                return array(
-                    "status" => "failed",
-                    "message" => "Please contact your administrator. Key does not match.",
-                );
-            }
-
 
             if (is_email($_POST['un'])) {
 

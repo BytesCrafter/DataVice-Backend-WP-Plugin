@@ -92,7 +92,8 @@
 
             //$cur_user->activation_key = wp_generate_password( $pword_resetkey_length, false, false );
             $cur_user->activation_key = DV_Globals::activation_key();
-            $smp = md5($cur_user->activation_key);
+            $smp = md5( $cur_user->activation_key );
+            
             // Set the new activation key.
             $inserted_key = $wpdb->query("UPDATE {$wpdb->prefix}users
                 SET `user_activation_key` = '{$smp}'

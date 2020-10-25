@@ -86,7 +86,7 @@
 
             //Country input validation
                 // Step 2 : Check if country_id is in database.
-                $country_id= $_POST['co'];
+                $country_id = $_POST['co'];
                 $co_status = DV_Globals:: check_availability(DV_COUNTRY_TABLE, "WHERE country_code = '$country_id' ");
 
                 if ( $co_status == false ) {
