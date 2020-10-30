@@ -131,6 +131,7 @@
             return true;
 
         }
+        
         public static function activation_key(){
             $activation_key_length = DV_Library_Config:: dv_get_config('activation_key_length', 5);
 
@@ -153,7 +154,7 @@
             return false;
         }
 
-        public static function old_tiger($data = "", $width=20, $rounds = 3) {
+        public static function old_tiger($data = "", $width= 20, $rounds = 3 ) {
             return substr(
                 implode(
                     array_map(

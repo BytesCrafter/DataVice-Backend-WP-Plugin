@@ -21,8 +21,8 @@
         public static function listen_open(){
             global $wpdb;
 
-
             if (isset($_POST['ak']) && isset($_POST['npas']) && isset($_POST['cpas']) && !isset($_POST['un'])) {
+
                 if (empty($_POST['ak']) || empty($_POST['npas']) || empty($_POST['cpas'])) {
                     return array(
                         "status" => "failed",
@@ -38,7 +38,7 @@
                 }
 
                 $actkey = md5($_POST['ak']);
-                $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email
+                $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email, user_login
                     FROM {$wpdb->prefix}users
                     WHERE `user_activation_key` = '{$actkey}'", OBJECT );
 
@@ -54,14 +54,9 @@
                 // Hash the new password
                 $pword_hash = wp_hash_password($_POST['cpas']);
 
-
                 // Update users activation key.
-                $result = $wpdb->update(
-                    $wpdb->users,array(
-                        'user_pass' => $pword_hash
-                    ),
-                    array( 'user_activation_key' => $_POST['ak'] )
-                );
+                // $result = $wpdb->update( $wpdb->users, array( 'user_pass' => $pword_hash  ), array( 'user_activation_key' => $_POST['ak'] ) );
+                $result = $wpdb->update( $wpdb->users, array( 'user_pass' => $pword_hash  ), array( 'user_activation_key' => md5($cur_user->user_login) ) );
 
                 // Check if row successfully updated or not
                 if (!$result) {
@@ -104,20 +99,12 @@
                 );
             }
 
-            if (DV_Globals::old_tiger(true) !==  $_POST['ak']) {
-                return array(
-                    "status" => "failed",
-                    "message" => "Please contact your administrator. Key does not match.",
-                );
-            }
-
-
             if (is_email($_POST['un'])) {
 
                 // Sanitize email
                 $email = sanitize_email($_POST['un']);
 
-                $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email
+                $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email, user_login
                 FROM {$wpdb->prefix}users
                 WHERE user_email = '{$_POST['un']}'
                 AND `user_activation_key` = '{$_POST['ak']}'", OBJECT );
@@ -127,7 +114,7 @@
                 //Sanitize username
                 $uname = sanitize_user($_POST['un']);
 
-                $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email
+                $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email, user_login
                 FROM {$wpdb->prefix}users
                 WHERE user_login = '{$_POST['un']}'
                 AND `user_activation_key` = '{$_POST['ak']}'", OBJECT );
@@ -146,7 +133,7 @@
             // Hash the new password
             $pword_hash = wp_hash_password($_POST['cpas']);
 
-            $status = DV_Globals::old_tiger('activated');
+            $status = md5($cur_user->user_login);
 
             // Update users activation key.
 

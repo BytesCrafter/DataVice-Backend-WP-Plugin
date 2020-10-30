@@ -184,6 +184,13 @@
 
                         }
 
+                        if(empty($result['data'])){
+                            return array(
+                                "status" => "failed",
+                                "status" => "Please contact your administrator. Uploading image does not indicates success. Error Code 404"
+                            );
+                        }
+
                         $link = $result['data'];
 
                         $wpdb->query("START TRANSACTION");
