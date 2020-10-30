@@ -4,21 +4,21 @@
 		exit;
 	}
 
-	/** 
+	/**
         * @package datavice-wp-plugin
 		* @version 0.1.0
 		* This is the primary gateway of all the rest api request.
     */
-    
+
     class DV_Change_Password{
 
         //REST API Call
         public static function listen(){
-            return rest_ensure_response( 
+            return rest_ensure_response(
                 self::listen_open()
             );
         }
-        
+
         public static function listen_open(){
 
             if ( DV_Verification::is_verified() == false ) {
@@ -39,18 +39,18 @@
 
             if ($_POST['npas'] !== $_POST['cpas']) {
                 return array(
-                    "status" => "faield",
+                    "status" => "failed",
                     "message" => "Password does not match."
                 );
             }
-            
+
             if ( $user && !wp_check_password( $_POST['pas'], $user->data->user_pass, $user->ID ) ) {
                 return array(
                     "status" => "failed",
                     "message" => "Old password does not match."
                 );
             } else {
-                
+
                 $new_pass = wp_set_password(  $_POST['cpas'],  $_POST['wpid'] );
 
                 if (is_wp_error($new_pass)) {
