@@ -35,6 +35,7 @@
                     "message" => "Please contact your administrator. Request unknown!"
                 );
             }
+
             $limit = DV_Library_Config::dv_get_config('limit_search', '0');
 
             $search = $_POST['search'];
@@ -44,10 +45,10 @@
                 ID,
                 IF((SELECT meta_value FROM wp_usermeta WHERE `user_id` = w.ID AND meta_key = 'avatar') is null, '$avatar', (SELECT meta_value FROM wp_usermeta WHERE `user_id` = w.ID AND meta_key = 'avatar') ) as avatar,
                 w.display_name as `name`
-            FROM `pasabuy`.`wp_users` w
+            FROM `wp_users` w
                 WHERE
                     w.`display_name` LIKE '%$search%' OR w.user_login LIKE '%$search%'  OR w.user_email LIKE '%$search%'
-                LIMIT $limit";
+                ";
 
 			if( isset($_POST['lid']) ){
 				// Step 4: Validate parameter
