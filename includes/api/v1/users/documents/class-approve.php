@@ -62,7 +62,7 @@
             if (!$check_doc) {
                 return array(
                     "status" => "failed",
-                    "message" => "This document does not exits.",
+                    "message" => "This document does not exist.",
                 );
             }
 
@@ -93,17 +93,13 @@
              * status = 0 : disapprove
              */
             if ($status === '0') {
-
                 $status = $wpdb->query("INSERT INTO $table_revs (revs_type, parent_id, child_key, child_val, created_by, date_created) VALUES ('documents', '$check_doc->ID', 'approve_status', '0', '$wpid', '$date_created')");
                 $status_id = $wpdb->insert_id;
                 $wpdb->query("UPDATE $table_revs SET hash_id = sha2($status_id, 256) WHERE ID = $status_id");
-
             }else{
-
                 $status = $wpdb->query("INSERT INTO $table_revs (revs_type, parent_id, child_key, child_val, created_by, date_created) VALUES ('documents', '$check_doc->ID', 'approve_status', '1', '$wpid', '$date_created')");
                 $status_id = $wpdb->insert_id;
                 $wpdb->query("UPDATE $table_revs SET hash_id = sha2($status_id, 256) WHERE ID = $status_id");
-
             }
 
             if ($status == false) {
@@ -116,7 +112,7 @@
                 $wpdb->query("COMMIT");
                 return array(
                     "status" => "success",
-                    "message" => "Data has been added successfully."
+                    "message" => "Data has been approved successfully."
                 );
             }
         }

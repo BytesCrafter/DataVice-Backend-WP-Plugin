@@ -131,7 +131,7 @@
             return true;
 
         }
-        
+
         public static function activation_key(){
             $activation_key_length = DV_Library_Config:: dv_get_config('activation_key_length', 5);
 
@@ -284,6 +284,7 @@
                     return array(
                         "status" => "success",
                         "data" =>  (string)$target_dir['url'].'/'.basename($completed_file_name),
+                        "upload_id" => $upload_id
                     );
 
                 } else {

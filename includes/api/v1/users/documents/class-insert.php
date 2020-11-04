@@ -29,18 +29,18 @@
                     "message" => "Please contact your administrator. Verification Issues!",
                 );
             }
- 
+
             $files = $request->get_file_params();
 
             if ( !isset($files['img']) ) {
 				return  array(
                     "status" => "unknown",
-                    "message" => "Please contact your administrator. Request Unknown!",
+                    "message" => "Please contact your administrator. Image not Set!",
                 );
             }
 
             // Step 3: Sanitize if all variables at POST
-            if ( !isset($_POST['type']) || !isset($_POST['number_contact']) ) {
+            if ( !isset($_POST['type']) ) {
 				return array(
 					"status" => "unknown",
 					"message" => "Please contact your administrator. Request unknown!",
@@ -49,14 +49,14 @@
             }
 
             // Step 4: Check if all variables is not empty
-            if ( empty($_POST['type']) || empty($_POST['number_contact']) ) {
+            if ( empty($_POST['type']) ) {
                 return array(
                     "status" => "failed",
                     "message" => "Required fileds cannot be empty.",
                 );
             }
 
-            
+
             // Declare variables
             $dv_docs = DV_DOCUMENTS;
             $doc_fields = DV_DOCS_FIELDS;
@@ -64,7 +64,7 @@
             $revs_fields = DV_INSERT_REV_FIELDS;
             $doc_type = $_POST['type'];
             $wpid = $_POST['wpid'];
-            $number_contact = $_POST['number_contact'];
+            $number_contact = 0;
             $doctype = 'face';
             $date_created = TP_Globals::date_stamp();
 
@@ -77,22 +77,29 @@
 
             if ( $_POST['type'] == 'id'  ) {
 
-                if ( !isset($_POST['doctype']) ) {
+                if ( !isset($_POST['doctype']) || !isset($_POST['number_contact']) ) {
                     return array(
                         "status" => "unknown",
                         "message" => "Please contact your administrator. Request unknown!",
                     );
                 }
 
+                if ( empty($_POST['doctype']) || empty($_POST['number_contact']) ) {
+                    return array(
+                        "status" => "failed",
+                        "message" => "Required fileds cannot be empty.",
+                    );
+                }
+
                 if ($_POST['doctype'] !== "sss"
-                && $_POST['doctype'] !== "drivers_license"
+                && $_POST['doctype'] !== "driver"
                 && $_POST['doctype'] !== "prc"
                 && $_POST['doctype'] !== "owwa"
-                && $_POST['doctype'] !== "voters_id"
+                && $_POST['doctype'] !== "voters"
                 && $_POST['doctype'] !== "pnp"
-                && $_POST['doctype'] !== "senior_id"
-                && $_POST['doctype'] !== "postal_id"
-                && $_POST['doctype'] !== "school_id"
+                && $_POST['doctype'] !== "senior"
+                && $_POST['doctype'] !== "postal"
+                && $_POST['doctype'] !== "school"
                 && $_POST['doctype'] !== "passport"
                 ) {
                     return array(
@@ -102,6 +109,7 @@
                 }
                 $doctype = $_POST['doctype'];
             }
+
             if ( $_POST['type'] == 'face'  ){
                 if ( !isset($_POST['nationality']) ) {
                     return array(
@@ -121,7 +129,7 @@
                 if (!empty($check_doc)) {
                     $check_doc_child = $wpdb->get_row("SELECT COUNT(ID) as docs FROM $dv_docs WHERE parent_id = '$check_doc->ID' ");
 
-                    if ($check_doc_child->docs === '2') {
+                    if ($check_doc_child->docs == "2") {
                         return array(
                             "status" => "failed",
                             "message" => "This user has already have two documents.",

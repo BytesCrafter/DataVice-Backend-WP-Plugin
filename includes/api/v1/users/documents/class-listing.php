@@ -46,16 +46,13 @@
             FROM $dv_docs doc WHERE parent_id = 0 ";
 
             if (isset($_POST['user_id'])) {
-                if ($user_id !== null) {
-                    $sql .= " WHERE wpid = '$user_id' ";
+                if ($user_id !== NULL) {
+                    $sql .= " AND wpid = '$user_id' ";
                 }
             }
 
             if (isset($_POST['docid'])) {
-                if ($document !== null && $user_id === null) {
-                    $sql .= " WHERE hash_id = '$document' ";
-                }
-                if ($document !== null && $user_id !== null) {
+                if ($document !== NULL) {
                     $sql .= " AND hash_id = '$document' ";
                 }
             }
@@ -65,7 +62,7 @@
 
                     if ($status == '1') {
                         $sql .= " HAVING approve_status = 'Approved' ";
-                    }else{
+                    } else {
                         $sql .= " HAVING approve_status = 'Pending' ";
                     }
                 }

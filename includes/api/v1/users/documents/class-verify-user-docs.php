@@ -25,6 +25,7 @@
         public static function listen_open(){
 
             global $wpdb;
+            $dv_docs = DV_DOCUMENTS;
 
             // Step 2: Validate user
             if (DV_Verification::is_verified() == false) {
@@ -36,37 +37,24 @@
 
             $wpid = $_POST["wpid"];
 
-            $get_data = $wpdb->get_results("SELECT *,
+            $get_data = $wpdb->get_row("SELECT
                 IF((SELECT child_val FROM dv_revisions WHERE parent_id = doc.ID AND revs_type ='documents' AND child_key ='approve_status' AND ID = (SELECT MAX(ID) FROM dv_revisions rev WHERE parent_id = doc.ID AND ID = rev.ID AND revs_type ='documents' AND child_key ='approve_status'  )  ) = 1 , 'Approved',
                 IF((SELECT child_val FROM dv_revisions WHERE parent_id = doc.ID AND revs_type ='documents' AND child_key ='approve_status' AND ID = (SELECT MAX(ID) FROM dv_revisions rev WHERE parent_id = doc.ID AND ID = rev.ID AND revs_type ='documents' AND child_key ='approve_status'  )  ) is null, 'Pending', 'Not approved' )
                     )as `approve_status`
-            FROM dv_documents doc WHERE parent_id != 0 AND wpid = '$wpid'  ");
+            FROM $dv_docs doc WHERE parent_id = 0  AND wpid = '$wpid' ");
 
-            if(!$get_data){
+            if(empty($get_data)){
                 return array(
                     "status" => "failed",
                     "message" => "This user does not exits in document list."
                 );
             }
 
-            if (count($get_data) != 2) {
+
+            if ($get_data->approve_status != "Approved") {
                 return array(
                     "status" => "failed",
-                    "message" => "user must have 2 documents"
-                );
-            }
-
-            $var = 0;
-            foreach ($get_data as $key => $value) {
-                if ($value->approve_status == "Approved") {
-                    $var ++;
-                }
-            }
-
-            if ($var != 2) {
-                return array(
-                    "status" => "failed",
-                    "message" => "Only ".$var." document is approve. All documents must be approved to be fully verified."
+                    "message" => "This user documents is not verified."
                 );
             }else{
                 return array(
