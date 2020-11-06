@@ -69,7 +69,6 @@
 			$uname = $_POST["un"];
 			$pword = $_POST["pw"];
 
-
 			// Store post variable into vars.
 
 			// Check account if activated or not

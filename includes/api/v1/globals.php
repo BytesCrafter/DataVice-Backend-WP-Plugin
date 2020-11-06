@@ -330,9 +330,7 @@
                 'formatted_address' => $formatted_address,
             );
 
-
 	        return $array;
-
         }
 
         public static function get_formated_address($street, $data){

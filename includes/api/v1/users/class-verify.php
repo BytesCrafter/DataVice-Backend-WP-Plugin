@@ -1,12 +1,12 @@
 
 <?php
 	// Exit if accessed directly
-	if ( ! defined( 'ABSPATH' ) ) 
+	if ( ! defined( 'ABSPATH' ) )
 	{
 		exit;
 	}
 
-	/** 
+	/**
         * @package datavice-wp-plugin
         * @version 0.1.0
 	*/
@@ -14,7 +14,7 @@
 	class DV_Verification {
 
 		public static function listen() {
-			return rest_ensure_response( 
+			return rest_ensure_response(
 				DV_Verification::verify()
 			);
 		}
@@ -23,14 +23,14 @@
 
 			// Catch verification result.
 			 $verified = DV_Verification::verify();
-			
+
 			 // Convert verification status to bool.
 			return $verified['status'] == 'success' ? true : false;
-			
+
 		}
 
 		public static function verify() {
-			
+
 			// STEP 1: Check if WPID and SNID is passed as this is REQUIRED!
 			if (!isset($_POST["wpid"]) || !isset($_POST["snky"]) ) {
 				return array(
@@ -69,10 +69,10 @@
 				}
 			}
 
-			// STEP 3 - Return a success status only. 
+			// STEP 3 - Return a success status only.
 			return array(
 				"status" => "success"
 			);
-	
+
 		}
 	}
