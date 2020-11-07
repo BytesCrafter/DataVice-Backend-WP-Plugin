@@ -21,23 +21,15 @@
 		}
 
 		public static function listen_open($request) {
-            // return wp_get_attachment_image_src(  '699',  $size = 'medium',  $icon = false );
-
-            $data = wp_get_attachment_image_src( '596', 'medium', $icon =false );
-            return $data[0];
-
-            return wp_get_attachment_image(  699, $size = 'thumbnail',  $icon = false, $attr = 'src' );
-
-            return wp_get_attachment_url(699  );
             global $wpdb;
             $date = DV_Globals:: date_stamp();
 
-            // if ( DV_Verification::is_verified() == false ) {
-            //     return array(
-            //             "status" => "unknown",
-            //             "message" => "Please contact your administrator. Verification Issue!",
-            //     );
-            // }
+            if ( DV_Verification::is_verified() == false ) {
+                return array(
+                        "status" => "unknown",
+                        "message" => "Please contact your administrator. Verification Issue!",
+                );
+            }
 
             $files = $request->get_file_params();
 
