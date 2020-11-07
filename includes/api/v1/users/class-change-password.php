@@ -51,9 +51,14 @@
                 );
             } else {
 
-                $new_pass = wp_set_password(  $_POST['cpas'],  $_POST['wpid'] );
+                global $wpdb;
 
-                if (is_wp_error($new_pass)) {
+                $new_pass = wp_hash_password($_POST['cpas']);
+                $updatepass = $wpdb->query("UPDATE {$wpdb->prefix}users
+                    SET `user_pass` = '{$new_pass}'
+                    WHERE `ID` = '{$_POST['wpid']}';");
+
+                if (is_wp_error($updatepass)) {
                     return array(
                         "status" => "failed",
                         "message" => "An error occured while submitting data to server."

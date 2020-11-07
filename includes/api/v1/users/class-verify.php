@@ -20,7 +20,6 @@
 		}
 
 		public static function is_verified() {
-
 			// Catch verification result.
 			 $verified = DV_Verification::verify();
 
