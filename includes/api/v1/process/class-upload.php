@@ -24,12 +24,12 @@
             global $wpdb;
             $date = DV_Globals:: date_stamp();
 
-            // if ( DV_Verification::is_verified() == false ) {
-            //     return array(
-            //             "status" => "unknown",
-            //             "message" => "Please contact your administrator. Verification Issue!",
-            //     );
-            // }
+            if ( DV_Verification::is_verified() == false ) {
+                return array(
+                        "status" => "unknown",
+                        "message" => "Please contact your administrator. Verification Issue!",
+                );
+            }
 
             $files = $request->get_file_params();
 
