@@ -24,12 +24,12 @@
             global $wpdb;
             $date = DV_Globals:: date_stamp();
 
-            if ( DV_Verification::is_verified() == false ) {
-                return array(
-                        "status" => "unknown",
-                        "message" => "Please contact your administrator. Verification Issue!",
-                );
-            }
+            // if ( DV_Verification::is_verified() == false ) {
+            //     return array(
+            //             "status" => "unknown",
+            //             "message" => "Please contact your administrator. Verification Issue!",
+            //     );
+            // }
 
             $files = $request->get_file_params();
 
@@ -153,7 +153,9 @@
 
 
                 if ($store_id !== NULL && $product_id == NULL && $type !== NULL) {
-                    $check_store = $wpdb->get_row("SELECT str.ID, child_val as `status` FROM  tp_stores str INNER JOIN tp_revisions rev ON rev.ID = str.`status` WHERE str.ID = '$store_id'");
+
+                    $check_store = $wpdb->get_row("SELECT str.ID, status FROM  tpv2_stores str WHERE str.hsid = '$store_id'");
+                    // $check_store = $wpdb->get_row("SELECT str.ID, child_val as `status` FROM  tp_stores str INNER JOIN tp_revisions rev ON rev.ID = str.`status` WHERE str.ID = '$store_id'");
 
                     if ($check_store->status == '0') {
                         return array(
