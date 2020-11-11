@@ -26,7 +26,7 @@
             $doc_fields = DV_DOCS_FIELDS;
             $table_revs = DV_REVS_TABLE;
             $revs_fields = DV_INSERT_REV_FIELDS;
-            $date_created = TP_Globals::date_stamp();
+            $date_created = DV_Globals::date_stamp();
 
             // Step 2: Validate user
             if (DV_Verification::is_verified() == false) {

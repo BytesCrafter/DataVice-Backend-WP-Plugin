@@ -66,7 +66,7 @@
             $wpid = $_POST['wpid'];
             $number_contact = 0;
             $doctype = 'face';
-            $date_created = TP_Globals::date_stamp();
+            $date_created = DV_Globals::date_stamp();
 
             if ($_POST['type'] !== "id" && $_POST['type'] !== "face") {
                 return array(

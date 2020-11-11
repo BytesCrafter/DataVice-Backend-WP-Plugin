@@ -61,7 +61,7 @@
 				$sql .= "`hash_id` varchar(255) NOT NULL , ";
 				$sql .= "`status` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Live/Hiden', ";
 				$sql .= "`wpid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID, 0 if Null', ";
-				$sql .= "`stid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Store ID, 0 if Null', ";
+				$sql .= "`stid` varchar(150) NOT NULL DEFAULT 0 COMMENT 'Store ID, 0 if Null', ";
 				$sql .= "`types` enum('none','home','office','business') NOT NULL DEFAULT 'none' COMMENT 'Group', ";
 				$sql .= "`street` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Street address from Revs, 0 if Null', ";
 				$sql .= "`brgy` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Barangay code from Revs, 0 if Null', ";

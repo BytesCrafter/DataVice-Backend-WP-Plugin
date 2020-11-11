@@ -39,7 +39,7 @@
 
 		public static function listen() {
 			return rest_ensure_response(
-				DV_Authenticate::submit()
+				self::submit()
 			);
 		}
 
@@ -73,18 +73,18 @@
 
 			// Check account if activated or not
 
-				$validate_account = $wpdb->get_row("SELECT user_login, user_activation_key FROM $users_table WHERE `user_email` = '$uname' OR `user_login` = '$uname' ");
+				// $validate_account = $wpdb->get_row("SELECT user_login, user_activation_key FROM $users_table WHERE `user_email` = '$uname' OR `user_login` = '$uname' ");
 
-				if( $validate_account ) {
-					if (md5($validate_account->user_login) != $validate_account->user_activation_key) {
+				// if( $validate_account ) {
+				// 	if (md5($validate_account->user_login) != $validate_account->user_activation_key) {
 
-						return array(
-							"status" => "failed",
-							"message" => "Please activate your account first.",
-						);
+ 				// 		return array(
+				// 			"status" => "failed",
+				// 			"message" => "Please activate your account first.",
+				// 		);
 
-					}
-				}
+				// 	}
+				// }
 			// End check account if activated or not
 
 			// Check if account is locked due to incorrect login attempts
@@ -93,6 +93,7 @@
 					INNER JOIN $usermeta_table um ON um.user_id = u.id
 					WHERE u.`user_login` = '$uname'
 					AND um.meta_key = 'lock_expiry_span'");
+
 
 			if ( $check_account && date('Y-m-d H:i:s', strtotime("now")) <  $check_account->lock_expiry ) {
 
@@ -113,8 +114,6 @@
 			if ($user->errors !== "") {
 				$error_code = array_keys( $user->errors );
 			}
-
-
 
 			// Check for WordPress authentication issue.
 			if ( is_wp_error($user) ) {
@@ -137,16 +136,13 @@
 							"status" => "error",
 							"message" => "Your account has been locked due to multiple failed login attempts.",
 						);
-
 					}
-
 				}
 
 				return array(
 					"status" => "error",
 					"message" => $user->get_error_message(),
 				);
-
 			}
 
 			// Return User ID and Session KEY as success data.

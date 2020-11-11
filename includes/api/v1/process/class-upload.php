@@ -151,11 +151,9 @@
                     );
                 }
 
-
                 if ($store_id !== NULL && $product_id == NULL && $type !== NULL) {
 
                     $check_store = $wpdb->get_row("SELECT str.ID, status FROM  tpv2_stores str WHERE str.hsid = '$store_id'");
-                    // $check_store = $wpdb->get_row("SELECT str.ID, child_val as `status` FROM  tp_stores str INNER JOIN tp_revisions rev ON rev.ID = str.`status` WHERE str.ID = '$store_id'");
 
                     if ($check_store->status == '0') {
                         return array(
@@ -327,7 +325,7 @@
                             $wpdb->query("ROLLBACK");
                             return array(
                                 "status" => "failed",
-                                "message" => "An erro occured while submmiting data to server."
+                                "message" => "An error occured while submmiting data to server."
                             );
 
                         }else{

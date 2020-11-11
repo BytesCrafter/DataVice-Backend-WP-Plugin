@@ -50,7 +50,6 @@
                 );
             }
 
-
             if ($get_data->approve_status != "Approved") {
                 return array(
                     "status" => "failed",
