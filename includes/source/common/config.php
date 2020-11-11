@@ -19,7 +19,8 @@
 	('Password Reset Key length', 'Length of hashed password reset key.', 'pword_resetkey_length', '4', sha2(4, 256)),
 	('Activation Key length', 'Length of activation key.', 'activation_key_length', '5', sha2(5, 256)),
 	('Maximum image file size', 'Length of Maximum file size to be upload to server.', 'max_img_size', '6', sha2(6, 256)),
-	('Limit of output in search user', 'This config is the length output of search query.', 'limit_search', '7', sha2(7, 256));";
+	('Limit of output in search user', 'This config is the length output of search query.', 'limit_search', '7', sha2(7, 256)),
+	('Lock authentication', 'This config lock authentication of datavice plugin.', 'lock_authentication', '8', sha2(8, 256));";
 
 	$date = date("Y-m-d h:i:s");
 
@@ -30,4 +31,5 @@
 	('configs', 'pword_resetkey_length', '5', '1', '$date', '4', sha2(4, 256) ),
 	('configs', 'max_img_size', '5000000', '1', '$date', '5', sha2(5, 256) ),
 	('configs', 'limit_search', '10', '1', '$date', '6', sha2(6, 256),
-	('configs', 'activation_key_length', '5', '1', '$date', '7', sha2(7, 256) );";
+	('configs', 'activation_key_length', '5', '1', '$date', '7', sha2(7, 256) ),
+	('configs', 'lock_authentication', 'active', '1', '$date', '8', sha2(8, 256) );";

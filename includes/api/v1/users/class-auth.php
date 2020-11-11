@@ -88,12 +88,22 @@
 			// End check account if activated or not
 
 			// Check if account is locked due to incorrect login attempts
-			$check_account = $wpdb->get_row("SELECT um.meta_value as lock_expiry
+			$check_account = $wpdb->get_row("SELECT um.meta_value as lock_expiry, `user_status`
 					FROM $users_table u
 					INNER JOIN $usermeta_table um ON um.user_id = u.id
 					WHERE u.`user_login` = '$uname'
 					AND um.meta_key = 'lock_expiry_span'");
 
+			$lock_auth = DV_Library_Config::dv_get_config('lock_authentication', "None");
+
+			if ($lock_auth == "active") {
+				if ($check_account->user_status == "0") {
+					return array(
+						"status" => "failed",
+						"message" => "Sorry only choosen user can login for now.",
+					);
+				}
+			}
 
 			if ( $check_account && date('Y-m-d H:i:s', strtotime("now")) <  $check_account->lock_expiry ) {
 
