@@ -73,35 +73,39 @@
 
 			// Check account if activated or not
 
-				// $validate_account = $wpdb->get_row("SELECT user_login, user_activation_key FROM $users_table WHERE `user_email` = '$uname' OR `user_login` = '$uname' ");
+				$validate_account = $wpdb->get_row("SELECT user_login, user_activation_key FROM $users_table WHERE `user_email` = '$uname' OR `user_login` = '$uname' ");
 
-				// if( $validate_account ) {
-				// 	if (md5($validate_account->user_login) != $validate_account->user_activation_key) {
+				if( $validate_account ) {
+					if (md5($validate_account->user_login) != $validate_account->user_activation_key) {
 
- 				// 		return array(
-				// 			"status" => "failed",
-				// 			"message" => "Please activate your account first.",
-				// 		);
+ 						return array(
+							"status" => "failed",
+							"message" => "Please activate your account first.",
+						);
 
-				// 	}
-				// }
+					}
+				}
 			// End check account if activated or not
 
 			// Check if account is locked due to incorrect login attempts
 			$check_account = $wpdb->get_row("SELECT um.meta_value as lock_expiry, `user_status`
 					FROM $users_table u
 					INNER JOIN $usermeta_table um ON um.user_id = u.id
-					WHERE u.`user_login` = '$uname'
+					WHERE u.`user_login` = '$uname' OR u.user_email = '$uname'
 					AND um.meta_key = 'lock_expiry_span'");
+
+			$get_account = $wpdb->get_row("SELECT user_status FROM $users_table u WHERE u.`user_login` = '$uname' OR u.user_email = '$uname'   ");
 
 			$lock_auth = DV_Library_Config::dv_get_config('lock_authentication', "None");
 
 			if ($lock_auth == "active") {
-				if ($check_account->user_status == "0") {
-					return array(
-						"status" => "failed",
-						"message" => "Sorry only choosen user can login for now.",
-					);
+				if (!empty($get_account)) {
+					if ($get_account->user_status == "0") {
+						return array(
+							"status" => "failed",
+							"message" => "Sorry only choosen user can login for now.",
+						);
+					}
 				}
 			}
 
