@@ -69,6 +69,13 @@
 			$uname = $_POST["un"];
 			$pword = $_POST["pw"];
 
+			if ( !is_email($uname) ) {
+				return array(
+					"status" => "failed",
+					"message" => "Username must be email.",
+                );
+			}
+
 			// Store post variable into vars.
 
 			// Check account if activated or not
@@ -91,7 +98,7 @@
 			$check_account = $wpdb->get_row("SELECT um.meta_value as lock_expiry, `user_status`
 					FROM $users_table u
 					INNER JOIN $usermeta_table um ON um.user_id = u.id
-					WHERE u.`user_login` = '$uname' OR u.user_email = '$uname'
+					WHERE u.`user_email` = '$uname'
 					AND um.meta_key = 'lock_expiry_span'");
 
 			$get_account = $wpdb->get_row("SELECT user_status FROM $users_table u WHERE u.`user_login` = '$uname' OR u.user_email = '$uname'   ");
