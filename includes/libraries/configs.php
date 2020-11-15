@@ -16,17 +16,31 @@
             
             global $wpdb; 
             $tbl_config = DV_CONFIG_TABLE;
-            $tbl_revision  = DV_REVS_TABLE;
             
-            $result = $wpdb->get_row("SELECT child_val FROM {$tbl_config} INNER JOIN {$tbl_revision} rev ON rev.ID = dv_configs.config_val  WHERE config_key = '$key' AND revs_type = 'configs' AND child_key = '$key'
-            ");
+            $result = $wpdb->get_row("SELECT config_val FROM {$tbl_config} WHERE config_key = '$key' ORDER BY ID DESC LIMIT 0, 1");
 
             if (!$result) {
                 return $default;
             } else {
-                return $result->child_val;
+                return $result->config_val;
             }
         }
+
+        // public static function dv_get_config($key, $default){
+            
+        //     global $wpdb; 
+        //     $tbl_config = DV_CONFIG_TABLE;
+        //     $tbl_revision  = DV_REVS_TABLE;
+            
+        //     $result = $wpdb->get_row("SELECT child_val FROM {$tbl_config} INNER JOIN {$tbl_revision} rev ON rev.ID = dv_configs.config_val 
+        //         WHERE config_key = '$key' AND revs_type = 'configs' AND child_key = '$key'");
+
+        //     if (!$result) {
+        //         return $default;
+        //     } else {
+        //         return $result->child_val;
+        //     }
+        // }
 
         public static function dv_set_config($title, $info, $key, $value){
             

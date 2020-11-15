@@ -36,7 +36,7 @@
                 );
             }
 
-            $limit = DV_Library_Config::dv_get_config('limit_search', '0');
+            $limit = DV_Library_Config::dv_get_config('limit_search', 10);
 
             $search = $_POST['search'];
             $avatar = DV_PLUGIN_URL . "assets/default-avatar.png";

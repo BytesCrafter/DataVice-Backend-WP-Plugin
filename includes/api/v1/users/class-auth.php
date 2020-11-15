@@ -8,13 +8,16 @@
 
 	/**
         * @package datavice-wp-plugin
-        * @version 0.1.0
+		* @version 0.1.0
+		* @author bytescrafter
+        * Quality Controlled since 15/11/2020
 	*/
 
 	class DV_Authenticate {
 
 		//Get the user session token string and if nothing, create and return one.
 		public static function get_session( $user_id ) {
+
 			//Grab WP_Session_Token from wordpress.
 			$wp_session_token = WP_Session_Tokens::get_instance($user_id);
 
@@ -45,13 +48,8 @@
 
 		// Rest Api routing.
 		public static function submit() {
-			global $wpdb;
-			$users_table = WP_USERS;
-			$usermeta_table = WP_USERS_META;
-			$events_table = DV_EVENTS_TABLE;
-			$events_fields = DV_EVENTS_FIELDS;
 
-			// Check that we're trying to authenticate
+			// Step 1 : Check if the fields are passed
 			if (!isset($_POST["un"]) || !isset($_POST["pw"])) {
 				return array(
 					"status" => "unknown",
@@ -59,62 +57,42 @@
 				);
 			}
 
-			// Step 2 : Check if username or password is not empty.
+			// Step 2 : Check if fields are empty.
             if ( empty($_POST['un']) || empty($_POST['pw']) ) {
 				return array(
 					"status" => "failed",
 					"message" => "Required fields cannot be empty.",
                 );
 			}
+
+			// Step 3 : Catch all fields.
+			global $wpdb;
+
 			$uname = $_POST["un"];
 			$pword = $_POST["pw"];
 
-			if ( !is_email($uname) ) {
-				return array(
-					"status" => "failed",
-					"message" => "Username must be email.",
-                );
-			}
+			$usermeta_table = WP_USERS_META;
+			$events_table = DV_EVENTS_TABLE;
+			$events_fields = DV_EVENTS_FIELDS;
 
-			// Store post variable into vars.
-
-			// Check account if activated or not
-
-				$validate_account = $wpdb->get_row("SELECT user_login, user_activation_key FROM $users_table WHERE `user_email` = '$uname' OR `user_login` = '$uname' ");
+			// Step 4 : Check account if activated or not
+				$validate_account = $wpdb->get_row("SELECT user_login, user_login, user_activation_key 
+					FROM {$wpdb->prefix}users  WHERE `user_email` = '$uname' OR `user_login` = '$uname' ");
 
 				if( $validate_account ) {
-					if (md5($validate_account->user_login) != $validate_account->user_activation_key) {
-
+					if ( !empty($validate_account->user_activation_key) ) {
  						return array(
 							"status" => "failed",
 							"message" => "Please activate your account first.",
 						);
-
 					}
 				}
 			// End check account if activated or not
 
-			// Check if account is locked due to incorrect login attempts
-			$check_account = $wpdb->get_row("SELECT um.meta_value as lock_expiry, `user_status`
-					FROM $users_table u
-					INNER JOIN $usermeta_table um ON um.user_id = u.id
-					WHERE u.`user_email` = '$uname'
-					AND um.meta_key = 'lock_expiry_span'");
-
-			$get_account = $wpdb->get_row("SELECT user_status FROM $users_table u WHERE u.`user_login` = '$uname' OR u.user_email = '$uname'   ");
-
-			$lock_auth = DV_Library_Config::dv_get_config('lock_authentication', "None");
-
-			if ($lock_auth == "active") {
-				if (!empty($get_account)) {
-					if ($get_account->user_status == "0") {
-						return array(
-							"status" => "failed",
-							"message" => "Sorry only choosen user can login for now.",
-						);
-					}
-				}
-			}
+			// Step 5 : Check if account is locked due to incorrect login attempts
+			$check_account = $wpdb->get_row("SELECT um.meta_value as lock_expiry, `user_status` 
+					FROM {$wpdb->prefix}users  u INNER JOIN $usermeta_table um ON um.user_id = u.id 
+					WHERE u.`user_email` = '$uname' AND um.meta_key = 'lock_expiry_span'");
 
 			if ( $check_account && date('Y-m-d H:i:s', strtotime("now")) <  $check_account->lock_expiry ) {
 
@@ -127,35 +105,49 @@
 				return array(
 					"status" => "failed",
 					"message" => "Your account is currently locked. Please wait $time_left minutes before trying again",
-                );
+				);
 			}
 
-			//Initialize wp authentication process.
+			// Step 6 : Check if User 
+			$lock_auth = DV_Library_Config::dv_get_config('lock_authentication', "inactive");
+			$get_account = $wpdb->get_row("SELECT user_status FROM {$wpdb->prefix}users  u 
+				WHERE u.`user_login` = '$uname' OR u.user_email = '$uname' ");
+
+			if ($lock_auth == "active") {
+				if (!empty($get_account)) {
+					if ($get_account->user_status == "0") {
+						return array(
+							"status" => "failed",
+							"message" => "You're account is currently locked.",
+						);
+					}
+				}
+			}
+
+			// Step 7 : Initialize wp authentication process.
 			$user = wp_authenticate($uname, $pword);
 			if ($user->errors !== "") {
 				$error_code = array_keys( $user->errors );
 			}
 
-			// Check for WordPress authentication issue.
+			// Step 8 : Check for WordPress authentication issue.
 			if ( is_wp_error($user) ) {
 
 				if ( $error_code[0] == "incorrect_password") {
 
-					$get_id = $wpdb->get_row("SELECT `ID` FROM $users_table WHERE user_login = '$uname'");
+					$get_id = $wpdb->get_row("SELECT `ID` FROM {$wpdb->prefix}users  WHERE user_login = '$uname' OR user_email = '$uname' ");
 					$wpdb->query("INSERT INTO $events_table $events_fields VALUES ('$get_id->ID', 'incorrect_password', ' ')");
 					$attempts = $wpdb->get_results("SELECT `ID` FROM $events_table WHERE date_created > now() - interval 30 minute AND wpid = $get_id->ID");
 
 					if (count($attempts) >= 3) {
 
 						$lock_expiry_span = DV_Library_Config::dv_get_config('lock_expiry_span', 1800);
-
 						$expiration_date = date( 'Y-m-d H:i:s', strtotime("now") + (int)$lock_expiry_span );
-
 						$add_key_meta = update_user_meta( $get_id->ID, 'lock_expiry_span', $expiration_date );
 
 						return array(
 							"status" => "error",
-							"message" => "Your account has been locked due to multiple failed login attempts.",
+							"message" => "Your account had been locked due to multiple failed login attempts.",
 						);
 					}
 				}
@@ -166,7 +158,7 @@
 				);
 			}
 
-			// Return User ID and Session KEY as success data.
+			// Step 9 : Return User ID and Session KEY as success data.
 			return array(
 				"status" => "success",
 				"data" => array(

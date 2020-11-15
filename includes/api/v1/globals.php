@@ -171,7 +171,7 @@
         public static function upload_image($request, $files){
 
 
-            $max_img_size = DV_Library_Config::dv_get_config('max_img_size', 123);
+            $max_img_size = DV_Library_Config::dv_get_config('max_img_size', 5000000);
             if (!$max_img_size) {
                 return array(
                     "status" => "unknown",

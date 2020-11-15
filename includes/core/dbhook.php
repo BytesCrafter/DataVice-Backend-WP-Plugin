@@ -19,7 +19,6 @@
 		$tbl_configs = DV_CONFIG_TABLE;
 		$tbl_contacts = DV_CONTACTS_TABLE;
 		$tbl_address = DV_ADDRESS_TABLE;
-		$tbl_revs = DV_REVS_TABLE;
 		$tbl_events = DV_EVENTS_TABLE;
 		$tbl_configs = DV_CONFIG_TABLE;
 		$tbl_docu = DV_DOCUMENTS;
@@ -41,14 +40,13 @@
 				$sql .= "`title` varchar(255) NOT NULL, ";
 				$sql .= "`info` varchar(255) NOT NULL, ";
 				$sql .= "`config_key` varchar(50) NOT NULL,";
-				$sql .= "`config_val` bigint(20) NOT NULL DEFAULT 0, ";
+				$sql .= "`config_val` varchar(120) NOT NULL, ";
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; ";
 			$result = $wpdb->get_results($sql);
 
 			//Pass the globally defined constant to a variable
 			$conf_list = DV_CONFIG_DATA;
-			$conf_fields = DV_CONFIG_FIELD;
 
 			//Dumping data into tables(title, info, config_key, config_val,  hash_id) ($conf_fields, hash_id)
 			$wpdb->query("INSERT INTO `".$tbl_configs."` (title, info, config_key, config_val,  hash_id) VALUES $conf_list");
@@ -105,28 +103,6 @@
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
-		}
-
-		//Database table creation for dv_revisions - QA: 01/08/2020
-		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_revs'" ) != $tbl_revs) {
-			$sql = "CREATE TABLE `".$tbl_revs."` (";
-				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
-				$sql .= "`hash_id` varchar(255) NOT NULL , ";
-				$sql .= "`revs_type` enum('none', 'documents', 'configs','address','contacts') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Plugin Tables', ";
-				$sql .= "`parent_id` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Row ID',";
-				$sql .= "`child_key` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Column Name', ";
-				$sql .= "`child_val` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Precious Value', ";
-				$sql .= "`created_by` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID of the author', ";
-				$sql .= "`date_created` datetime(0) NULL DEFAULT NULL COMMENT 'Date created', ";
-				$sql .= "PRIMARY KEY (`ID`) ";
-				$sql .= ") ENGINE = InnoDB; ";
-			$result = $wpdb->get_results($sql);
-			$conf_list_val = DV_CONFIG_VALUE;
-			$rev_table = DV_REVS_TABLE;
-			$rev_fields = DV_INSERT_REV_FIELDS;
-
-			//Dumping data into tables
-			$wpdb->query("INSERT INTO `".$rev_table."` ($rev_fields,  `parent_id`, `hash_id`) VALUES $conf_list_val");
 		}
 
 		//Database table creation for dv_geo_countries - QA: 01/08/2020

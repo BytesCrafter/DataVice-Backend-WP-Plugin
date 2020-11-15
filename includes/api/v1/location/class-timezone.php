@@ -44,7 +44,7 @@
             
             //Step 2: Master key validation
             //Get master key from database
-            $master_key = DV_Library_Config::dv_get_config('master_key', 123);
+            $master_key = DV_Library_Config::dv_get_config('master_key', "datavice");
             
             //Check if master key matches
             if ($master_key !== $_POST['mkey']) {
