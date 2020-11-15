@@ -20,9 +20,19 @@
         }
 
         public static function listen_open(){
+            return self::submit(
+                array(
+                    "em" => $_POST['em'],
+                    "fn" => $_POST['fn'],
+                    "ln" => $_POST['ln'],
+                )
+            );
+        }
+
+        public static function submit($cuser){
 
             // Step 1 : Check if the fields are passed
-            if( !isset($_POST['em']) || !isset($_POST['fn']) || !isset($_POST['ln']) ){
+            if( !isset($cuser['em']) || !isset($cuser['fn']) || !isset($cuser['ln']) ){
                 return array(
                     "status" => "unknown",
                     "message" => "Please contact your administrator. Request Unknown!",
@@ -30,7 +40,7 @@
             }
 
             // Step 2 : Check if fields are empty.
-            if ( empty($_POST['em']) || empty($_POST['fn']) || empty($_POST['ln']) ) {
+            if ( empty($cuser['em']) || empty($cuser['fn']) || empty($cuser['ln']) ) {
                 return array(
                     "status" => "failed",
                     "message" => "Required fields cannot be empty.",
@@ -38,7 +48,7 @@
             }
 
             // Step 3 : Check if email is in valid format.
-            if ( !is_email($_POST['em']) ) {
+            if ( !is_email($cuser['em']) ) {
                 return  array(
                     "status" => "failed",
                     "message" => "Invalid email address.",
@@ -46,7 +56,7 @@
             }
 
             // Step 4 : Check if username or email is existing.
-            if ( email_exists($_POST['em']) ) {
+            if ( email_exists($cuser['em']) ) {
                 return array(
                     "status" => "failed",
                     "message" => "Username or Email already exist.",
@@ -58,7 +68,7 @@
             global $wpdb; // Initialize WordPress Core DB.
 
             // Get user object.
-            $user = DV_Signup::catch_post();
+            $user = DV_Signup::catch_post($cuser);
             $tempActKey = $user['user_activation_key']; //Use to store AK
             $user['user_activation_key'] = md5($user['user_activation_key']);
 
@@ -117,10 +127,10 @@
         }
 
         // Return of SignUp user object from POST.
-        public static function catch_post()
+        public static function catch_post($cuser)
         {
             $cur_user = array();
-            $cur_user['user_email'] = $_POST['em'];
+            $cur_user['user_email'] = $cuser['em'];
             $unames = explode("@", $cur_user['user_email']);
             $cur_user['user_login'] = $unames[0]."-".crc32($unames[1]);
             $cur_user['user_pass'] = wp_generate_password( 49, false, false );
@@ -128,8 +138,8 @@
             $cur_user['user_nicename'] = $cur_user['user_login']; //user post url
             $cur_user['user_url'] = site_url()."/?u=".$cur_user['user_login']; //referral url
 
-            $cur_user['first_name'] = $_POST['fn'];
-            $cur_user['last_name'] = $_POST['ln'];
+            $cur_user['first_name'] = $cuser['fn'];
+            $cur_user['last_name'] = $cuser['ln'];
             $cur_user['display_name'] = $cur_user['first_name'] ." ". $cur_user['last_name'];
 
             $cur_user['role'] = "subscriber";
@@ -147,9 +157,8 @@
             $message = "Hello " .$user['display_name']. ",";
             $message .= "\n\nWelcome to PasaBuy.App! We're happy that your here.";
             $message .= "\nPassword Activation Key: " .$user['user_activation_key'];
-            $message .= "\n\nPasaBuy.App";
-            $message .= "\nsupport@pasabuy.app";
-
+            $message .= "\n\n".get_bloginfo('name');
+            $message .= "\n".get_bloginfo('admin_email');
             $pasabuy = EMAIL_HEADER;
             $subject = EMAIL_HEADER_SUBJECT_ACTIVATE;
 
@@ -157,7 +166,6 @@
             return is_wp_error($mail) ? false : $mail;
         }
 
-        // 
         public static function insert_dv_users($wpid) {
             global $wpdb;
             $table = DV_USERS;

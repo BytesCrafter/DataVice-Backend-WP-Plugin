@@ -148,8 +148,8 @@
             $message .= "\n\nThere was a request to change your password!";
             $message .= "\nPassword Reset Key: " .$user->activation_key;
             $message .= "\n\nIf did not make this request, just ignore this email.";
-            $message .= "\n\nPasaBuy.App";
-            $message .= "\nsupport@pasabuy.app";
+            $message .= "\n\n".get_bloginfo('name');
+            $message .= "\n".get_bloginfo('admin_email');
             $pasabuy = EMAIL_HEADER;
             $subject = EMAIL_HEADER_SUBJECT_FORGOT;
             return wp_mail( $user->user_email, $pasabuy." - ".$subject, $message );
