@@ -122,6 +122,15 @@
 						);
 					}
 				}
+			} else {
+				if (!empty($get_account)) {
+					if ($get_account->user_status == "1") {
+						return array(
+							"status" => "failed",
+							"message" => "You're account is currently locked.",
+						);
+					}
+				}
 			}
 
 			// Step 7 : Initialize wp authentication process.
