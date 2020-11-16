@@ -63,7 +63,7 @@
             if( empty($expiry_meta) ) {
                 return array(
                     "status" => "failed",
-                    "message" => "Password activation key is already used.",
+                    "message" => "Password activation key is not valid.",
                 );
             }
 

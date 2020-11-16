@@ -47,4 +47,19 @@
     //Include the REST API of USocketNet to be accessible.
     include_once ( DV_PLUGIN_PATH . '/includes/api/routes.php' );
 
-?>
+    //Display menu on WP Backend.
+    include_once ( DV_PLUGIN_PATH . '/includes/view/primary.php' );
+
+        function my_login_logo_one() { 
+    ?> 
+            <style type="text/css"> 
+                body.login div#login h1 a {
+                    background-image: url(<?php echo get_site_icon_url(); ?>); 
+                    padding-bottom: 30px; 
+                    background-size: 100px;
+                    width: 100px;
+                } 
+            </style>
+    <?php 
+        } 
+        add_action( 'login_enqueue_scripts', 'my_login_logo_one' );
