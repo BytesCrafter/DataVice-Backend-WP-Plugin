@@ -94,7 +94,7 @@
                  * @param1 = key
                  * @param2 = default value if no value found
                 **/
-                $pword_expiry_span = (int)DV_Library_Config::dv_get_config('pword_expiry_span', 1800);
+                $pword_expiry_span = DV_Library_Config::dv_get_config('pword_expiry_span', 1800);
 
                 $expiration_date = date( 'Y-m-d H:i:s', strtotime("now") + (int)$pword_expiry_span );
                 $add_key_meta = update_user_meta( $created_id, 'reset_pword_expiry', $expiration_date );
@@ -103,14 +103,12 @@
 
                 // Try to send mail.
                 if( DV_Signup::is_success_sendmail( $user ) ) {
-                    return rest_ensure_response(
-                        array(
-                                "status" => "success",
-                                "data" => array(
-                                    "wpid" => $created_id
-                                ),
-                                "message" => "Please check your email for password reset key.",
-                        )
+                    return array(
+                            "status" => "success",
+                            "data" => array(
+                                "wpid" => $created_id
+                            ),
+                            "message" => "Please check your email for password reset key.",
                     );
 
                 } else {
