@@ -41,14 +41,6 @@
 		}
 
 		public static function listen() {
-			return rest_ensure_response(
-				self::submit()
-			);
-		}
-
-		// Rest Api routing.
-		public static function submit() {
-
 			// Step 1 : Check if the fields are passed
 			if (!isset($_POST["un"]) || !isset($_POST["pw"])) {
 				return array(
@@ -57,8 +49,21 @@
 				);
 			}
 
+			return rest_ensure_response(
+				self::submit(
+					array(
+						"un" => $_POST["un"],
+						"pw" => $_POST["pw"]
+					)
+				)
+			);
+		}
+
+		// Rest Api routing.
+		public static function submit($cuser) {
+
 			// Step 2 : Check if fields are empty.
-            if ( empty($_POST['un']) || empty($_POST['pw']) ) {
+            if ( empty($cuser['un']) || empty($cuser['pw']) ) {
 				return array(
 					"status" => "failed",
 					"message" => "Required fields cannot be empty.",
@@ -68,8 +73,8 @@
 			// Step 3 : Catch all fields.
 			global $wpdb;
 
-			$uname = $_POST["un"];
-			$pword = $_POST["pw"];
+			$uname = $cuser["un"];
+			$pword = $cuser["pw"];
 
 			$usermeta_table = WP_USERS_META;
 			$events_table = DV_EVENTS_TABLE;

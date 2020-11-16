@@ -63,3 +63,18 @@
     <?php 
         } 
         add_action( 'login_enqueue_scripts', 'my_login_logo_one' );
+
+    function is_dv_user_logged_in() {
+        if(isset($_COOKIE['wpid']) && isset($_COOKIE['snky'])) {
+            
+            return DV_Verification::is_cookie_verified(
+                array(
+                    "wpid" => $_COOKIE['wpid'],
+                    "snky" => $_COOKIE['snky'],
+                 )
+            );
+            
+        } else {
+            return false;
+        }
+    }

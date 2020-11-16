@@ -154,6 +154,30 @@
             return false;
         }
 
+        public static function verify_role_is($role){
+
+            if(isset($_COOKIE['wpid']) && isset($_COOKIE['wpid'])) {
+                if(DV_Verification::is_cookie_verified(
+                    array(
+						"wpid" => $_COOKIE['wpid'],
+						"snky" => $_COOKIE['snky'],
+					 )
+                )) {
+                    $wp_user = get_userdata($_COOKIE['wpid']);
+                
+                    if ( in_array('administrator' , $wp_user->roles, true) ) {
+                        return true;
+                    }
+        
+                    if ( in_array($role , $wp_user->roles, true) ) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public static function old_tiger($data = "", $width= 20, $rounds = 3 ) {
             return substr(
                 implode(
