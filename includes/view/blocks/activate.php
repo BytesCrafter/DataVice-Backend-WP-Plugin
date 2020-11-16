@@ -57,7 +57,7 @@
 
             return indexed_array;
         }
-
+        
         $("#activation-form").submit(function (e) {
             e.preventDefault();
 
@@ -81,9 +81,18 @@
                 data: formDataActivate,
                 url:'<?= site_url() ?>/wp-json/datavice/v1/user/activate/verify',
                 success:function(response){
-                    response.status!="success"? alert(response.message) : alert("You're account is now activated!");
                     if(response.status == "success") {
-                        $('#activation-form').trigger("reset");
+                        <?php 
+
+                            if( isset($_GET['redirect']) ) {
+                                ?>
+                        window.location.href = "<?= $_GET['redirect'] ?>";
+                                <?php
+                            }
+
+                        ?>
+                    } else {
+                        alert(response.message);
                     }
                     $inputs.prop("disabled", false);
                 },
