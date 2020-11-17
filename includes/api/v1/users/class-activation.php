@@ -86,6 +86,3 @@
             );
         }
     }
-
-    //$key = md5($_POST['un']);
-    //$result = $wpdb -> query( "UPDATE wp_users  SET user_activation_key = '$key' WHERE user_email = '$un' " );

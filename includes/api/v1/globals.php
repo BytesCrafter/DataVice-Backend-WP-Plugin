@@ -154,25 +154,26 @@
             return false;
         }
 
-        public static function verify_role_is($role){
+        public static function verify_role_is($dv_wprole){
 
-            if(isset($_COOKIE['wpid']) && isset($_COOKIE['wpid'])) {
+            if(isset($_COOKIE['wpid']) && isset($_COOKIE['snky'])) {
+
                 if(DV_Verification::is_cookie_verified(
                     array(
 						"wpid" => $_COOKIE['wpid'],
 						"snky" => $_COOKIE['snky'],
 					 )
                 )) {
-                    $wp_user = get_userdata($_COOKIE['wpid']);
+                    $dv_wp_user = get_userdata($_COOKIE['wpid']);
                 
-                    if ( in_array('administrator' , $wp_user->roles, true) ) {
+                    if ( in_array('administrator', $dv_wp_user->roles) ) {
                         return true;
                     }
         
-                    if ( in_array($role , $wp_user->roles, true) ) {
+                    if ( in_array($dv_wprole , $dv_wp_user->roles) ) {
                         return true;
                     }
-                }
+                } 
             }
 
             return false;
