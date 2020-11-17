@@ -156,7 +156,7 @@
         public static function is_success_sendmail($user) {
 
             $message = "Hello " .$user['display_name']. ",";
-            $message .= "\n\nWelcome to PasaBuy.App! We're happy that your here.";
+            $message .= "\n\nWelcome to ".get_bloginfo('name')."! We're happy that your here.";
             $message .= "\nPassword Activation Key: " .$user['user_activation_key'];
             $message .= "\n\n".get_bloginfo('name');
             $message .= "\n".get_bloginfo('admin_email');
