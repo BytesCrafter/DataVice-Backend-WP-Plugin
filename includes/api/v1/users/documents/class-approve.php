@@ -18,7 +18,14 @@
 
                 self::listen_open($request)
             );
-		}
+        }
+
+        public static function catch_post(){
+            $curl_user = array();
+            $curl_user['status'] = $_POST['status'];
+            return $curl_user;
+        }
+
         public static function listen_open($request){
 
             global $wpdb;
@@ -27,6 +34,7 @@
             $table_revs = DV_REVS_TABLE;
             $revs_fields = DV_INSERT_REV_FIELDS;
             $date_created = DV_Globals::date_stamp();
+            $smp = 'disapprove';
 
             // Step 2: Validate user
             if (DV_Verification::is_verified() == false) {
@@ -50,14 +58,24 @@
                 );
             }
 
+
+            $user = self::catch_post();
+
+            if ($user['status'] != "true" && $user['status'] != "false"  ) {
+                return array(
+                    "status" => "failed",
+                    "message" => "Invalid value of status."
+                );
+            }
+
             $document_id = $_POST['docid'];
-            $status = $_POST['status'];
+            #$status = $_POST['status'];
             $wpid = $_POST['wpid'];
 
             $wpdb->query("START TRANSACTION");
 
             /* Check first if user has a document data in server */
-            $check_doc = $wpdb->get_row("SELECT * FROM $dv_docs WHERE hash_id = '$document_id' AND parent_id = 0 ");
+           $check_doc = $wpdb->get_row("SELECT * FROM $dv_docs WHERE hash_id = '$document_id' AND parent_id = 0 ");
 
             if (!$check_doc) {
                 return array(
@@ -89,14 +107,15 @@
             /* End */
 
             /**
-             * status = 1 : approve
-             * status = 0 : disapprove
+             * status = true : approve
+             * status = false : disapprove
              */
-            if ($status === '0') {
+            if ($user['status'] == "false") {
                 $status = $wpdb->query("INSERT INTO $table_revs (revs_type, parent_id, child_key, child_val, created_by, date_created) VALUES ('documents', '$check_doc->ID', 'approve_status', '0', '$wpid', '$date_created')");
                 $status_id = $wpdb->insert_id;
                 $wpdb->query("UPDATE $table_revs SET hash_id = sha2($status_id, 256) WHERE ID = $status_id");
             }else{
+                $smp = 'approve';
                 $status = $wpdb->query("INSERT INTO $table_revs (revs_type, parent_id, child_key, child_val, created_by, date_created) VALUES ('documents', '$check_doc->ID', 'approve_status', '1', '$wpid', '$date_created')");
                 $status_id = $wpdb->insert_id;
                 $wpdb->query("UPDATE $table_revs SET hash_id = sha2($status_id, 256) WHERE ID = $status_id");
@@ -112,7 +131,7 @@
                 $wpdb->query("COMMIT");
                 return array(
                     "status" => "success",
-                    "message" => "Data has been approved successfully."
+                    "message" => "Data has been $smp successfully."
                 );
             }
         }

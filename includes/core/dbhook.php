@@ -277,6 +277,7 @@
 			$sql = "CREATE ALGORITHM=UNDEFINED  VIEW  `".$tbl_address_view."` AS SELECT";
 				$sql .= "  `add`.ID,
 					`add`.stid,
+					`add`.wpid,
 					IF(`add`.types = 'business', 'Business', 'Office' )as `type`,
 					( SELECT child_val FROM dv_revisions WHERE id = `add`.street ) AS street,
 					( SELECT child_val FROM dv_revisions WHERE id = `add`.latitude ) AS latitude,

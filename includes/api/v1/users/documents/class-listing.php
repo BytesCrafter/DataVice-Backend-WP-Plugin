@@ -73,13 +73,18 @@
             $var = array();
             foreach ($get_parent as $key => $value) {
 
-                $value->documents = $get_child = $wpdb->get_results("SELECT
+                $get_child = $wpdb->get_results("SELECT
                     (SELECT child_val FROM dv_revisions WHERE parent_id = doc.ID AND revs_type ='documents' AND child_key ='name' AND ID = (SELECT MAX(ID) FROM dv_revisions rev WHERE parent_id = doc.ID AND ID = rev.ID AND revs_type ='documents' AND child_key ='name'  )  ) as `doctype`,
-                    (SELECT child_val FROM dv_revisions WHERE parent_id = doc.ID AND revs_type ='documents' AND child_key ='preview' AND ID = (SELECT MAX(ID) FROM dv_revisions rev WHERE parent_id = doc.ID AND ID = rev.ID AND revs_type ='documents' AND child_key ='preview'  )  ) as `preview`
+                    (SELECT child_val FROM dv_revisions WHERE parent_id = doc.ID AND revs_type ='documents' AND child_key ='preview' AND ID = (SELECT MAX(ID) FROM dv_revisions rev WHERE parent_id = doc.ID AND ID = rev.ID AND revs_type ='documents' AND child_key ='preview'  )  ) as `preview`,
+                    (SELECT child_val FROM dv_revisions WHERE parent_id = doc.ID AND revs_type ='documents' AND child_key ='id_number' AND ID = (SELECT MAX(ID) FROM dv_revisions rev WHERE parent_id = doc.ID AND ID = rev.ID AND revs_type ='documents' AND child_key ='id_number'  )  ) as `id_number`
                 FROM
                     dv_documents doc
                 WHERE
                     doc.parent_id = $value->ID ");
+                foreach ($get_child as $key => $value) {
+                    $value->id_number  = $value->id_number = null ? '' : $value->id_number ;
+                }
+                $value->documents = $get_child;
             }
 
             return array(

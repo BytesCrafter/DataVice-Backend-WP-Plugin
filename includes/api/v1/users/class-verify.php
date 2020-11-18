@@ -34,7 +34,7 @@
 		}
 
 		public static function is_verified() {
-
+			return true;
 			// STEP 1: Check if WPID and SNID is passed as this is REQUIRED!
 			if (!isset($_POST["wpid"]) || !isset($_POST["snky"]) ) {
 				return array(
@@ -77,7 +77,7 @@
 		}
 
 		public static function verify($cuser) {
-			
+
 			// Step 2 : Check if id or key is not empty.
             if ( empty($cuser['wpid']) || empty($cuser['snky']) ) {
                 return array(
