@@ -81,8 +81,8 @@
                     dv_documents doc
                 WHERE
                     doc.parent_id = $value->ID ");
-                foreach ($get_child as $key => $value) {
-                    $value->id_number  = $value->id_number = null ? '' : $value->id_number ;
+                foreach ($get_child as $get_child_key => $get_child_value) {
+                    $get_child_key->id_number  = $get_child_key->id_number = null ? '' : $get_child_value->id_number ;
                 }
                 $value->documents = $get_child;
             }
