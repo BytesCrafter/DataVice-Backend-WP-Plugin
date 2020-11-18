@@ -64,12 +64,7 @@
 			}
 
 			// Catch verification result.
-			 $verified = self::verify(
-				 array(
-					"wpid" => $cuser['wpid'],
-					"snky" => $cuser['snky'],
-				 )
-			 );
+			 $verified = self::verify( $cuser );
 
 			 // Convert verification status to bool.
 			return $verified['status'] == 'success' ? true : false;
