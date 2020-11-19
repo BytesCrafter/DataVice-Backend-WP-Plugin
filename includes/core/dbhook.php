@@ -47,6 +47,8 @@
 
 			//Pass the globally defined constant to a variable
 			$conf_list = DV_CONFIG_DATA;
+			$wpdb->query("CREATE INDEX `config_key` ON $tbl_configs (`config_key`);");
+			$wpdb->query("CREATE INDEX `title` ON $tbl_configs (`title`);");
 
 			//Dumping data into tables(title, info, config_key, config_val,  hash_id) ($conf_fields, hash_id)
 			$wpdb->query("INSERT INTO `".$tbl_configs."` (title, info, config_key, config_val,  hash_id) VALUES $conf_list");
@@ -73,6 +75,15 @@
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
+			$wpdb->query("CREATE INDEX `status` ON $tbl_address (`status`);");
+			$wpdb->query("CREATE INDEX `wpid` ON $tbl_address (`wpid`);");
+			$wpdb->query("CREATE INDEX `stid` ON $tbl_address (`stid`);");
+			$wpdb->query("CREATE INDEX `types` ON $tbl_address (`types`);");
+			$wpdb->query("CREATE INDEX `brgy` ON $tbl_address (`brgy`);");
+			$wpdb->query("CREATE INDEX `city` ON $tbl_address (`city`);");
+			$wpdb->query("CREATE INDEX `province` ON $tbl_address (`province`);");
+			$wpdb->query("CREATE INDEX `country` ON $tbl_address (`country`);");
+
 		}
 
 		//Database table creation for plugin_config
@@ -103,6 +114,10 @@
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
+
+			$wpdb->query("CREATE INDEX `wpid` ON $tbl_contacts (`wpid`);");
+			$wpdb->query("CREATE INDEX `stid` ON $tbl_contacts (`stid`);");
+
 		}
 
 		//Database table creation for dv_geo_countries - QA: 01/08/2020
@@ -122,6 +137,9 @@
 			$ctry_data = DV_COUNTRY_DATA;
 			$ctry_fields = DV_COUNTRY_FIELD;
 
+			$wpdb->query("CREATE INDEX `country_code` ON $tbl_countries (`country_code`);");
+			$wpdb->query("CREATE INDEX `status` ON $tbl_countries (`status`);");
+
 			//Dumping data into tables
 			$wpdb->query("INSERT INTO `".$tbl_countries."` $ctry_fields VALUES $ctry_data");
 		}
@@ -139,6 +157,10 @@
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; ";
 			$result = $wpdb->get_results($sql);
+
+			$wpdb->query("CREATE INDEX `status` ON $tbl_province (`status`);");
+			$wpdb->query("CREATE INDEX `country_code` ON $tbl_province (`country_code`);");
+			$wpdb->query("CREATE INDEX `prov_code` ON $tbl_province (`prov_code`);");
 
 			//Pass the globally defined constant to a variable
 			$prov_list = DV_PROVINCE_DATA;
@@ -166,6 +188,10 @@
 			$cty_list = DV_CITY_DATA;
 			$cty_fields = DV_CITY_FIELD;
 
+			$wpdb->query("CREATE INDEX `status` ON $tbl_city (`status`);");
+			$wpdb->query("CREATE INDEX `prov_code` ON $tbl_city (`prov_code`);");
+			$wpdb->query("CREATE INDEX `city_code` ON $tbl_city (`city_code`);");
+
 			//Dumping data into tables
 			$wpdb->query("INSERT INTO `".$tbl_city."` $cty_fields VALUES $cty_list");
 		}
@@ -186,6 +212,9 @@
 			//Pass the globally defined constant to a variable
 			$brgy_data = DV_BRGY_DATA;
 			$brgy_field = DV_BRGY_FIELD;
+
+			$wpdb->query("CREATE INDEX `status` ON $tbl_brgy (`status`);");
+			$wpdb->query("CREATE INDEX `city_code` ON $tbl_brgy (`city_code`);");
 
 			//Dumping data into tables
 			$wpdb->query("INSERT INTO `".$tbl_brgy."` $brgy_field VALUES $brgy_data");
@@ -211,6 +240,9 @@
 
 			//Dumping data into tables
 			$wpdb->query("INSERT INTO `".$tbl_timezone."` $tz_field VALUES $tz_data");
+
+			$wpdb->query("CREATE INDEX `country_code` ON $tbl_timezone (`country_code`);");
+
 		}
 
 		//Database table creation for dv_events
@@ -224,6 +256,10 @@
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
+
+			$wpdb->query("CREATE INDEX `wpid` ON $tbl_events (`wpid`);");
+			$wpdb->query("CREATE INDEX `keys` ON $tbl_events (`keys`);");
+
 		}
 
 		//Database table creation for link ACCOUNT
@@ -239,6 +275,10 @@
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
+
+			$wpdb->query("CREATE INDEX `wpid` ON $tbl_link_acc (`wpid`);");
+			$wpdb->query("CREATE INDEX `platform` ON $tbl_link_acc (`platform`);");
+
 		}
 
 		//Database table creation for error log
@@ -256,6 +296,10 @@
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
+
+			$wpdb->query("CREATE INDEX `platform` ON $tbl_error_log (`platform`);");
+			$wpdb->query("CREATE INDEX `device_ip` ON $tbl_error_log (`device_ip`);");
+
 		}
 
 
@@ -269,6 +313,8 @@
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
+
+			$wpdb->query("CREATE INDEX `wpid` ON $tbl_users (`wpid`);");
 
 		}
 
@@ -291,6 +337,10 @@
 				FROM
 					dv_address `add`";
 			$result = $wpdb->get_results($sql);
+
+			$wpdb->query("CREATE INDEX `stid` ON $tbl_address_view (`stid`);");
+			$wpdb->query("CREATE INDEX `wpid` ON $tbl_address_view (`wpid`);");
+
 		}
 
 
