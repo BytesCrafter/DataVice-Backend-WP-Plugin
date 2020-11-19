@@ -46,18 +46,19 @@
                 // If email, use email in where clause
                 $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email, user_activation_key
                     FROM {$wpdb->prefix}users
-                    WHERE user_email = '$email'", OBJECT );
+                    WHERE user_login = '$email'", OBJECT );
 
-            } else {
-
-                //Sanitize username
-                $uname = sanitize_user($_POST['un']);
-
-                // if username, use username in where clause
-                $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email,user_activation_key
-                    FROM {$wpdb->prefix}users
-                    WHERE user_login = '$uname'", OBJECT );
             }
+            // else {
+
+            //     //Sanitize username
+            //     $uname = sanitize_user($_POST['un']);
+
+            //     // if username, use username in where clause
+            //     $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email,user_activation_key
+            //         FROM {$wpdb->prefix}users
+            //         WHERE user_login = '$uname'", OBJECT );
+            // }
 
             // Step 3: Check for cur_user. Return a message if null
             if ( !$cur_user ) {
@@ -93,7 +94,7 @@
             //$cur_user->activation_key = wp_generate_password( $pword_resetkey_length, false, false );
             $cur_user->activation_key = DV_Globals::activation_key();
             $smp = md5( $cur_user->activation_key );
-            
+
             // Set the new activation key.
             $inserted_key = $wpdb->query("UPDATE {$wpdb->prefix}users
                 SET `user_activation_key` = '{$smp}'
