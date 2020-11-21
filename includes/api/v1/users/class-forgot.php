@@ -14,6 +14,7 @@
 
         // REST API for Forgotten Passwords
 		public static function listen() {
+
             // Step 1: Check if UN field is passed
 			if (!isset($_POST["un"])) {
 				return rest_ensure_response(
@@ -46,19 +47,18 @@
                 // If email, use email in where clause
                 $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email, user_activation_key
                     FROM {$wpdb->prefix}users
-                    WHERE user_login = '$email'", OBJECT );
+                    WHERE user_email = '$email'", OBJECT );
 
+            } else {
+
+                //Sanitize username
+                $uname = sanitize_user($_POST['un']);
+
+                // if username, use username in where clause
+                $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email, user_activation_key
+                    FROM {$wpdb->prefix}users
+                    WHERE user_login = '$uname'", OBJECT );
             }
-            // else {
-
-            //     //Sanitize username
-            //     $uname = sanitize_user($_POST['un']);
-
-            //     // if username, use username in where clause
-            //     $cur_user = $wpdb->get_row("SELECT ID, display_name, user_email,user_activation_key
-            //         FROM {$wpdb->prefix}users
-            //         WHERE user_login = '$uname'", OBJECT );
-            // }
 
             // Step 3: Check for cur_user. Return a message if null
             if ( !$cur_user ) {
@@ -143,17 +143,14 @@
         // Try to Send email for a new verification or activation key.
         public static function is_success_sendmail($user) {
             // TODO: PENDING! Put this on config (HTML SOURCE). Need a research about this.
-            // TODO: PENDING! We get the value by a global function named, dv_get_config('key') which return value.
-            // TODO: PENDING! We set the value by a global function named, dv_get_config('key', {value}) which bool.
             $message = "Hello " .$user->display_name. ",";
             $message .= "\n\nThere was a request to change your password!";
             $message .= "\nPassword Reset Key: " .$user->activation_key;
             $message .= "\n\nIf did not make this request, just ignore this email.";
             $message .= "\n\n".get_bloginfo('name');
             $message .= "\n".get_bloginfo('admin_email');
-            $pasabuy = EMAIL_HEADER;
             $subject = EMAIL_HEADER_SUBJECT_FORGOT;
-            return wp_mail( $user->user_email, $pasabuy." - ".$subject, $message );
+            return wp_mail( $user->user_email, $subject, $message );
         }
 
 	}
