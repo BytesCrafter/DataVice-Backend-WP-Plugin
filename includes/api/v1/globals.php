@@ -30,10 +30,75 @@
             return DV_PLUGIN_URL . "/assets/default-banner.png";
         }
 
+        /**
+         * Check if user is signin via web.
+         * Author: BytesCrafter
+         * Date: 21 Nov 2020
+         */
+        public static function is_signed_with_cookie() {
+            return isset($_COOKIE['wpid']) && isset($_COOKIE['snky']) ? true : false;
+        }
 
+        /**
+         * Get signin with cookie array.
+         * Author: BytesCrafter
+         * Date: 21 Nov 2020
+         */
+        public static function get_cookie_signed() {
+            return array(
+                "wpid" => $_COOKIE['wpid'],
+                "snky" => $_COOKIE['snky']
+            );
+        }
 
+        /**
+         * Check if user is currently cookie logged in.
+         * Author: BytesCrafter
+         * Date: 21 Nov 2020
+         */
+        public static function is_user_logged_in() {
+            if( self::is_signed_with_cookie() ) {
+                return DV_Verification::is_cookie_verified();
+            } else {
+                return false;
+            }
+        }
 
+        /**
+         * Check if this user has this role.
+         * Author: BytesCrafter
+         * Date: 21 Nov 2020
+         */
+        public static function verify_role_is($dv_wprole) {
+
+            if( self::is_signed_with_cookie() ) {
+
+                if( DV_Verification::is_cookie_verified() ) {
+                    $dv_wp_user = get_userdata($_COOKIE['wpid']);
+                
+                    if ( in_array('administrator', $dv_wp_user->roles) ) {
+                        return true;
+                    }
         
+                    if ( in_array($dv_wprole , $dv_wp_user->roles) ) {
+                        return true;
+                    }
+                } 
+            }
+
+            return false;
+        }
+
+        /**
+         * Get the current url on web platform.
+         */
+        public static function get_current_url($remove_query = false) {
+            $cur_url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            return $remove_query == true ? explode('?', $cur_url, 2)[0] : $cur_url;
+        }
+
+
+
         //Declare a private variable for mysql table name
         private $table;
         private $rev_table;
@@ -171,31 +236,6 @@
 
             if ( in_array($role , $wp_user->roles, true) ) {
                 return true;
-            }
-
-            return false;
-        }
-
-        public static function verify_role_is($dv_wprole){
-
-            if(isset($_COOKIE['wpid']) && isset($_COOKIE['snky'])) {
-
-                if(DV_Verification::is_cookie_verified(
-                    array(
-						"wpid" => $_COOKIE['wpid'],
-						"snky" => $_COOKIE['snky'],
-					 )
-                )) {
-                    $dv_wp_user = get_userdata($_COOKIE['wpid']);
-                
-                    if ( in_array('administrator', $dv_wp_user->roles) ) {
-                        return true;
-                    }
-        
-                    if ( in_array($dv_wprole , $dv_wp_user->roles) ) {
-                        return true;
-                    }
-                } 
             }
 
             return false;

@@ -56,15 +56,15 @@
 
 		}
 
-		public static function is_cookie_verified($cuser) {
+		public static function is_cookie_verified() {
 
 			// STEP 1: Check if WPID and SNID is passed as this is REQUIRED!
-			if (!isset($cuser["wpid"]) || !isset($cuser["snky"]) ) {
+			if ( !DV_Globals::is_signed_with_cookie() ) {
 				return false;
 			}
 
 			// Catch verification result.
-			 $verified = self::verify( $cuser );
+			 $verified = self::verify( DV_Globals::get_cookie_signed() );
 
 			 // Convert verification status to bool.
 			return $verified['status'] == 'success' ? true : false;
