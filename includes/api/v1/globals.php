@@ -12,6 +12,28 @@
 
   	class DV_Globals {
 
+        /**
+         * Get the default avatar.
+         * Author: BytesCrafter
+         * Date: 21 Nov 2020
+         */
+        public static function get_default_avatar() {
+            return DV_PLUGIN_URL . "/assets/default-avatar.png";
+        }
+
+        /**
+         * Get the default avatar.
+         * Author: BytesCrafter
+         * Date: 21 Nov 2020
+         */
+        public static function get_default_banner() {
+            return DV_PLUGIN_URL . "/assets/default-banner.png";
+        }
+
+
+
+
+        
         //Declare a private variable for mysql table name
         private $table;
         private $rev_table;

@@ -1,25 +1,19 @@
 <?php
-	// Exit if accessed directly
 	if ( ! defined( 'ABSPATH' ) ) 
 	{
-		exit;
+	        exit;
 	}
 
 	/** 
-        * @package datavice-wp-plugin
-        * @version 0.1.0
-	*/
+         * @package datavice-wp-plugin
+         * @version 0.1.0
+         * @author BytesCrafter
+         * @date 21 Nov 2020
+	 */
 
 	class DV_Userprofile{
 
                 public static function listen(){
-                        return rest_ensure_response( 
-                                DV_Userprofile:: get_profile()
-                        ); 
-                }
-
-                // REST API for getting the user data
-                public static function get_profile(){
 
                         //User validation
                         if (DV_Verification::is_verified() == false) {
@@ -27,11 +21,19 @@
 						"status" => "unknown",
 						"message" => "Please contact your administrator. Request Unknown!",
                                 );
-			        
                         }
 
+                        return rest_ensure_response( 
+                                DV_Userprofile:: get_profile($_POST['wpid'])
+                        ); 
+
+                }
+
+                // REST API for getting the user data
+                public static function get_profile($wpid){
+
                         // Find user in db using wpid
-                        $wp_user = get_user_by("ID", $_POST['wpid']);
+                        $wp_user = get_user_by("ID", $wpid);
 
                         if (!$wp_user) {
                                 return array(
@@ -44,13 +46,13 @@
                         return  array("status" => 'success',
                                         "data" => array(
                                                 "uname" => $wp_user->data->user_nicename,
-                                                "dname" => $wp_user->data->display_name,
                                                 "email" => $wp_user->data->user_email,
-                                                "roles" => $wp_user->roles,
+                                                "avatar" => $wp_user->avatar == null ? DV_Globals::get_default_avatar() : $wp_user->avatar,
+                                                "banner" => $wp_user->banner == null ? DV_Globals::get_default_banner() : $wp_user->banner,
+                                                "dname" => $wp_user->data->display_name,
                                                 "fname" => $wp_user->first_name,
                                                 "lname" => $wp_user->last_name,
-                                                "avatar" => $wp_user->avatar,
-                                                "banner" => $wp_user->banner
+                                                "roles" => $wp_user->roles
                                 )
                         );
 
