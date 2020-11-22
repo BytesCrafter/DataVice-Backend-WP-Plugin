@@ -81,7 +81,7 @@
 			$events_fields = DV_EVENTS_FIELDS;
 
 			// Step 4 : Check account if activated or not
-				$validate_account = $wpdb->get_row("SELECT user_login, user_login, user_activation_key 
+				$validate_account = $wpdb->get_row("SELECT user_login, user_login, user_activation_key
 					FROM {$wpdb->prefix}users  WHERE `user_email` = '$uname' OR `user_login` = '$uname' ");
 
 				if( $validate_account ) {
@@ -95,8 +95,8 @@
 			// End check account if activated or not
 
 			// Step 5 : Check if account is locked due to incorrect login attempts
-			$check_account = $wpdb->get_row("SELECT um.meta_value as lock_expiry, `user_status` 
-					FROM {$wpdb->prefix}users  u INNER JOIN $usermeta_table um ON um.user_id = u.id 
+			$check_account = $wpdb->get_row("SELECT um.meta_value as lock_expiry, `user_status`
+					FROM {$wpdb->prefix}users  u INNER JOIN $usermeta_table um ON um.user_id = u.id
 					WHERE u.`user_email` = '$uname' AND um.meta_key = 'lock_expiry_span'");
 
 			if ( $check_account && date('Y-m-d H:i:s', strtotime("now")) <  $check_account->lock_expiry ) {
@@ -113,9 +113,9 @@
 				);
 			}
 
-			// Step 6 : Check if User 
+			// Step 6 : Check if User
 			$lock_auth = DV_Library_Config::dv_get_config('lock_authentication', "inactive");
-			$get_account = $wpdb->get_row("SELECT user_status FROM {$wpdb->prefix}users  u 
+			$get_account = $wpdb->get_row("SELECT user_status FROM {$wpdb->prefix}users  u
 				WHERE u.`user_login` = '$uname' OR u.user_email = '$uname' ");
 
 			if ($lock_auth == "active") {
@@ -123,7 +123,7 @@
 					if ($get_account->user_status == "0") {
 						return array(
 							"status" => "failed",
-							"message" => "You're account is currently locked.",
+							"message" => "Sorry, signing in is currently unavailable.",
 						);
 					}
 				}
@@ -132,7 +132,7 @@
 					if ($get_account->user_status == "1") {
 						return array(
 							"status" => "failed",
-							"message" => "You're account is currently locked.",
+							"message" => "Sorry, signing in is currently unavailable.",
 						);
 					}
 				}
