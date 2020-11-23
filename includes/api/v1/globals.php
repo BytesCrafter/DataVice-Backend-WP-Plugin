@@ -46,8 +46,8 @@
          */
         public static function get_cookie_signed() {
             return array(
-                "wpid" => $_COOKIE['wpid'],
-                "snky" => $_COOKIE['snky']
+                "wpid" => isset($_COOKIE['wpid']) ? $_COOKIE['wpid'] : "",
+                "snky" => isset($_COOKIE['snky']) ? $_COOKIE['snky'] : ""
             );
         }
 
@@ -91,10 +91,27 @@
 
         /**
          * Get the current url on web platform.
+         * Author: BytesCrafter
+         * Date: 21 Nov 2020
          */
         public static function get_current_url($remove_query = false) {
             $cur_url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
             return $remove_query == true ? explode('?', $cur_url, 2)[0] : $cur_url;
+        }
+
+        /**
+         * Get the current url on web platform.
+         * Author: BytesCrafter
+         * Date: 21 Nov 2020
+         */
+        public static function is_wp_user_exist($wpid){
+
+            global $wpdb;
+        
+            $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $wpdb->users WHERE ID = %d", $wpid));
+        
+            if($count == 1){ return true; } else { return false; }
+
         }
 
 
