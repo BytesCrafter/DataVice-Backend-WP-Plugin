@@ -19,25 +19,19 @@
 			);
         }
 
-        public static function catch_post(){
-            $curl_user = array();
-
-            $curl_user['user_login'] = $_POST['un'];
-            $unames = explode("@", $curl_user['user_login']);
-            $curl_user['user_login'] = $unames[0]."-".crc32($unames[1]);
-            $curl_user["wpid"] = $_POST["wpid"];
-
-            return array();
-        }
+  
 
         public static function listen_open(){
             global $wpdb;
 
             $activation_key = DV_Globals::activation_key();
 
-            $user = self::catch_post();
 
-            $get_wpid = $wpdb->get_row("SELECT ID FROM  {$wpdb->prefix}users  WHERE user_login = '{$user["user_login"]}' ");
+            $user_login = $_POST['un'];
+            $unames = explode("@", $user_login);
+            $user_login = $unames[0]."-".crc32($unames[1]);
+
+            $get_wpid = $wpdb->get_row("SELECT ID FROM  {$wpdb->prefix}users  WHERE user_login = '$user_login' ");
 
             if (empty($get_wpid)) {
                 return array(
@@ -67,8 +61,8 @@
                 );
             }else{
                 return array(
-                    "status" => "failed",
-                    "message" => $mail
+                    "status" => "success",
+                    "message" => "Email has been sent"
                 );
             }
         }
