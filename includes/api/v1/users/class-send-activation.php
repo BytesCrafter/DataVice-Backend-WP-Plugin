@@ -62,7 +62,7 @@
             }else{
                 return array(
                     "status" => "success",
-                    "message" => "Email has been sent"
+                    "message" => "Please check your email for password reset key."
                 );
             }
         }
