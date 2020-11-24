@@ -17,7 +17,7 @@
         {
             $cur_user = array();
 
-            $cur_user['adid'] = $_POST['adid'];
+            $cur_user['id'] = $_POST['id'];
             $cur_user['created_by'] = $_POST['wpid'];
 
             return  $cur_user;
@@ -41,7 +41,7 @@
             }
 
             // Step 1 : Check if the fields are passed
-            if( !isset($_POST['adid'])){
+            if( !isset($_POST['id'])){
                 return array(
                     "status"  => "unknown",
                     "message" => "Please contact your administrator. Request unknown!",
@@ -49,7 +49,7 @@
             }
 
              // Step 1 : Check if the fields are passed
-             if( empty($_POST['adid'])){
+             if( empty($_POST['id'])){
                 return array(
                     "status"  => "unknown",
                     "message" => "Please contact your administrator. Request Empty!",
@@ -62,7 +62,7 @@
             $wpdb->query("START TRANSACTION");
 
 
-			$data = DV_Address_Config::get_address(   null,   null,  null, $_POST['adid'] );
+			$data = DV_Address_Config::get_address(   null,   null,  null, $_POST['id'] );
 
             if ($data["status"] == "failed") {
                 return array(
@@ -80,12 +80,12 @@
                 "type" =>  $data["data"][0]->types
             );
 
-            $address = DV_Address_Config::add_address( $address, $data["data"][0]->wpid, $data["data"][0]->stid, $data["data"][0]->latitude, $data["data"][0]->longitude,  $data["data"][0]->img_url, 'inactive', $user["adid"]);
+            $address = DV_Address_Config::add_address( $address, $data["data"][0]->wpid, $data["data"][0]->stid, $data["data"][0]->latitude, $data["data"][0]->longitude,  $data["data"][0]->img_url, 'inactive', $user["id"]);
 
             $contact = $wpdb->query("INSERT INTO $tbl_contacts
                     (`hash_id`, $tbl_contacts_filed, `contact_person`, `status`)
                 VALUES
-                    ('{$data["data"][0]->contact_id}', '{$user["adid"]}', '{$data["data"][0]->contact}', '{$data["data"][0]->contact_type}','$created_id', '{$data["data"][0]->contact_person}', 'inactive') ");
+                    ('{$data["data"][0]->contact_id}', '{$user["id"]}', '{$data["data"][0]->contact}', '{$data["data"][0]->contact_type}','$created_id', '{$data["data"][0]->contact_person}', 'inactive') ");
             $contact_id = $wpdb->insert_id;
             // End
 
