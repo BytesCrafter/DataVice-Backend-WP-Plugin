@@ -34,7 +34,7 @@
 		}
 
 		public static function is_verified() {
-			return true;
+
 			// STEP 1: Check if WPID and SNID is passed as this is REQUIRED!
 			if (!isset($_POST["wpid"]) || !isset($_POST["snky"]) ) {
 				return array(
