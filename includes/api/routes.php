@@ -27,6 +27,7 @@
     require plugin_dir_path(__FILE__) . '/v1/users/class-link-account.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-delete-link-acount.php';
     require plugin_dir_path(__FILE__) . '/v1/users/class-search.php';
+    require plugin_dir_path(__FILE__) . '/v1/users/class-send-activation.php';
     // documents folder
     require plugin_dir_path(__FILE__) . '/v1/users/documents/class-insert.php';
     require plugin_dir_path(__FILE__) . '/v1/users/documents/class-listing.php';
@@ -90,6 +91,12 @@
         /*
          * USER RESTAPI
         */
+
+            register_rest_route( 'datavice/v1/user/verify/resend', 'activation', array(
+                'methods' => 'POST',
+                'callback' => array('DV_Send_Activation_key', 'listen'),
+            ));
+
             register_rest_route( 'datavice/v1/user/verify', 'docs', array(
                 'methods' => 'POST',
                 'callback' => array('DV_Verify_User_Documents', 'listen'),
