@@ -19,7 +19,7 @@
 			);
         }
 
-  
+
 
         public static function listen_open(){
             global $wpdb;
@@ -53,7 +53,7 @@
             $pasabuy = EMAIL_HEADER;
             $subject = EMAIL_HEADER_SUBJECT_ACTIVATE;
 
-            $mail = wp_mail( $user['user_email'], $pasabuy." - ".$subject, $message );
+            $mail = wp_mail( $user_login, $pasabuy." - ".$subject, $message );
             if (is_wp_error($mail)) {
                 return array(
                     "status" => "failed",
