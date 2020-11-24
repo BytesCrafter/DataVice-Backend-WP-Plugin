@@ -44,7 +44,6 @@
                 $import = wp_update_user( array( 'ID' => $get_wpid->ID, 'user_activation_key' => $activation_key ) );
             // End
 
-
             $message = "Hello " .$user['display_name']. ",";
             $message .= "\n\nWelcome to ".get_bloginfo('name')."! We're happy that your here.";
             $message .= "\nPassword Activation Key: " .$activation_key;
