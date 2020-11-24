@@ -58,38 +58,20 @@
 
 			$address_type = $_POST["address_type"];
 
-			$dv_rev_table = DV_REVS_TABLE;
-			$table_address = DV_ADDRESS_TABLE;
-			$country_table = DV_COUNTRY_TABLE;
-            $province_table = DV_PROVINCE_TABLE;
-            $city_table = DV_CITY_TABLE;
-            $brgy_table = DV_BRGY_TABLE;
+			$result = DV_Address_Config::get_address(   null,   null,  null, null, $_POST['address_type'] );
 
-            $result  = $wpdb->get_results("SELECT
-					(SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.ID = dv_add.street ) as street,
-					(SELECT $brgy_table.brgy_name FROM $brgy_table WHERE $brgy_table.ID = (SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.ID = dv_add.brgy ) ) as brgy,
-					(SELECT $city_table.city_name FROM $city_table WHERE $city_table.city_code = (SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.ID = dv_add.city ) ) as city,
-					(SELECT $province_table.prov_name FROM $province_table WHERE $province_table.prov_code = (SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.ID = dv_add.province ) ) as province,
-					(SELECT $country_table.country_name FROM $country_table WHERE $country_table.ID = (SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.ID = dv_add.country ) ) as country
-				FROM
-					$table_address dv_add
-				INNER JOIN $dv_rev_table dv_rev
-					ON dv_rev.ID = dv_add.status
-				WHERE (SELECT dv_rev.child_val FROM $dv_rev_table dv_rev WHERE dv_rev.ID = dv_add.status ) = 1 AND dv_add.types = '$address_type'"
-			);
-
-			if (!$result) {
+			if ($result["status"] == "failed") {
                 return rest_ensure_response(
                     array(
                         "status" => "failed",
-                        "message" => "Address return empty."
+                        "message" => $result["message"]
                     )
                 );
             } else {
                 return rest_ensure_response(
 					array(
 						"status" => "success",
-						"data" => $result
+						"data" => $result["data"]
 					)
 				);
             }
