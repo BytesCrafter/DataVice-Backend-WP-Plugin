@@ -12,6 +12,12 @@
 
     class DV_Insert_Address {
 
+        public static function listen(){
+            return rest_ensure_response(
+                self::listen_open()
+            );
+        }
+
         // Return of Insert user address object from POST.
         public static function catch_post()
         {
@@ -32,7 +38,7 @@
             return  $cur_user;
         }
 
-        public static function listen(WP_REST_Request $request){
+        public static function listen_open(WP_REST_Request $request){
             global $wpdb;
             $tbl_contacts = DV_CONTACTS_TABLE;
             $tbl_contacts_filed = DV_CONTACTS_FILEDS;
