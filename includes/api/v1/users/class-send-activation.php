@@ -29,9 +29,9 @@
 
             $user_login = $_POST['un'];
             $unames = explode("@", $user_login);
-            $user_login = $unames[0]."-".crc32($unames[1]);
+            $user_login_hash = $unames[0]."-".crc32($unames[1]);
 
-            $get_wpid = $wpdb->get_row("SELECT ID FROM  {$wpdb->prefix}users  WHERE user_login = '$user_login' ");
+            $get_wpid = $wpdb->get_row("SELECT ID FROM  {$wpdb->prefix}users  WHERE user_login = '$user_login_hash' ");
 
             if (empty($get_wpid)) {
                 return array(
@@ -51,7 +51,7 @@
             $message .= "\n".get_bloginfo('admin_email');
             $pasabuy = EMAIL_HEADER;
             $subject = EMAIL_HEADER_SUBJECT_ACTIVATE;
-
+            
             $mail = wp_mail( $user_login, $pasabuy." - ".$subject, $message );
             if (is_wp_error($mail)) {
                 return array(
