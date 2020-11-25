@@ -122,7 +122,7 @@
             } else {
                 return array(
                     "status" => "error",
-                    "message" => $created_id['message'],
+                    "message" => "Please contact site administrator. Insert Error!",
                 );
             }
         }
