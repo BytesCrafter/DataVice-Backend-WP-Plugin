@@ -9,11 +9,7 @@
      * @version 0.1.0
      * This is where you provide all the constant config.
 	*/
-	// Email Subject
-	define('EMAIL_HEADER', 'Pasabuy.app');
-	define('EMAIL_HEADER_SUBJECT_FORGOT', 'Forgot Password');
-	define('EMAIL_HEADER_SUBJECT_ACTIVATE', 'Activate Password');
-
+	
 	//Defining Global Variables
 	define('DV_PREFIX', 'dv_');
 	define('DV_MASTER', 'masterkey');

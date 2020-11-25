@@ -149,8 +149,7 @@
             $message .= "\n\nIf did not make this request, just ignore this email.";
             $message .= "\n\n".get_bloginfo('name');
             $message .= "\n".get_bloginfo('admin_email');
-            $subject = EMAIL_HEADER_SUBJECT_FORGOT;
-            return wp_mail( $user->user_email, $subject, $message );
+            return wp_mail( $user->user_email, "Forgot Password", $message );
         }
 
 	}

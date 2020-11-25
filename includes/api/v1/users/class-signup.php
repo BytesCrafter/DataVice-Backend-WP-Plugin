@@ -160,10 +160,9 @@
             $message .= "\nPassword Activation Key: " .$user['user_activation_key'];
             $message .= "\n\n".get_bloginfo('name');
             $message .= "\n".get_bloginfo('admin_email');
-            $pasabuy = EMAIL_HEADER;
             $subject = EMAIL_HEADER_SUBJECT_ACTIVATE;
 
-            $mail = wp_mail( $user['user_email'], $pasabuy." - ".$subject, $message );
+            $mail = wp_mail( $user['user_email'], "Activate Password", $message );
             return is_wp_error($mail) ? false : $mail;
         }
 
