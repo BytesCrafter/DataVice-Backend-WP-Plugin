@@ -51,7 +51,7 @@
             $user = self::catch_post();
             $created_id = $user['created_by'];
             $wpdb->query("START TRANSACTION");
-            
+
 			$data = DV_Address_Config::get_address( null, $user["stid"], null, $user["id"] );
 
             if ($data["status"] == "failed") {
@@ -60,7 +60,7 @@
                     "message" => $data["message"]
                 );
             }
-            
+
             isset($_POST['bg']) && !empty($_POST['bg'])? $user['bg'] =  $_POST['bg'] :  $user['bg'] =  $data["data"][0]->brgy_code ;
             isset($_POST['ct']) && !empty($_POST['ct'])? $user['ct'] =  $_POST['ct'] :  $user['ct'] = $data["data"][0]->city_code ;
             isset($_POST['pv']) && !empty($_POST['pv'])? $user['pv'] =  $_POST['pv'] :  $user['pv'] = $data["data"][0]->province_code ;

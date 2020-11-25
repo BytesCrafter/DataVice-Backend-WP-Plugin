@@ -12,9 +12,9 @@
 
     class DV_Insert_Address {
 
-        public static function listen(){
+        public static function listen(WP_REST_Request $request){
             return rest_ensure_response(
-                self::listen_open()
+                self::listen_open($request)
             );
         }
 
@@ -38,7 +38,7 @@
             return  $cur_user;
         }
 
-        public static function listen_open(WP_REST_Request $request){
+        public static function listen_open($request){
             global $wpdb;
             $tbl_contacts = DV_CONTACTS_TABLE;
             $tbl_contacts_filed = DV_CONTACTS_FILEDS;
