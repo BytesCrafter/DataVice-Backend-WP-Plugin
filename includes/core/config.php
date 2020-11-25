@@ -28,6 +28,8 @@
 
 	// Primary Table Constant
 	define('DV_CONTACTS_TABLE', DV_PREFIX.'contacts');
+	define('DV_CONTACTS_FILEDS', ' `adid`, `value`, `contact_type`, `created_by` ');
+
 	define('DV_ADDRESS_TABLE', DV_PREFIX.'address');
 	define('DV_REVS_TABLE', DV_PREFIX.'revisions');
 
@@ -35,7 +37,7 @@
 
 	//Insert Fields
 	define('DV_INSERT_REV_FIELDS', '`revs_type`, `child_key`, `child_val`, `created_by`, `date_created`');
-	define('DV_INSERT_ADDRESS_FIELDS', '`status`, `wpid`, `types`, `street`, `brgy`, `city`, `province`, `country`, `date_created`');
+	define('DV_INSERT_ADDRESS_FIELDS', ' `wpid`, `types`, `street`, `brgy`, `city`, `province`, `country` ');
 
 	define('DV_LINK_ACCOUNT', DV_PREFIX.'link_account');
 
