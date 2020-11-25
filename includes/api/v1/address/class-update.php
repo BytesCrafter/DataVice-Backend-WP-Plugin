@@ -24,8 +24,8 @@
             $cur_user = array();
 
             $cur_user['created_by'] = $_POST['wpid'];
-            isset($_POST['id']) && !empty($_POST['id']) ? $curl_user['id'] =  $_POST['id'] :  $curl_user['id'] = null ;
-            isset($_POST['stid']) && !empty($_POST['stid']) ? $curl_user['stid'] =  $_POST['stid'] :  $curl_user['stid'] = null ;
+            isset($_POST['id']) && !empty($_POST['id']) ? $cur_user['id'] =  $_POST['id'] :  $cur_user['id'] = null ;
+            isset($_POST['stid']) && !empty($_POST['stid']) ? $cur_user['stid'] =  $_POST['stid'] :  $cur_user['stid'] = null ;
 
             return  $cur_user;
         }
@@ -86,7 +86,7 @@
                     $user['long'],
                     $data["data"][0]->img_url,
                     'active',
-                    $user["adid"]
+                    $data["data"][0]->hash_id
                 );
 
             //Check if any of the insert queries above failed
