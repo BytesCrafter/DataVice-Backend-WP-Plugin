@@ -70,8 +70,12 @@
                 $img_url = $data["data"][0]->img_url;
                 $store_id = $data["data"][0]->stid;
                 $user_id = $data["data"][0]->wpid;
-
             }
+
+            if ($user['stid'] != null) {
+                $store_id = $user['stid'];
+            }
+
 
             isset($_POST['st']) && !empty($_POST['st'])? $user['st'] =  $_POST['st'] :  $user['st'] =  $data["data"][0]->street ;
             isset($_POST['bg']) && !empty($_POST['bg'])? $user['bg'] =  $_POST['bg'] :  $user['bg'] =  $data["data"][0]->brgy_code ;
