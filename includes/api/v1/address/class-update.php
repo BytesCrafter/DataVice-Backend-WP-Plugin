@@ -23,8 +23,9 @@
         {
             $cur_user = array();
 
-            $cur_user['id'] = $_POST['id'];
             $cur_user['created_by'] = $_POST['wpid'];
+            isset($_POST['id']) && !empty($_POST['id']) ? $curl_user['id'] =  $_POST['id'] :  $curl_user['id'] = null ;
+            isset($_POST['stid']) && !empty($_POST['stid']) ? $curl_user['stid'] =  $_POST['stid'] :  $curl_user['stid'] = null ;
 
             return  $cur_user;
         }
@@ -46,28 +47,12 @@
                 );
             }
 
-            // Step 1 : Check if the fields are passed
-            if( !isset($_POST['id'])){
-                return array(
-                    "status"  => "unknown",
-                    "message" => "Please contact your administrator. Request unknown!",
-                );
-            }
-
-            // Step 1 : Check if the fields are passed
-            if( empty($_POST['id'])){
-                return array(
-                    "status"  => "unknown",
-                    "message" => "Please contact your administrator. Request Empty!",
-                );
-            }
-
             // Get user object.
             $user = self::catch_post();
             $created_id = $user['created_by'];
             $wpdb->query("START TRANSACTION");
 
-			$data = DV_Address_Config::get_address( null, null, null, $_POST['id'] );
+			$data = DV_Address_Config::get_address( null, $user["stid"], null, $user["id"] );
 
             if ($data["status"] == "failed") {
                 return array(

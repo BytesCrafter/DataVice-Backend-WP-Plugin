@@ -42,6 +42,7 @@
             global $wpdb;
             $tbl_contacts = DV_CONTACTS_TABLE;
             $tbl_contacts_filed = DV_CONTACTS_FILEDS;
+            $stid = 0;
 
             // Step1: Validate user
              if ( DV_Verification::is_verified() == false ) {
@@ -78,6 +79,10 @@
             // Get user object.
             $user = self::catch_post();
             $created_id = $user['created_by'];
+            if (isset($_POST['stid']) && !empty($_POST['stid'])) {
+                $stid = $_POST['stid'];
+                $created_id = 0;
+            }
             $image_add = '';
 
             $files = $request->get_file_params();
@@ -113,7 +118,7 @@
                 "type" =>  $user["type"]
             );
 
-            $address = DV_Address_Config::add_address( $data, $created_id, 0, $user["lat"], $user["long"],  $image_add);
+            $address = DV_Address_Config::add_address( $data, $created_id, $stid, $user["lat"], $user["long"],  $image_add);
 
                 $contact = $wpdb->query("INSERT INTO $tbl_contacts ($tbl_contacts_filed) VALUES ( '{$address["data"]}', '{$user["contact"]}', '{$user["contact_type"]}', $created_id) ");
                 $contact_id = $wpdb->insert_id;
