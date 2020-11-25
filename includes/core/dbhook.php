@@ -85,17 +85,42 @@
 
 		}
 
-		//Database table creation for plugin_config
+		/* //Database table creation for plugin_config
 		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_docu'" ) != $tbl_docu) {
 			$sql = "CREATE TABLE `".$tbl_docu."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
 				$sql .= "`hash_id` varchar(255) NOT NULL COMMENT 'Hash of id.', ";
 				$sql .= "`wpid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Store ID of Merchant', ";
-				$sql .= "`parent_id` bigint(20) NOT NULL COMMENT 'Image url of document', ";
+				$sql .= "`` bigint(20) NOT NULL COMMENT 'Image url of document', ";
 				$sql .= "`date_created` datetime DEFAULT current_timestamp() COMMENT 'Date document was created', ";
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
+		} */
+
+		//Database table creation for mover documents
+		if($wpdb->get_var( "SHOW TABLES LIKE '$tbl_docu'" ) != $tbl_docu) {
+			$sql = "CREATE TABLE `".$tbl_docu."` (";
+				$sql .= " `ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
+				$sql .= " `hash_id` varchar(255) NOT NULL COMMENT 'This column is used for table realtionship' , ";
+				$sql .= " `wpid` varchar(255) NOT NULL COMMENT 'User documents', ";
+				$sql .= " `preview` bigint(20) NOT NULL COMMENT 'preview of this docuemtns', ";
+				$sql .= " `types`  enum('id', 'face') NOT NULL COMMENT 'types of documents', ";
+				$sql .= " `status` enum('active', 'inactive') NOT NULL COMMENT 'Status of documents', ";
+				$sql .= " `id_number` int(50) COMMENT 'ID nunmber for this user', ";
+				$sql .= " `instructions` varchar(255) COMMENT 'Instruction of this documents', ";
+				$sql .= " `comments` varchar(255) COMMENT 'Comments for this documents', ";
+				$sql .= " `executed_by` bigint(20)  COMMENT 'approved by', ";
+				$sql .= " `doctype` varchar(150)  COMMENT 'parent of this document', ";
+				$sql .= " `parent_id` bigint(20)  COMMENT 'parent of this document', ";
+				$sql .= " `activated` enum('false', 'true') NOT NULL COMMENT 'Status of this mover if approved or not', ";
+				$sql .= " `date_created` datetime NOT NULL DEFAULT current_timestamp(), ";
+				$sql .= "PRIMARY KEY (`ID`) ";
+				$sql .= ") ENGINE = InnoDB; ";
+			$result = $wpdb->get_results($sql);
+
+			$wpdb->query("CREATE INDEX hash_id ON $tbl_docu (hash_id);");
+			$wpdb->query("CREATE INDEX wpid ON $tbl_docu (wpid);");
 		}
 
 		// Database table creation for dv_contacts - QA: 01/08/2020

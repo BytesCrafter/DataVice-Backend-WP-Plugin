@@ -18,9 +18,23 @@
 			);
         }
 
-        public static function listen_open($request){
+        public static function catch_post(){
+            $curl_user = array();
+            $curl_user['data'] = $_POST['data'];
+            $curl_user['wpid'] = $_POST['wpid'];
+            return $curl_user;
+        }
 
+        public static function listen_open($request){
             global $wpdb;
+
+            // Declare variables
+            $dv_docs = DV_DOCUMENTS;
+            $doc_fields = DV_DOCS_FIELDS;
+            $table_revs = DV_REVS_TABLE;
+            $revs_fields = DV_INSERT_REV_FIELDS;
+            $user = self::catch_post();
+            $date_created = DV_Globals::date_stamp();
 
             // Step 2: Validate user
             if (DV_Verification::is_verified() == false) {
@@ -32,220 +46,98 @@
 
             $files = $request->get_file_params();
 
-            if ( !isset($files['img']) ) {
+            if ( !isset($_POST['data']) ) {
 				return  array(
                     "status" => "unknown",
-                    "message" => "Please contact your administrator. Image not Set!",
+                    "message" => "Please contact your administrator. Request unknown!",
                 );
             }
 
-            // Step 3: Sanitize if all variables at POST
-            if ( !isset($_POST['type']) ) {
-				return array(
-					"status" => "unknown",
-					"message" => "Please contact your administrator. Request unknown!",
-                );
+            $check_documents = $wpdb->get_row("SELECT COUNT(ID) as docs FROM $dv_docs WHERE wpid = '{$user["wpid"]}' ");
 
-            }
-
-            // Step 4: Check if all variables is not empty
-            if ( empty($_POST['type']) ) {
-                return array(
-                    "status" => "failed",
-                    "message" => "Required fileds cannot be empty.",
-                );
-            }
-
-
-            // Declare variables
-            $dv_docs = DV_DOCUMENTS;
-            $doc_fields = DV_DOCS_FIELDS;
-            $table_revs = DV_REVS_TABLE;
-            $revs_fields = DV_INSERT_REV_FIELDS;
-            $doc_type = $_POST['type'];
-            $wpid = $_POST['wpid'];
-            $number_contact = 0;
-            $doctype = 'face';
-            $date_created = DV_Globals::date_stamp();
-
-            if ($_POST['type'] !== "id" && $_POST['type'] !== "face") {
-                return array(
-                    "status" => "failed",
-                    "message" => "Invalid type of documents.",
-                );
-            }
-
-            if ( $_POST['type'] == 'id'  ) {
-
-                if ( !isset($_POST['doctype']) || !isset($_POST['number_contact']) ) {
-                    return array(
-                        "status" => "unknown",
-                        "message" => "Please contact your administrator. Request unknown!",
-                    );
-                }
-
-                if ( empty($_POST['doctype']) || empty($_POST['number_contact']) ) {
+            if (!empty($check_documents)) {
+                if ($check_documents->docs == "2") {
                     return array(
                         "status" => "failed",
-                        "message" => "Required fileds cannot be empty.",
+                        "message" => "This user has already have two documents.",
                     );
                 }
-
-                if ($_POST['doctype'] !== "sss"
-                && $_POST['doctype'] !== "driver"
-                && $_POST['doctype'] !== "prc"
-                && $_POST['doctype'] !== "owwa"
-                && $_POST['doctype'] !== "voters"
-                && $_POST['doctype'] !== "pnp"
-                && $_POST['doctype'] !== "senior"
-                && $_POST['doctype'] !== "postal"
-                && $_POST['doctype'] !== "school"
-                && $_POST['doctype'] !== "passport"
-                ) {
-                    return array(
-                        "status" => "failed",
-                        "message" => "Invalid type of ID.",
-                    );
-                }
-                $doctype = $_POST['doctype'];
             }
 
-            if ( $_POST['type'] == 'face'  ){
-                if ( !isset($_POST['nationality']) ) {
+            // Optional Upload for avatar and banner
+            if (isset($files['id']) || isset($files['face'])) {
+
+                if (empty($files['id']['name'])) {
                     return array(
-                        "status" => "unknown",
-                        "message" => "Please contact your administrator. Request unknown!",
+                        "status" => "failed",
+                        "message" => "ID document image is required"
                     );
                 }
-                $nationality = $_POST['nationality'];
+                if (empty($files['face']['name'])) {
+                    return array(
+                        "status" => "failed",
+                        "message" => "Face document image is required"
+                    );
+                }
+
+                $image = DV_Globals::multiple_upload_image( $request, $files);
+                if ($image['status'] != 'success') {
+                    return array(
+                        "status" => $image['status'],
+                        "message" => $image['message']
+                    );
+                }
+
             }
 
             $wpdb->query("START TRANSACTION");
 
-            /* Check first if user has a document data in server */
-                $check_doc = $wpdb->get_row("SELECT * FROM $dv_docs WHERE wpid = $wpid AND parent_id = 0 ");
+            foreach ($user['data'] as $key => $value) {
 
-                // Check child documents
-                if (!empty($check_doc)) {
-                    $check_doc_child = $wpdb->get_row("SELECT COUNT(ID) as docs FROM $dv_docs WHERE parent_id = '$check_doc->ID' ");
-
-                    if ($check_doc_child->docs == "2") {
-                        return array(
-                            "status" => "failed",
-                            "message" => "This user has already have two documents.",
-                        );
-                    }
-
-                    $get_parent = $wpdb->get_results("SELECT
-                            doc.ID AS ID,
-                            wpid,
-                            date_created,
-                            ( SELECT child_val FROM dv_revisions WHERE parent_id = doc.ID AND child_key = 'status' AND revs_type = 'documents' ) AS `status`
-                        FROM
-                            dv_documents doc
-                        WHERE
-                            doc.parent_id = 0
-                        AND
-                            doc.wpid = $wpid");
-
-                    $var = array();
-                    // Verift if doucment is already exits in database
-                    foreach ($get_parent as $key => $value) {
-
-                        $get_child_data = $wpdb->get_results("SELECT
-                            (SELECT child_val FROM dv_revisions WHERE parent_id = doc.ID AND revs_type ='documents' AND child_key ='name' AND ID = (SELECT MAX(ID) FROM dv_revisions rev WHERE parent_id = doc.ID AND ID = rev.ID AND revs_type ='documents' AND child_key ='name'  )  ) as `doctype`,
-                            (SELECT child_val FROM dv_revisions WHERE parent_id = doc.ID AND revs_type ='documents' AND child_key ='preview' AND ID = (SELECT MAX(ID) FROM dv_revisions rev WHERE parent_id = doc.ID AND ID = rev.ID AND revs_type ='documents' AND child_key ='preview'  )  ) as `preview`
-                        FROM
-                            dv_documents doc
-                        WHERE
-                            doc.parent_id = $value->ID
-                            AND wpid = $wpid;");
-
-                        foreach ($get_child_data as $key => $value) {
-                            $var[] = $value->doctype;
-                        }
-                    }
-
-                    if (in_array($doctype, $var, true)) {
-                        return array(
-                            "status" => "failed",
-                            "message" => "This document is already exits."
-                        );
-                    }
-                }
-
-            /* End */
-
-            /* Upload image */
-                $result = DV_Globals::upload_image( $request, $files); // upload image
-
-                if ($result['status'] == 'failed') {
+                if ($value['type'] != "face" && $value['type'] != "id" ) {
                     return array(
                         "status" => "failed",
-                        "message" => $result['message']
+                        "message" => "Invalid value of document type '{$value['type']}'.",
                     );
                 }
 
-                $doc_prev = $result['data'];
-            /* End */
+                $check_document = $wpdb->get_row("SELECT ID  FROM $dv_docs doc  WHERE doc.wpid = '{$user["wpid"]}'  AND doc.types = '{$value["type"]}' ");
 
-
-            /* inset parent Document */
-                if (!$check_doc) {
-
-                    $p_doc = $wpdb->query("INSERT INTO $dv_docs (wpid, parent_id) VALUES ( $wpid, '0' )");
-                    $p_doc_id = $wpdb->insert_id;
-                    $wpdb->query("UPDATE $dv_docs SET hash_id = sha2($p_doc_id, 256) WHERE ID = $p_doc_id");
-                    //dv_rev table
-                    $p_doc_rev = $wpdb->query("INSERT INTO $table_revs (revs_type, parent_id, child_key, child_val, created_by, date_created) VALUES ('documents', '$p_doc_id', 'status', '1', '$wpid', '$date_created')");
-                    $p_doc_rev_id = $wpdb->insert_id;
-                    $wpdb->query("UPDATE $table_revs SET hash_id = sha2($p_doc_rev_id, 256) WHERE ID = $p_doc_rev_id");
-
-                    if ($p_doc == false || $p_doc_rev == false) {
-                        $wpdb->query("ROLLBACK");
-                        return array(
-                            "status" => "failed",
-                            "message" => "An error occured while submitting data to server."
-                        );
-                    }
-                }else{
-                    $p_doc_id = $check_doc->ID;
-                }
-            /* End */
-
-
-            /* insert child document */
-                $c_doc = $wpdb->query("INSERT INTO $dv_docs (wpid, parent_id) VALUES ( $wpid, $p_doc_id )");
-                $c_doc_id = $wpdb->insert_id;
-                $wpdb->query("UPDATE $dv_docs SET hash_id = sha2($c_doc_id, 256) WHERE ID = $c_doc_id");
-
-                //dv_rev table name
-                $c_doc_rev_name = $wpdb->query("INSERT INTO $table_revs (revs_type, parent_id, child_key, child_val, created_by, date_created) VALUES ('documents', '$c_doc_id', 'name', '$doctype', '$wpid', '$date_created')");
-                $c_doc_rev_name_id = $wpdb->insert_id;
-                $wpdb->query("UPDATE $table_revs SET hash_id = sha2($c_doc_rev_name_id, 256) WHERE ID = $c_doc_rev_name_id");
-
-                // preview
-                $c_doc_rev_preview = $wpdb->query("INSERT INTO $table_revs (revs_type, parent_id, child_key, child_val, created_by, date_created) VALUES ('documents', '$c_doc_id', 'preview', '$doc_prev', '$wpid', '$date_created')");
-                $c_doc_rev_preview_id = $wpdb->insert_id;
-                $wpdb->query("UPDATE $table_revs SET hash_id = sha2($c_doc_rev_preview_id, 256) WHERE ID = $c_doc_rev_preview_id");
-
-                if ($_POST['type'] == "face"){
-
-                    $c_doc_rev_nationality = $wpdb->query("INSERT INTO $table_revs (revs_type, parent_id, child_key, child_val, created_by, date_created) VALUES ('documents', '$c_doc_id', 'nationality', '$nationality', '$wpid', '$date_created')");
-                    $wpdb->query("UPDATE $table_revs SET hash_id = sha2($c_doc_rev_name_id, 256) WHERE ID = $wpdb->insert_id;");
-
-                    $c_doc_rev_contact = $wpdb->query("INSERT INTO $table_revs (revs_type, parent_id, child_key, child_val, created_by, date_created) VALUES ('documents', '$c_doc_id', 'contact', '$number_contact', '$wpid', '$date_created')");
-                    $wpdb->query("UPDATE $table_revs SET hash_id = sha2($c_doc_rev_name_id, 256) WHERE ID = $wpdb->insert_id;");
-                }
-                if ($_POST['type'] == "id"){
-
-                    $c_doc_rev_num = $wpdb->query("INSERT INTO $table_revs (revs_type, parent_id, child_key, child_val, created_by, date_created) VALUES ('documents', '$c_doc_id', 'id_number', '$number_contact', '$wpid', '$date_created')");
-                    $wpdb->query("UPDATE $table_revs SET hash_id = sha2($c_doc_rev_name_id, 256) WHERE ID = $wpdb->insert_id;");
+                if (!empty($check_document)) {
+                    return array(
+                        "status" => "failed",
+                        "message" => "This document is already exits."
+                    );
                 }
 
-            /* End */
+                switch ($value['type']) {
+                    case 'face':
+                        /* Import data */
+                            $face = $wpdb->query("INSERT INTO $dv_docs
+                                    (`wpid`, `preview`, `types`,  `instructions`)
+                                VALUES
+                                    ('{$user["wpid"]}', '{$image["data"][0]["face_id"]}', 'face', '{$value["instruction"]}'  ) ");
+                            $face_id = $wpdb->insert_id;
 
-            if ($c_doc == false || $c_doc_rev_name == false || $c_doc_rev_preview == false) {
+                            $face_hsid = $wpdb->query("UPDATE $dv_docs SET hash_id = sha2($face_id, 256) WHERE ID = '$face_id' ");
+                        /* End */
+                        break;
+
+                    case 'id':
+                        /* Import data */
+                            $id = $wpdb->query("INSERT INTO $dv_docs
+                                    (`wpid`, `preview`, `types`, `id_number`, `doctype`)
+                                VALUES
+                                    ('{$user["wpid"]}', '{$image["data"][0]["id_id"]}', 'id', '{$value["number_contact"]}', '{$value["doctype"]}'  ) ");
+                            $id_id = $wpdb->insert_id;
+
+                            $id_hsid = $wpdb->query("UPDATE $dv_docs SET hash_id = sha2($id_id, 256) WHERE ID = '$id_id' ");
+                        /* End */
+                        break;
+                }
+            }
+
+            if ($id < 1 || $face < 1) {
                 $wpdb->query("ROLLBACK");
                 return array(
                     "status" => "failed",
@@ -258,6 +150,5 @@
                     "message" => "Data has been added successfully."
                 );
             }
-
         }
     }
