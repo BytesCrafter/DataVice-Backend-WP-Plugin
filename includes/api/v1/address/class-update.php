@@ -24,6 +24,7 @@
             $cur_user = array();
 
             $cur_user['created_by'] = $_POST['wpid'];
+
             isset($_POST['id']) && !empty($_POST['id']) ? $cur_user['id'] =  $_POST['id'] :  $cur_user['id'] = null ;
             isset($_POST['stid']) && !empty($_POST['stid']) ? $cur_user['stid'] =  $_POST['stid'] :  $cur_user['stid'] = null ;
 
@@ -38,7 +39,10 @@
             $tbl_city = DV_CITY_TABLE;
             $tb_countries = DV_COUNTRY_TABLE;
             $tbl_province = DV_PROVINCE_TABLE;
-
+            $store_id = 0;
+            $user_id = 0;
+            $img_url = '';
+            $hash_id = 0;
             // Step1: Validate user
              if ( DV_Verification::is_verified() == false ) {
                 return array(
@@ -54,13 +58,22 @@
 
 			$data = DV_Address_Config::get_address( null, $user["stid"], null, $user["id"] );
 
-            if ($data["status"] == "failed") {
+            if ($data["status"] == "failed" && $data["status"] == "unknown" && $data["status"] == "error") {
                 return array(
                     "status" => "failed",
                     "message" => $data["message"]
                 );
             }
 
+            if (!empty($data['data'])) {
+                $hash_id = $data["data"][0]->hash_id;
+                $img_url = $data["data"][0]->img_url;
+                $store_id = $data["data"][0]->stid;
+                $user_id = $data["data"][0]->wpid;
+
+            }
+
+            isset($_POST['st']) && !empty($_POST['st'])? $user['st'] =  $_POST['st'] :  $user['st'] =  $data["data"][0]->street ;
             isset($_POST['bg']) && !empty($_POST['bg'])? $user['bg'] =  $_POST['bg'] :  $user['bg'] =  $data["data"][0]->brgy_code ;
             isset($_POST['ct']) && !empty($_POST['ct'])? $user['ct'] =  $_POST['ct'] :  $user['ct'] = $data["data"][0]->city_code ;
             isset($_POST['pv']) && !empty($_POST['pv'])? $user['pv'] =  $_POST['pv'] :  $user['pv'] = $data["data"][0]->province_code ;
@@ -70,7 +83,7 @@
             isset($_POST['long']) && !empty($_POST['long'])? $user['long'] =  $_POST['long'] :  $user['long'] =  $data["data"][0]->longitude;
 
             $address = array(
-                "st" =>  $data["data"][0]->street,
+                "st" =>  $user['st'],
                 "bg" =>  $user['bg'],
                 "ct" =>  $user['ct'],
                 "pv" =>  $user['pv'],
@@ -80,23 +93,23 @@
 
                 $address = DV_Address_Config::add_address(
                     $address,
-                    $data["data"][0]->wpid,
-                    $data["data"][0]->stid,
+                    $user_id,
+                    $store_id,
                     $user['lat'],
                     $user['long'],
-                    $data["data"][0]->img_url,
+                    $img_url,
                     'active',
-                    $data["data"][0]->hash_id
+                    $hash_id
                 );
 
             //Check if any of the insert queries above failed
-            if ( $address["status"] == "failed" ) {
+            if ( $address["status"] == "failed" &&  $address["status"] == "error" &&  $address["status"] == "unknown") {
 
                 //If failed, do mysql rollback (discard the insert queries(no inserted data))
                 $wpdb->query("ROLLBACK");
 
                 return array(
-                    "status" => "error",
+                    "status" => "failed",
                     "message" => "An error occured while submitting data to the server."
                 );
             }
