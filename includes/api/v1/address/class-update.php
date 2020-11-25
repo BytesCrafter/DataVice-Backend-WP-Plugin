@@ -51,7 +51,7 @@
             $user = self::catch_post();
             $created_id = $user['created_by'];
             $wpdb->query("START TRANSACTION");
-
+            
 			$data = DV_Address_Config::get_address( null, $user["stid"], null, $user["id"] );
 
             if ($data["status"] == "failed") {
@@ -60,11 +60,11 @@
                     "message" => $data["message"]
                 );
             }
-
-            isset($_POST['bg']) && !empty($_POST['bg'])? $user['bg'] =  $_POST['bg'] :  $user['bg'] = DV_Address_Config::get_geo_location( $tbl_brgy, 'brgy_name', $data["data"][0]->brgy )['data'][0]->ID;
-            isset($_POST['ct']) && !empty($_POST['ct'])? $user['ct'] =  $_POST['ct'] :  $user['ct'] = DV_Address_Config::get_geo_location( $tbl_city, 'city_name', $data["data"][0]->city )['data'][0]->city_code;
-            isset($_POST['pv']) && !empty($_POST['pv'])? $user['pv'] =  $_POST['pv'] :  $user['pv'] = DV_Address_Config::get_geo_location( $tbl_province, 'prov_name', $data["data"][0]->province )['data'][0]->prov_code;
-            isset($_POST['co']) && !empty($_POST['co'])? $user['co'] =  $_POST['co'] :  $user['co'] = DV_Address_Config::get_geo_location( $tb_countries, 'country_name', $data["data"][0]->country )['data'][0]->country_code;
+            
+            isset($_POST['bg']) && !empty($_POST['bg'])? $user['bg'] =  $_POST['bg'] :  $user['bg'] =  $data["data"][0]->brgy_code ;
+            isset($_POST['ct']) && !empty($_POST['ct'])? $user['ct'] =  $_POST['ct'] :  $user['ct'] = $data["data"][0]->city_code ;
+            isset($_POST['pv']) && !empty($_POST['pv'])? $user['pv'] =  $_POST['pv'] :  $user['pv'] = $data["data"][0]->province_code ;
+            isset($_POST['co']) && !empty($_POST['co'])? $user['co'] =  $_POST['co'] :  $user['co'] = $data["data"][0]->country_code ;
             isset($_POST['type']) && !empty($_POST['type'])? $user['type'] =  $_POST['type'] :  $user['type'] = $data["data"][0]->types;
             isset($_POST['lat']) && !empty($_POST['lat'])? $user['lat'] =  $_POST['lat'] :  $user['lat'] = $data["data"][0]->latitude;
             isset($_POST['long']) && !empty($_POST['long'])? $user['long'] =  $_POST['long'] :  $user['long'] =  $data["data"][0]->longitude;
@@ -78,7 +78,7 @@
                 "type" => $user['type']
             );
 
-            $address = DV_Address_Config::add_address(
+                $address = DV_Address_Config::add_address(
                     $address,
                     $data["data"][0]->wpid,
                     $data["data"][0]->stid,

@@ -59,14 +59,19 @@
             if ($type != null) {
                 $sql .= " AND `types` = '$type' ";
             }
-
+            
             $data = $wpdb->get_results($sql);
 
             foreach ($data as $key => $value) {
+                $value->brgy_code = $value->brgy;
+                $value->city_code = $value->city;
+                $value->province_code = $value->province;
+                $value->country_code = $value->country;
                 $value->brgy = self::get_geo_location( $tbl_brgy, 'ID', $value->brgy )['data'][0]->brgy_name;
                 $value->city = self::get_geo_location( $tbl_city, 'city_code', $value->city )['data'][0]->city_name;
                 $value->province = self::get_geo_location( $tbl_province, 'prov_code', $value->province )['data'][0]->prov_name;
                 $value->country = self::get_geo_location( $tb_countries, 'country_code', $value->country )['data'][0]->country_name;
+                
 
                 $get_contact = $wpdb->get_row("SELECT * FROM $tbl_contacts WHERE adid = '$value->hash_id' AND id IN ( SELECT MAX( id ) FROM $tbl_contacts c WHERE c.hash_id = hash_id  GROUP BY hash_id ) ");
 
@@ -243,10 +248,11 @@
                 $longitude = $geolocation["longitude"];
             }
 
-            if ($status == "active") {
-                $hash_id = DV_Globals::generating_hash_id($import_id, $tbl_address, 'hash_id', $get_key = true, $length = 64);
-            }else{
+            if ($status != null ) {
                 $wpdb->query("UPDATE $tbl_address SET `hash_id` = '$address_id'  WHERE ID = $import_id ");
+            }else{
+                return "HAHAHA ".$address_id;
+                $hash_id = DV_Globals::generating_hash_id($import_id, $tbl_address, 'hash_id', $get_key = true, $length = 64);
             }
 
             $wpdb->query("UPDATE $tbl_address SET `latitude` = $latitude, `longitude` = $longitude  WHERE ID = $import_id ");
