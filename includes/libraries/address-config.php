@@ -15,7 +15,7 @@
         /**
          * Listing Script of Address
         */
-        public static function get_address( int $user_id = null, string $store_id = null, string $status = null, string $address_id = null, string $type = null ){
+        public static function get_address( int $user_id = null, string $store_id = null, string $status = null, string $address_id = null, string $type = null, bool $single = false ){
             global $wpdb;
             $tbl_address = DV_ADDRESS_TABLE;
             $tb_countries = DV_COUNTRY_TABLE;
@@ -23,6 +23,7 @@
             $tbl_city = DV_CITY_TABLE;
             $tbl_province = DV_PROVINCE_TABLE;
             $tbl_contacts = DV_CONTACTS_TABLE;
+            $smp = 'get_results';
 
             if ( DV_Verification::is_verified() == false ) {
                 return array(
@@ -60,27 +61,31 @@
                 $sql .= " AND `types` = '$type' ";
             }
 
-            $data = $wpdb->get_results($sql);
+            if ($single == false) {
+                $smp = 'get_row';
+            }
 
-            foreach ($data as $key => $value) {
-                $value->brgy_code = $value->brgy;
-                $value->city_code = $value->city;
-                $value->province_code = $value->province;
-                $value->country_code = $value->country;
-                $value->brgy = self::get_geo_location( $tbl_brgy, 'ID', $value->brgy )['data'][0]->brgy_name;
-                $value->city = self::get_geo_location( $tbl_city, 'city_code', $value->city )['data'][0]->city_name;
-                $value->province = self::get_geo_location( $tbl_province, 'prov_code', $value->province )['data'][0]->prov_name;
-                $value->country = self::get_geo_location( $tb_countries, 'country_code', $value->country )['data'][0]->country_name;
+            $data = $wpdb->$smp($sql);
+            if (!empty($data)) {
+                foreach ($data as $key => $value) {
+                    $value->brgy_code = $value->brgy;
+                    $value->city_code = $value->city;
+                    $value->province_code = $value->province;
+                    $value->country_code = $value->country;
+                    $value->brgy = self::get_geo_location( $tbl_brgy, 'ID', $value->brgy )['data'][0]->brgy_name;
+                    $value->city = self::get_geo_location( $tbl_city, 'city_code', $value->city )['data'][0]->city_name;
+                    $value->province = self::get_geo_location( $tbl_province, 'prov_code', $value->province )['data'][0]->prov_name;
+                    $value->country = self::get_geo_location( $tb_countries, 'country_code', $value->country )['data'][0]->country_name;
 
+                    $get_contact = $wpdb->get_row("SELECT * FROM $tbl_contacts WHERE adid = '$value->hash_id' AND id IN ( SELECT MAX( id ) FROM $tbl_contacts c WHERE c.hash_id = hash_id  GROUP BY hash_id ) ");
 
-                $get_contact = $wpdb->get_row("SELECT * FROM $tbl_contacts WHERE adid = '$value->hash_id' AND id IN ( SELECT MAX( id ) FROM $tbl_contacts c WHERE c.hash_id = hash_id  GROUP BY hash_id ) ");
-
-                if (!empty($get_contact)) {
-                    $value->contact_id = $get_contact->hash_id;
-                    $value->contact_status = $get_contact->status;
-                    $value->contact = $get_contact->value;
-                    $value->contact_person = $get_contact->contact_person = null? '': $get_contact->contact_person ;
-                    $value->contact_type = $get_contact->contact_type;
+                    if (!empty($get_contact)) {
+                        $value->contact_id = $get_contact->hash_id;
+                        $value->contact_status = $get_contact->status;
+                        $value->contact = $get_contact->value;
+                        $value->contact_person = $get_contact->contact_person = null? '': $get_contact->contact_person ;
+                        $value->contact_type = $get_contact->contact_type;
+                    }
                 }
             }
 
