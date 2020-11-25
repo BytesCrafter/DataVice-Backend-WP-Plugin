@@ -13,10 +13,6 @@
     class DV_Verify_User_Documents{
 
         public static function listen(){
-            // $verified = self::listen_open();
-            // return rest_ensure_response(
-            //     $verified['status'] == true ? true : $verified
-            // );
             return rest_ensure_response(
 				self::listen_open()
 			);
@@ -26,6 +22,7 @@
 
             global $wpdb;
             $dv_docs = DV_DOCUMENTS;
+            $approved = 0;
 
             // Step 2: Validate user
             if (DV_Verification::is_verified() == false) {
@@ -37,11 +34,7 @@
 
             $wpid = $_POST["wpid"];
 
-            $get_data = $wpdb->get_row("SELECT
-                IF((SELECT child_val FROM dv_revisions WHERE parent_id = doc.ID AND revs_type ='documents' AND child_key ='approve_status' AND ID = (SELECT MAX(ID) FROM dv_revisions rev WHERE parent_id = doc.ID AND ID = rev.ID AND revs_type ='documents' AND child_key ='approve_status'  )  ) = 1 , 'Approved',
-                IF((SELECT child_val FROM dv_revisions WHERE parent_id = doc.ID AND revs_type ='documents' AND child_key ='approve_status' AND ID = (SELECT MAX(ID) FROM dv_revisions rev WHERE parent_id = doc.ID AND ID = rev.ID AND revs_type ='documents' AND child_key ='approve_status'  )  ) is null, 'Pending', 'Not approved' )
-                    )as `approve_status`
-            FROM $dv_docs doc WHERE parent_id = 0  AND wpid = '$wpid' ");
+            $get_data = $wpdb->get_results("SELECT * FROM $dv_docs WHERE wpid = $wpid AND id IN ( SELECT MAX( id ) FROM $dv_docs d WHERE d.hash_id = hash_id GROUP BY hash_id )");
 
             if(empty($get_data)){
                 return array(
@@ -50,7 +43,14 @@
                 );
             }
 
-            if ($get_data->approve_status != "Approved") {
+            foreach ($get_data as $key => $value) {
+
+                if ($value->executed_by != null && $value->activated == "true") {
+                    $approved = $approved + 1;
+                }
+            }
+
+            if ($approved < 2) {
                 return array(
                     "status" => "failed",
                     "message" => "This user documents is not verified."
