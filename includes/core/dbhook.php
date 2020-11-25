@@ -59,26 +59,25 @@
 			$sql = "CREATE TABLE `".$tbl_address."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
 				$sql .= "`hash_id` varchar(255) NOT NULL , ";
-				$sql .= "`status` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Live/Hiden', ";
+				$sql .= " `status` enum('active', 'inactive') NOT NULL  COMMENT 'Status of this Address.', ";
 				$sql .= "`wpid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID, 0 if Null', ";
 				$sql .= "`stid` varchar(150) NOT NULL DEFAULT 0 COMMENT 'Store ID, 0 if Null', ";
 				$sql .= "`types` enum('none','home','office','business') NOT NULL DEFAULT 'none' COMMENT 'Group', ";
-				$sql .= "`street` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Street address from Revs, 0 if Null', ";
+				$sql .= "`street` varchar(150) NOT NULL DEFAULT 0 COMMENT 'Street address from Revs, 0 if Null', ";
 				$sql .= "`brgy` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Barangay code from Revs, 0 if Null', ";
 				$sql .= "`city` bigint(20) NOT NULL DEFAULT 0 COMMENT 'CityMun code from Revs, 0 if Null', ";
 				$sql .= "`province` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Province code from Revs, 0 if Null', ";
-				$sql .= "`country` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Country code from Revs, 0 if Null', ";
-				$sql .= "`latitude` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Latitude id from Revs, 0 if Null', ";
-				$sql .= "`longitude` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Longitude id from Revs, 0 if Null', ";
-				$sql .= "`img_url` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Url id from Revs, 0 if Null', ";
-				$sql .= "`date_created` datetime DEFAULT NULL COMMENT 'Date created', ";
+				$sql .= "`country` varchar(10) NOT NULL DEFAULT 0 COMMENT 'Country code from Revs, 0 if Null', ";
+				$sql .= "`latitude` DECIMAL(10, 8) NOT NULL DEFAULT 0 COMMENT 'Latitude id from Revs, 0 if Null', ";
+				$sql .= "`longitude` DECIMAL(11, 8) NOT NULL DEFAULT 0 COMMENT 'Longitude id from Revs, 0 if Null', ";
+				$sql .= "`img_url` varchar(150) NOT NULL DEFAULT 0 COMMENT 'Url id from Revs, 0 if Null', ";
+				$sql .= "`date_created` datetime DEFAULT current_timestamp() NULL COMMENT 'Date created', ";
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
 			$wpdb->query("CREATE INDEX `status` ON $tbl_address (`status`);");
 			$wpdb->query("CREATE INDEX `wpid` ON $tbl_address (`wpid`);");
 			$wpdb->query("CREATE INDEX `stid` ON $tbl_address (`stid`);");
-			$wpdb->query("CREATE INDEX `types` ON $tbl_address (`types`);");
 			$wpdb->query("CREATE INDEX `brgy` ON $tbl_address (`brgy`);");
 			$wpdb->query("CREATE INDEX `city` ON $tbl_address (`city`);");
 			$wpdb->query("CREATE INDEX `province` ON $tbl_address (`province`);");
@@ -104,19 +103,19 @@
 			$sql = "CREATE TABLE `".$tbl_contacts."` (";
 				$sql .= "`ID` bigint(20) NOT NULL AUTO_INCREMENT, ";
 				$sql .= "`hash_id` varchar(255) NOT NULL , ";
-				$sql .= "`status` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Live/Hiden', ";
-				$sql .= "`wpid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'User ID, 0 if Null', ";
-				$sql .= "`stid` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Store ID, 0 if Null', ";
-				$sql .= "`types` enum('none','phone','email','emergency') NOT NULL DEFAULT 'none' COMMENT 'Group', ";
-				$sql .= "`revs` bigint(20) NOT NULL DEFAULT 0 COMMENT 'Revision ID', ";
+				$sql .= "`status` enum('active', 'inactive') NOT NULL COMMENT 'Live/Hiden', ";
+				$sql .= "`adid` varchar(150) NOT NULL DEFAULT 0 COMMENT 'Address id for this contact', ";
+				$sql .= "`value` varchar(80) NOT NULL DEFAULT 0 COMMENT 'Value of this contact', ";
+				$sql .= "`contact_person` varchar(80) NOT NULL DEFAULT 0 COMMENT 'Value of this contact', ";
+				$sql .= "`contact_type` varchar(80) NOT NULL DEFAULT 0 COMMENT 'Value of this contact', ";
 				$sql .= "`created_by` bigint(20) NOT NULL, ";
-				$sql .= "`date_created` datetime NOT NULL, ";
+				$sql .= "`date_created` datetime NOT NULL DEFAULT current_timestamp() , ";
 				$sql .= "PRIMARY KEY (`ID`) ";
 				$sql .= ") ENGINE = InnoDB; ";
 			$result = $wpdb->get_results($sql);
 
-			$wpdb->query("CREATE INDEX `wpid` ON $tbl_contacts (`wpid`);");
-			$wpdb->query("CREATE INDEX `stid` ON $tbl_contacts (`stid`);");
+			$wpdb->query("CREATE INDEX `adid` ON $tbl_contacts (`adid`);");
+			$wpdb->query("CREATE INDEX `status` ON $tbl_contacts (`status`);");
 
 		}
 

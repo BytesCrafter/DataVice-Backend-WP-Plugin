@@ -75,15 +75,15 @@
 
                 if( DV_Verification::is_cookie_verified() ) {
                     $dv_wp_user = get_userdata($_COOKIE['wpid']);
-                
+
                     if ( in_array('administrator', $dv_wp_user->roles) ) {
                         return true;
                     }
-        
+
                     if ( in_array($dv_wprole , $dv_wp_user->roles) ) {
                         return true;
                     }
-                } 
+                }
             }
 
             return false;
@@ -107,9 +107,9 @@
         public static function is_wp_user_exist($wpid){
 
             global $wpdb;
-        
+
             $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $wpdb->users WHERE ID = %d", $wpid));
-        
+
             if($count == 1){ return true; } else { return false; }
 
         }
@@ -402,7 +402,6 @@
             }
         }
 
-
         public static function get_location($string, $api_key){
             $string = str_replace(" ", "+", urlencode($string));
 
@@ -497,7 +496,45 @@
 					return true;
 				}
 			}
+        }
+
+        	/**
+		 * GENERATING PUBLICKEY
+		 * @param primary_key = primary key
+		 * @param table_name = table name
+		 * @param column_name = Column name to be updated
+		 */
+		public static function generating_hash_id($primary_key, $table_name, $column_name, $get_key = false, $length = 64){
+            global $wpdb;
+
+            $sql = "UPDATE  $table_name SET $column_name = concat(
+                substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand($primary_key)*4294967296))*36+1, 1), ";
+
+            for ($i=0; $i < $length ; $i++) {
+                $sql .= "substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed:=round(rand(@seed)*4294967296))*36+1, 1),";
+            }
+
+            $sql .=" substring('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', rand(@seed)*36+1, 1)
+            )
+            WHERE ID = $primary_key;";
+
+
+            $results = $wpdb->query($sql);
+
+            if ($get_key = true) {
+                $key  = $wpdb->get_row("SELECT `$column_name` as `key` FROM $table_name WHERE ID = '$primary_key' ");
+                return $key->key;
+            }
+
+            if ($results < 1) {
+				return false;
+			}else{
+				if ($results == 1) {
+					return true;
+				}
+			}
 		}
+
 
 
     } // end of class

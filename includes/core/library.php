@@ -12,3 +12,4 @@
 
     //Include source data for library fo config.
     include_once ( DV_PLUGIN_PATH . '/includes/libraries/configs.php' );
+    include_once ( DV_PLUGIN_PATH . '/includes/libraries/address-config.php' );
