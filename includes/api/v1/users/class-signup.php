@@ -122,7 +122,7 @@
             } else {
                 return array(
                     "status" => "error",
-                    "message" => "Please contact site administrator. Insert Error!",
+                    "message" => $created_id['message'],
                 );
             }
         }
@@ -135,7 +135,7 @@
             $unames = explode("@", $cur_user['user_email']);
             $cur_user['user_login'] = $unames[0]."-".crc32($unames[1]);
             $cur_user['user_pass'] = wp_generate_password( 49, false, false );
-            
+
             $cur_user['user_nicename'] = $cur_user['user_login']; //user post url
             $cur_user['user_url'] = site_url()."/?u=".$cur_user['user_login']; //referral url
 
