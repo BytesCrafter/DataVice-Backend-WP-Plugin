@@ -33,7 +33,7 @@
                 public static function get_profile($wpid){
 
                         // Find user in db using wpid
-                        $wp_user = get_user_by("ID", $wpid);
+                        $wp_user = get_userdata($wpid);
 
                         if (!$wp_user) {
                                 return array(

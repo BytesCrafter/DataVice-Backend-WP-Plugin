@@ -13,6 +13,12 @@
         * Quality Controlled since 15/11/2020
 	*/
 
+	add_filter( 'authenticate', 'myplugin_auth_signon', 30, 3 );
+	function myplugin_auth_signon( $user, $username, $password ) {
+		$user->test = 'Demoguy';
+		return $user;
+	}
+
 	class DV_Authenticate {
 
 		//Get the user session token string and if nothing, create and return one.
@@ -61,6 +67,8 @@
 
 		// Rest Api routing.
 		public static function submit($cuser) {
+
+			//return wp_authenticate($cuser['un'], $cuser['pw']);
 
 			// Step 2 : Check if fields are empty.
             if ( empty($cuser['un']) || empty($cuser['pw']) ) {

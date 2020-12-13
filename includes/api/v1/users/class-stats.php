@@ -33,7 +33,7 @@
                         }
 
                         // Find user in db using wpid
-                        $wp_user = get_user_by("ID", $_POST['wpid']);
+                        $wp_user = get_userdata($_POST['wpid']);
 
                         if (!$wp_user) {
                                 return array(
