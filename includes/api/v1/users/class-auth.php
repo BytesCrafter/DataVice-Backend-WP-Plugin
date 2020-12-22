@@ -128,7 +128,7 @@
 
 			if ($lock_auth == "active") {
 				if (!empty($get_account)) {
-					if ($get_account->user_status == "0") {
+					if ($get_account->user_status == "0" || $get_account->user_status == "1") {
 						return array(
 							"status" => "failed",
 							"message" => "Sorry, signing in is currently unavailable.",
