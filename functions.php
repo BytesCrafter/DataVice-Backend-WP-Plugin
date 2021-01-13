@@ -32,6 +32,9 @@
     define('DV_PLUGIN_PATH', plugin_dir_path( __FILE__ ));
     define("DV_PLUGIN_URL", plugin_dir_url( __FILE__ ) );
 
+    //Includes helper class firts.
+    include_once ( DV_PLUGIN_PATH . '/includes/helpers/includes.php' );
+
     //Important config files and plugin updates.
     include_once ( DV_PLUGIN_PATH . '/includes/core/source.php' );
     include_once ( DV_PLUGIN_PATH . '/includes/core/config.php' );
