@@ -13,11 +13,32 @@
         * Quality Controlled since 15/11/2020
 	*/
 
-	add_filter( 'authenticate', 'myplugin_auth_signon', 30, 3 );
-	function myplugin_auth_signon( $user, $username, $password ) {
-		$user->test = 'Demoguy';
+	function wp_authenticate_filter( $user, $username, $password ) {
+
+		global $wpdb;
+		$user->authorized = 'confirmed';
+
+		$lock_auth = DV_Library_Config::dv_get_config('lock_authentication', "inactive");
+		$get_account = $wpdb->get_row("SELECT user_status FROM {$wpdb->prefix}users  u
+			WHERE u.`user_login` = '$username' OR u.user_email = '$username' ");
+
+		if ($lock_auth == "active") {
+			if (!empty($get_account)) {
+				if ($get_account->user_status == "0" || $get_account->user_status == "1") {
+					$user->authorized = 'blocked';
+				}
+			}
+		} else {
+			if (!empty($get_account)) {
+				if ($get_account->user_status == "1") {
+					$user->authorized = 'blocked';
+				}
+			}
+		}		
+
 		return $user;
 	}
+	add_filter( 'authenticate', 'wp_authenticate_filter', 30, 3 );
 
 	class DV_Authenticate {
 
@@ -46,31 +67,10 @@
 			return $session_now;
 		}
 
-		public static function listen() {
-			// Step 1 : Check if the fields are passed
-			if (!isset($_POST["un"]) || !isset($_POST["pw"])) {
-				return array(
-					"status" => "unknown",
-					"message" => "Please contact your administrator. Request Unknown!",
-				);
-			}
-
-			return rest_ensure_response(
-				self::submit(
-					array(
-						"un" => $_POST["un"],
-						"pw" => $_POST["pw"]
-					)
-				)
-			);
-		}
-
 		// Rest Api routing.
 		public static function submit($cuser) {
 
-			//return wp_authenticate($cuser['un'], $cuser['pw']);
-
-			// Step 2 : Check if fields are empty.
+			// Step 1 : Check if fields are empty.
             if ( empty($cuser['un']) || empty($cuser['pw']) ) {
 				return array(
 					"status" => "failed",
@@ -78,9 +78,7 @@
                 );
 			}
 
-			// Step 3 : Catch all fields.
-			global $wpdb;
-
+			// Step 2 : Catch and Prepare all fields.
 			$uname = $cuser["un"];
 			$pword = $cuser["pw"];
 
@@ -88,7 +86,9 @@
 			$events_table = DV_EVENTS_TABLE;
 			$events_fields = DV_EVENTS_FIELDS;
 
-			// Step 4 : Check account if activated or not
+			global $wpdb;
+
+			// Step 3 : Check account if activated or not
 				$validate_account = $wpdb->get_row("SELECT user_login, user_login, user_activation_key
 					FROM {$wpdb->prefix}users  WHERE `user_email` = '$uname' OR `user_login` = '$uname' ");
 
@@ -102,16 +102,16 @@
 				}
 			// End check account if activated or not
 
-			// Step 5 : Check if account is locked due to incorrect login attempts
-			$check_account = $wpdb->get_row("SELECT um.meta_value as lock_expiry, `user_status`
+			// Step 4 : Check if account is locked due to incorrect login attempts
+			$locked_account = $wpdb->get_row("SELECT um.meta_value as lock_expiry, `user_status`
 					FROM {$wpdb->prefix}users  u INNER JOIN $usermeta_table um ON um.user_id = u.id
 					WHERE u.`user_email` = '$uname' AND um.meta_key = 'lock_expiry_span'");
 
-			if ( $check_account && date('Y-m-d H:i:s', strtotime("now")) <  $check_account->lock_expiry ) {
+			if ( $locked_account && date('Y-m-d H:i:s', strtotime("now")) <  $locked_account->lock_expiry ) {
 
 				//Get remaining time of releasing lock account
 				$now = strtotime("now");
-				$lock_expiry = strtotime($check_account->lock_expiry);
+				$lock_expiry = strtotime($locked_account->lock_expiry);
 				$interval  = abs($lock_expiry - $now);
 				$time_left = round($interval / 60);
 
@@ -121,38 +121,13 @@
 				);
 			}
 
-			// Step 6 : Check if User
-			$lock_auth = DV_Library_Config::dv_get_config('lock_authentication', "inactive");
-			$get_account = $wpdb->get_row("SELECT user_status FROM {$wpdb->prefix}users  u
-				WHERE u.`user_login` = '$uname' OR u.user_email = '$uname' ");
-
-			if ($lock_auth == "active") {
-				if (!empty($get_account)) {
-					if ($get_account->user_status == "0" || $get_account->user_status == "1") {
-						return array(
-							"status" => "failed",
-							"message" => "Sorry, signing in is currently unavailable.",
-						);
-					}
-				}
-			} else {
-				if (!empty($get_account)) {
-					if ($get_account->user_status == "1") {
-						return array(
-							"status" => "failed",
-							"message" => "Sorry, signing in is currently unavailable.",
-						);
-					}
-				}
-			}
-
-			// Step 7 : Initialize wp authentication process.
+			// Step 6 : Initialize wp authentication process.
 			$user = wp_authenticate($uname, $pword);
 			if ($user->errors !== "") {
 				$error_code = array_keys( $user->errors );
 			}
 
-			// Step 8 : Check for WordPress authentication issue.
+			// Step 7 : Check for WordPress authentication issue.
 			if ( is_wp_error($user) ) {
 
 				if ( $error_code[0] == "incorrect_password") {
@@ -180,12 +155,42 @@
 				);
 			}
 
-			// Step 9 : Return User ID and Session KEY as success data.
-			return array(
-				"status" => "success",
-				"data" => array(
-					"wpid" => $user->ID,
-					"snky" => DV_Authenticate::get_session($user->ID),
+			// Step 8 : Return User ID and Session KEY as success data.
+			if( $user->data->authorized == "confirmed" ) {
+				return array(
+					"status" => "success",
+					"data" => array(
+						"wpid" => $user->ID,
+						"snky" => DV_Authenticate::get_session($user->ID),
+					)
+				);
+			} else {
+				return array(
+					"status" => "failed",
+					"message" => "Signin is currently disabled!",
+				);
+			}
+			
+		}
+
+		//Default RestAPI function.
+		public static function listen() {
+			
+			// Step 1 : Check if the fields are passed
+			if (!isset($_POST["un"]) || !isset($_POST["pw"])) {
+				return array(
+					"status" => "unknown",
+					"message" => "Please contact your administrator. Request Unknown!",
+				);
+			}
+
+			// Step 2 : Submit the user credintials.
+			return rest_ensure_response(
+				self::submit(
+					array(
+						"un" => $_POST["un"],
+						"pw" => $_POST["pw"]
+					)
 				)
 			);
 		}
