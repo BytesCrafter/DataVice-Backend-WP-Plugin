@@ -18,7 +18,7 @@
          * Date: 21 Nov 2020
          */
         public static function get_default_avatar() {
-            return DV_PLUGIN_URL . "/assets/default-avatar.png";
+            return DV_PLUGIN_URL . "assets/default-avatar.png";
         }
 
         /**
@@ -27,7 +27,7 @@
          * Date: 21 Nov 2020
          */
         public static function get_default_banner() {
-            return DV_PLUGIN_URL . "/assets/default-banner.png";
+            return DV_PLUGIN_URL . "assets/default-banner.png";
         }
 
         /**
@@ -672,6 +672,169 @@
 			}
 		}
 
+        public static function upload_image_cm($request, $files){
 
+            $max_img_size = 5000000;
+            if (!$max_img_size) {
+                return array(
+                    "status" => "unknown",
+                    "message" => "Please contact your administrator. Can't find config of img size.",
+                );
+            }
+
+            //Get the directory of uploading folder
+            $target_dir = wp_upload_dir();
+
+            //Get the file extension of the uploaded image
+            $file_type = strtolower(pathinfo($target_dir['path'] . '/' . basename($files['img']['name']),PATHINFO_EXTENSION));
+
+            if (!isset($_POST['IN'])) {
+                $img_name = $files['img']['name'];
+
+            } else {
+                $img_name = sanitize_file_name($_POST['IN']);
+
+            }
+
+            $completed_file_name = sha1(date("Y-m-d~h:i:s"))."-".$img_name;
+
+            $target_file = $target_dir['path'] . '/' . basename($completed_file_name);
+            $uploadOk = 1;
+
+            $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+
+            $check = getimagesize($files['img']['tmp_name']);
+
+            if($check !== false) {
+                $uploadOk = 1;
+
+            } else {
+                $uploadOk = 0;
+                return array(
+                    "status" => "failed",
+                    "message" => "File is not an image.",
+                );
+            }
+
+            // Check if file already exists
+            if (file_exists($target_file)) {
+                //  file already exists
+                $uploadOk = 0;
+                return array(
+                    "status" => "failed",
+                    "message" => "File is already existed.",
+                );
+            }
+
+            // Check file size
+            if ($files['img']['size'] > $max_img_size) {
+                // file is too large
+                $uploadOk = 0;
+                return array(
+                    "status" => "failed",
+                    "message" => "File is too large.",
+                );
+            }
+
+            // Allow certain file formats
+            if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType !=
+                "jpeg"
+                && $imageFileType != "gif" ) {
+                //only JPG, JPEG, PNG & GIF files are allowed
+                $uploadOk = 0;
+                return array(
+                    "status" => "failed",
+                    "message" => "Only JPG, JPEG, PNG & GIF files are allowed.",
+                );
+            }
+
+            // Check if $uploadOk is set to 0 by an error
+            if ($uploadOk == 0) {
+               // file was not uploaded.
+                // if everything is ok, try to upload file
+                    return array(
+                        "status" => "unknown",
+                        "message" => "Please contact your admnistrator. File has not uploaded! ",
+                    );
+
+            } else {//
+
+                if (move_uploaded_file($files['img']['tmp_name'], $target_file)) {
+
+                    $pic = $files['img'];
+                    $file_mime = mime_content_type( $target_file);
+
+                    $upload_id = wp_insert_attachment( array(
+                        'guid'           => $target_file,
+                        'post_mime_type' => $file_mime,
+                        'post_title'     => preg_replace( '/\.[^.]+$/', '', $pic['name'] ),
+                        'post_content'   => '',
+                        'post_status'    => 'inherit'
+                    ), $target_file );
+
+                    // wp_generate_attachment_metadata() won't work if you do not include this file
+                    require_once( ABSPATH . 'wp-admin/includes/image.php' );
+
+                    $attach_data = wp_generate_attachment_metadata( $upload_id, $target_file );
+
+                    // Generate and save the attachment metas into the database
+                    wp_update_attachment_metadata( $upload_id, $attach_data );
+
+                    // Show the uploaded file in browser
+	                wp_redirect( $target_dir['url'] . '/' . basename( $target_file ) );
+
+                    //return file path
+                    return array(
+                        "status" => "success",
+                        "data" =>  (string)$target_dir['url'].'/'.basename($completed_file_name),
+                    );
+
+                } else {
+                    //there was an error uploading your file
+                    return array(
+                        "status" => "unknown",
+                        "message" => "Please contact your admnistrator. File has not uploaded! ",
+                    );
+
+                }
+            }
+        }
+
+        public static function IsBase64($data) {
+            if (base64_decode($str, true) !== false){
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public static function base64_upload($base64)
+        {
+            //Remopved: data:image/png;base64,
+            $image_array_1 = explode(";", $base64);
+            $image_array_2 = explode(",", $image_array_1[1]);
+
+            //Save Image to WordPress
+            $imageData = base64_decode($image_array_2[1]);
+
+            //Make sure directory is existing.
+            // $targetDir = 'cardmake/' . date("Y") . '/' . date("m") . "/";
+            // if (!file_exists($target_dir['basedir'] . '/' . $targetDir)) {
+            //     mkdir($target_dir['basedir'] . '/' . $targetDir, 0777, true);
+            // }
+
+            //Generate name for this photo.
+            $target_dir = wp_upload_dir();
+            //$fileName = $targetDir . sha1(date("Y-m-d~h:i:s")).".png";
+            $fileName = "/" . sha1(date("Y-m-d~h:i:s")).".png";
+            $imageDir = $target_dir['basedir'] . $fileName;
+            $imageUrl = $target_dir['baseurl'] . $fileName;
+
+            if( file_put_contents($imageDir, $imageData) === false ) {
+                return false;
+            } else {
+                return $imageUrl;
+            }
+        }
 
     } // end of class
