@@ -53,6 +53,9 @@
     //Display menu on WP Backend.
     include_once ( DV_PLUGIN_PATH . '/includes/view/primary.php' );
 
+    //Any wordpress custom implementation.
+    include_once ( DV_PLUGIN_PATH . '/includes/core/wpress.php' );
+
         function my_login_logo_one() { 
     ?> 
             <style type="text/css"> 

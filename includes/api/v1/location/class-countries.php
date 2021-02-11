@@ -19,9 +19,7 @@
         }
 
         public static function get_countries(){
-            
-            global $wpdb;
-            
+                        
             //Step 1: Validate and sanitize request
             if ( !isset($_POST["mkey"]) ) {
 				return array(
@@ -50,6 +48,13 @@
                 );
             }
 
+            return self::get_countries_raw(0);
+        }
+
+        public static function get_countries_raw($status) {
+
+            global $wpdb;
+
             // Step 3: Pass constants to variables and catch post values 
             $ctry_table = DV_COUNTRY_TABLE;
             $tzone_table = DV_TZ_TABLE;
@@ -58,7 +63,7 @@
 
             // Step 4: Start query
             $countries =  $wpdb->get_results("SELECT $ctry_table.ID, $ctry_table.country_code as code, $ctry_table.country_name as name, $tzone_table.tzone_name as tzone
-                FROM $ctry_table INNER JOIN $tzone_table ON $tzone_table.country_code = $ctry_table.country_code where $ctry_table.status = 1");
+                FROM $ctry_table INNER JOIN $tzone_table ON $tzone_table.country_code = $ctry_table.country_code where $ctry_table.status = $status");
 
             // Step 5: Check if no rows found
             if (!$countries) {
@@ -73,7 +78,6 @@
                 "status" => "success",
                 "data" => $countries
             );
-            
         }
     
     }//end of class

@@ -53,29 +53,35 @@
             }
             
             $country_code = $_POST["country_code"];
+            return DV_Provinces::get_provinces_raw($country_code);
+        }
 
-           // Step 3: Pass constants to variables and catch post values 
-            $prv_table = DV_PROVINCE_TABLE;
-            $prv_fields = DV_PROVINCE_FIELDS; 
-            $where = DV_PROVINCE_WHERE . "'$country_code'";
+        public static function get_provinces_raw($country_code) {
 
-            // Step 4: Start query
-            $provinces =  DV_Globals::retrieve($prv_table, $prv_fields, $where, 'ORDER BY name', 'ASC');
+            global $wpdb;
 
-            // Step 5: Check if no rows found
-            if (!$provinces) {
-                    return array(
-                        "status" => "failed",
-                        "message" => "No results found",
-                    );
-            }
-            
-            // Return a success message and complete object
-            return array(
-                "status" => "success",
-                "data" => $provinces
-            );
-            
+             // Step 3: Pass constants to variables and catch post values 
+             $prv_table = DV_PROVINCE_TABLE;
+             $prv_fields = DV_PROVINCE_FIELDS; 
+             $where = DV_PROVINCE_WHERE . "'$country_code'";
+ 
+             // Step 4: Start query
+             $provinces =  $wpdb->get_results("SELECT $prv_fields FROM $prv_table $where");
+ 
+             // Step 5: Check if no rows found
+             if (!$provinces) {
+                     return array(
+                         "status" => "error",
+                         "message" => "No results found."
+                     );
+             }
+             
+             // Return a success message and complete object
+             return array(
+                 "status" => "success",
+                 "data" => $provinces
+             );
+ 
         }
     
     

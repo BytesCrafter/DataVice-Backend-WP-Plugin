@@ -18,13 +18,13 @@
                         //User validation
                         if (DV_Verification::is_verified() == false) {
 				return array(
-						"status" => "unknown",
-						"message" => "Please contact your administrator. Request Unknown!",
+					"status" => "unknown",
+					"message" => "Please contact your administrator. Request Unknown!",
                                 );
                         }
 
                         return rest_ensure_response( 
-                                DV_Userprofile:: get_profile($_POST['wpid'])
+                                DV_Userprofile::get_profile($_POST['wpid'])
                         ); 
 
                 }
@@ -50,9 +50,11 @@
                                                 "avatar" => $wp_user->avatar == null ? DV_Globals::get_default_avatar() : $wp_user->avatar,
                                                 "banner" => $wp_user->banner == null ? DV_Globals::get_default_banner() : $wp_user->banner,
                                                 "dname" => $wp_user->data->display_name,
+                                                "about" => $wp_user->description,
                                                 "fname" => $wp_user->first_name,
                                                 "lname" => $wp_user->last_name,
-                                                "roles" => $wp_user->roles
+                                                "roles" => $wp_user->roles,
+                                                "phone" => get_user_meta($wpid, 'datavice_phone', true),
                                 )
                         );
 
