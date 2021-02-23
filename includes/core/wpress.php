@@ -10,10 +10,10 @@
          * @author BytesCrafter
 	 */
 
-    add_action( 'show_user_profile', 'extra_user_profile_fields' );
-    add_action( 'edit_user_profile', 'extra_user_profile_fields' );
+    add_action( 'show_user_profile', 'datavice_extra_user_profile_fields' );
+    add_action( 'edit_user_profile', 'datavice_extra_user_profile_fields' );
 
-    function extra_user_profile_fields( $user ) { ?>
+    function datavice_extra_user_profile_fields( $user ) { ?>
 
         <h3><?php _e("Contact Reference (DataVice)", "blank"); ?></h3>
 
@@ -110,10 +110,10 @@
         
     <?php } 
     
-        add_action( 'personal_options_update', 'datavice_save_extra_user_profile_fields' );
-        add_action( 'edit_user_profile_update', 'datavice_save_extra_user_profile_fields' );
+        add_action( 'personal_options_update', 'datavice_save_datavice_extra_user_profile_fields' );
+        add_action( 'edit_user_profile_update', 'datavice_save_datavice_extra_user_profile_fields' );
 
-        function datavice_save_extra_user_profile_fields( $user_id ) {
+        function datavice_save_datavice_extra_user_profile_fields( $user_id ) {
             
             if ( !DV_Globals::verify_role_is('administrator') ) { 
                 return false; 
