@@ -110,10 +110,10 @@
         
     <?php } 
     
-        add_action( 'personal_options_update', 'save_extra_user_profile_fields' );
-        add_action( 'edit_user_profile_update', 'save_extra_user_profile_fields' );
+        add_action( 'personal_options_update', 'datavice_save_extra_user_profile_fields' );
+        add_action( 'edit_user_profile_update', 'datavice_save_extra_user_profile_fields' );
 
-        function save_extra_user_profile_fields( $user_id ) {
+        function datavice_save_extra_user_profile_fields( $user_id ) {
             
             if ( !DV_Globals::verify_role_is('administrator') ) { 
                 return false; 
