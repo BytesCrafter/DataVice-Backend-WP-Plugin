@@ -87,6 +87,19 @@
 				'snky' => $cuser["snky"],
 			);
 
+			global $wpdb;
+
+			// Check if status of user is deactivated.
+			$isDeactivated = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}users 
+                WHERE `ID` = '{$cuser["wpid"]}' AND `user_status` = '1'", OBJECT );
+
+			if($isDeactivated) {
+				return array(
+					"status" => "deactivated",
+					"message" => "Please contact your administrator. Account deactivated!"
+				);
+			}
+
 			// STEP 2: Verify the Token if Valid and not expired.
 			$wp_session_tokens = WP_Session_Tokens::get_instance($request['wpid']);
 			if( is_null($wp_session_tokens->get( $request['snky'] )) ) {
