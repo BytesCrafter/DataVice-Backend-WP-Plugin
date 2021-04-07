@@ -36,7 +36,7 @@ class DV_File_Upload {
                 "message" => "Please contact your administrator. Image not set!",
             );
         }
-        $file_prefix = isset($_POST['group']) ? $_POST['group'] : "wpid_".$_POST['wpid']."_";
+        $file_prefix = isset($_POST['group']) ? $_POST['group']."_" : "wpid_".$_POST['wpid']."_";
 
         $overwrite = true; //overwrite file
         $max_img_size = 5000000; //5MB
