@@ -102,11 +102,11 @@ class DV_File_Upload {
 
         return array(
             "status" => "success",
-            "data" =>  array(
-                "baseurl" => $wp_upload_dir['baseurl'].'/'.$subfolder.basename($file_name),
-                "attach" => $attach_id,
-                "metadata" => $attach_data,
-            )
+            "data" => $wp_upload_dir['baseurl'].'/'.$subfolder.basename($file_name),
+            // "data" =>  array(
+            //     "attach" => $attach_id,
+            //     "metadata" => $attach_data,
+            // )
         );
     }
 }
