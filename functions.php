@@ -4,7 +4,7 @@
         Plugin Name: DataVice WP Plugin
         Plugin URI: http://www.bytescrafter.net/projects/datavice
         Description: DataVice WP Plugin is a user management for your application or game users.
-        Version: 0.1.1
+        Version: 0.1.2
         Author: Bytes Crafter
         Author URI:   https://www.bytescrafter.net/about-us
         Text Domain:  datavice-wp-plugin
@@ -13,7 +13,7 @@
         * @author       Bytes Crafter
 
         * @copyright    2020 Bytes Crafter
-        * @version      0.1.0
+        * @version      0.1.2
 
         * @wordpress-plugin
         * WC requires at least: 2.5.0
@@ -49,6 +49,7 @@
 
     //Include the REST API of USocketNet to be accessible.
     include_once ( DV_PLUGIN_PATH . '/includes/api/routes.php' );
+    include_once ( DV_PLUGIN_PATH . '/includes/api/v2/routes.php' );
 
     //Display menu on WP Backend.
     include_once ( DV_PLUGIN_PATH . '/includes/view/primary.php' );
