@@ -343,29 +343,29 @@
 		}
 
 		// Store View
-		if($wpdb->get_var( "SHOW CREATE VIEW $tbl_address_view" ) != $tbl_address_view) {
-			$sql = "CREATE ALGORITHM=UNDEFINED  VIEW  `".$tbl_address_view."` AS SELECT";
-				$sql .= "  `add`.ID,
-					`add`.stid,
-					`add`.wpid,
-					IF(`add`.types = 'business', 'Business', 'Office' )as `type`,
-					( SELECT child_val FROM dv_revisions WHERE id = `add`.street ) AS street,
-					( SELECT child_val FROM dv_revisions WHERE id = `add`.latitude ) AS latitude,
-					( SELECT child_val FROM dv_revisions WHERE id = `add`.longitude ) AS longitude,
-					( SELECT brgy_name FROM dv_geo_brgys WHERE ID = ( SELECT child_val FROM dv_revisions WHERE id = `add`.brgy ) ) AS brgy,
-					( SELECT city_name FROM dv_geo_cities WHERE city_code = ( SELECT child_val FROM dv_revisions WHERE id = `add`.city ) ) AS city,
-					( SELECT prov_name FROM dv_geo_provinces WHERE prov_code = ( SELECT child_val FROM dv_revisions WHERE id = `add`.province ) ) AS province,
-					( SELECT country_name FROM dv_geo_countries WHERE id = ( SELECT child_val FROM dv_revisions WHERE id = `add`.country ) ) AS country,
-					IF (( select child_val from dv_revisions where id = `add`.`status` ) = 1, 'Active' , 'Inactive' ) AS `status`,
-					`add`.date_created
-				FROM
-					dv_address `add`";
-			$result = $wpdb->get_results($sql);
+		// if($wpdb->get_var( "SHOW CREATE VIEW $tbl_address_view" ) != $tbl_address_view) {
+		// 	$sql = "CREATE ALGORITHM=UNDEFINED  VIEW  `".$tbl_address_view."` AS SELECT";
+		// 		$sql .= "  `add`.ID,
+		// 			`add`.stid,
+		// 			`add`.wpid,
+		// 			IF(`add`.types = 'business', 'Business', 'Office' )as `type`,
+		// 			( SELECT child_val FROM dv_revisions WHERE id = `add`.street ) AS street,
+		// 			( SELECT child_val FROM dv_revisions WHERE id = `add`.latitude ) AS latitude,
+		// 			( SELECT child_val FROM dv_revisions WHERE id = `add`.longitude ) AS longitude,
+		// 			( SELECT brgy_name FROM dv_geo_brgys WHERE ID = ( SELECT child_val FROM dv_revisions WHERE id = `add`.brgy ) ) AS brgy,
+		// 			( SELECT city_name FROM dv_geo_cities WHERE city_code = ( SELECT child_val FROM dv_revisions WHERE id = `add`.city ) ) AS city,
+		// 			( SELECT prov_name FROM dv_geo_provinces WHERE prov_code = ( SELECT child_val FROM dv_revisions WHERE id = `add`.province ) ) AS province,
+		// 			( SELECT country_name FROM dv_geo_countries WHERE id = ( SELECT child_val FROM dv_revisions WHERE id = `add`.country ) ) AS country,
+		// 			IF (( select child_val from dv_revisions where id = `add`.`status` ) = 1, 'Active' , 'Inactive' ) AS `status`,
+		// 			`add`.date_created
+		// 		FROM
+		// 			dv_address `add`";
+		// 	$result = $wpdb->get_results($sql);
 
-			$wpdb->query("CREATE INDEX `stid` ON $tbl_address_view (`stid`);");
-			$wpdb->query("CREATE INDEX `wpid` ON $tbl_address_view (`wpid`);");
+		// 	$wpdb->query("CREATE INDEX `stid` ON $tbl_address_view (`stid`);");
+		// 	$wpdb->query("CREATE INDEX `wpid` ON $tbl_address_view (`wpid`);");
 
-		}
+		// }
 
 
 		$wpdb->query("SET GLOBAL max_allowed_packet=$get_last_pocket->value;");
