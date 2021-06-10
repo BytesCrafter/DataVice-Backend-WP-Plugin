@@ -77,6 +77,8 @@
             }
 
             // Step 4 : Return success and email.
+            update_user_meta($cur_user->ID, "activation_key", '');
+            update_user_meta($cur_user->ID, "reset_pword_expiry", '');
             return array(
                 "status" => "success",
                 "data" => array(
