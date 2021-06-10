@@ -29,7 +29,7 @@
             );
         }
 
-        public static function submit($cuser){
+        public static function submit($cuser, $sendmail = true){
 
             // Step 1 : Check if the fields are passed
             if( !isset($cuser['em']) || !isset($cuser['fn']) || !isset($cuser['ln']) ){
@@ -101,23 +101,24 @@
 
                 $user['user_activation_key'] = $tempActKey;
 
+                $message = "Please check your email for password reset key.";
+                
                 // Try to send mail.
-                if( DV_Signup::is_success_sendmail( $user ) ) {
-                    return array(
-                            "status" => "success",
-                            "data" => array(
-                                "wpid" => $created_id
-                            ),
-                            "message" => "Please check your email for password reset key.",
-                    );
-
-                } else {
-                    return  array(
-                        "status" => "email",
-                        "message" => "Please contact site administrator. Email not sent!"
-                    );
-
+                if($sendmail) {
+                    $is_sent = DV_Signup::is_success_sendmail( $user );
+                    if(!$is_sent) {
+                        $message = "Failed sending activation key to your email. Contact administrator for more info.";
+                    }
                 }
+
+                return array(
+                    "status" => "success",
+                    "data" => array(
+                        "wpid" => $created_id,
+                        "key" => $tempActKey
+                    ),
+                    "message" => $message,
+                );
 
             } else {
                 return array(
